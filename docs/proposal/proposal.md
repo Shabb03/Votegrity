@@ -66,13 +66,17 @@
 ### Programming language(s)
 
 > Backend: Node.js
+>
 > Frontend: Vue.js
+>
 > Database: MySQL
 
 ### Libraries / Frameworks / Tools
 
 > Blockchain Platform: Ethereum
+>
 > Blind Signatures: RSA
+>
 > Gmail API
 
 ### Hardware
@@ -82,6 +86,7 @@
 ### Learning Challenges
 
 > Blockchain is a completely new concept for us so we will have to research many concepts as we develop the system and its requirements
+>
 > (Rishab): Node.js and Vue.js are new programming languages for me so I will have to learn them before developing the system
 
 ### Breakdown of work
