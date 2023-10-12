@@ -68,15 +68,12 @@
 > Backend: Node.js
 > Frontend: Vue.js
 > Database: MySQL
+
+### Libraries / Frameworks / Tools
+
 > Blockchain Platform: Ethereum
 > Blind Signatures: RSA
-
-### Programming tools / Tech stack
-
-> Describe the compiler, database, web server, etc., and any other software tools you plan to use.
-
 > Gmail API
-> Google Calendar API
 
 ### Hardware
 
