@@ -4,9 +4,9 @@
 
 |                     |                   |
 | ------------------- | ----------------- |
-| Project Title:      | xxxxxx            |
-| Student 1 Name:     | xxxxxx            |
-| Student 1 ID:       | xxxxxx            |
+| Project Title:      | Votegrity         |
+| Student 1 Name:     | Thomas Kelly      |
+| Student 1 ID:       | xxxxxxxx          |
 | Student 2 Name:     | Rishabdev Sidhu   |
 | Student 2 ID:       | 20309616          |
 | Project Supervisor: | Geoffrey Hamilton |
@@ -43,7 +43,8 @@
 
 ### Background
 
-> Where did the ideas come from?
+> Came to this idea when looking at innovative ways of implementing the emerging technology of blockchain in a way that general consumers can avail of without having a technical background and understanding of the process behind using blockchain.
+> I believe that the use of blockchain for a voting system is the next step forward in how technology can be implemented to modernise the way we vote
 
 ### Achievements
 
@@ -65,7 +66,7 @@
 
 ### Programming language(s)
 
-> Backend: Node.js
+> Backend: Solidity + Node.js
 >
 > Frontend: Vue.js
 >
@@ -74,6 +75,8 @@
 ### Libraries / Frameworks / Tools
 
 > Blockchain Platform: Ethereum
+>
+> Web3.js
 >
 > Blind Signatures: RSA
 >
@@ -87,7 +90,7 @@
 
 > Blockchain is a completely new concept for us so we will have to research many concepts as we develop the system and its requirements
 >
-> (Rishab): Node.js and Vue.js are new programming languages for me so I will have to learn them before developing the system
+> Learning new languages Solidity, Node.js and Vue.js as well as the use of new libraries / frameworks
 
 ### Breakdown of work
 
