@@ -77,49 +77,29 @@
 
 ### Hardware
 
-> Describe any non-standard hardware components which will be required.
+> No non-standard hardware components required.
 
 ### Learning Challenges
-
-> List the main new things (technologies, languages, tools, etc) that you will have to learn.
 
 > Blockchain is a completely new concept for us so we will have to research many concepts as we develop the system and its requirements
 > (Rishab): Node.js and Vue.js are new programming languages for me so I will have to learn them before developing the system
 
 ### Breakdown of work
 
-> Voter Registration
+> Frontend
 >
-> Ballot Generation
+> Backend
 >
-> Voter Authentication
+> Database setup
 >
-> Encryption of vote
+> Homomorphic encryption
 >
-> Voters Submission to the blockchain
+> Blind Signature
 >
-> Tally of the votes
+> Blockchain
 >
-> Election Admins
+> Verification
 >
-> Key Management
+> Keys
 >
-> (Optional Feature) Verification
-
-#### Student 1
-
-> _Student 1 should complete this section._
-
-#### Student 2
-
-> _Student 2 should complete this section._
-
-## Example
-
-> Example: Here's how you can include images in markdown documents...
-
-<!-- Basically, just use HTML! -->
-
-<p align="center">
-  <img src="./res/cat.png" width="300px">
-</p>
+> Account registration
