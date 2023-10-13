@@ -11,8 +11,6 @@
 | Student 2 ID:       | 20309616          |
 | Project Supervisor: | Geoffrey Hamilton |
 
-> My title ideas: (TrustVote) || (Votegrity) || (SecureVoteX) || (eVoteSolutions)
-
 ## SECTION B
 
 ### Introduction
