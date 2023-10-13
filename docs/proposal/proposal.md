@@ -6,7 +6,7 @@
 | ------------------- | ----------------- |
 | Project Title:      | Votegrity         |
 | Student 1 Name:     | Thomas Kelly      |
-| Student 1 ID:       | xxxxxxxx          |
+| Student 1 ID:       | 20361526          |
 | Student 2 Name:     | Rishabdev Sidhu   |
 | Student 2 ID:       | 20309616          |
 | Project Supervisor: | Geoffrey Hamilton |
@@ -17,7 +17,7 @@
 
 > Our Blockchain Voting System is at the cutting edge of innovation in a world where technology, transparency, and confidence in democratic processes are all fast advancing.
 > This ambitious project seeks to fundamentally alter the way elections are held, guaranteeing not only the authenticity of the voting process but also the accessibility and convenience for each and every eligible voter which in turn will increase voter turnout.
-> We aim to create a voting system that is safe, open, and impenetrable by utilizing blockchain technology.
+> We aim to create a voting system that is safe, open, and secure by utilizing blockchain technology.
 
 ### Outline
 
@@ -41,7 +41,7 @@
 
 ### Background
 
-> Came to this idea when looking at innovative ways of implementing the emerging technology of blockchain in a way that general consumers can avail of without having a technical background and understanding of the process behind using blockchain.
+> We came to this idea when looking at innovative ways of implementing the emerging technology of blockchain in a way that general consumers can avail of without having a technical background and understanding of the process behind using blockchain.
 > I believe that the use of blockchain for a voting system is the next step forward in how technology can be implemented to modernise the way we vote
 
 ### Achievements
@@ -64,21 +64,25 @@
 
 ### Programming language(s)
 
-> Backend: Solidity + Node.js
->
-> Frontend: Vue.js
->
-> Database: MySQL
+Solidity, Python, Javascript
 
 ### Libraries / Frameworks / Tools
 
 > Blockchain Platform: Ethereum
+>
+> Backend: Node.js
+>
+> Frontend: Vue.js
 >
 > Web3.js
 >
 > Blind Signatures: RSA
 >
 > Gmail API
+>
+> Homomorphic Encryption libraries: PyCryptodome/ python-paillier
+>
+> Testing: PyUnit, Solidity Security Analysers, Truffle
 
 ### Hardware
 
@@ -88,24 +92,27 @@
 
 > Blockchain is a completely new concept for us so we will have to research many concepts as we develop the system and its requirements
 >
-> Learning new languages Solidity, Node.js and Vue.js as well as the use of new libraries / frameworks
+> Learning new languages Solidity, as well as the use of new libraries / frameworks such as Node.js and Vue.js
 
 ### Breakdown of work
 
+#### Student 1 (Rishab)
 > Frontend
->
-> Backend
->
-> Database setup
 >
 > Homomorphic encryption
 >
 > Blind Signature
 >
+> User Verification
+>
+
+#### Student 2 (Thomas)
+> Backend
+>
+> Database setup
+>
 > Blockchain
 >
-> Verification
->
-> Keys
+> Key Generation and Management
 >
 > Account registration
