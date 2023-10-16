@@ -12,22 +12,25 @@ stages:
     - test
     - deploy
 
-build_job:
+build-job:
     stage: build
     script:
         - npm install
-        - echo "Build"
+        - echo "Compiling the code..."
+        - echo "Compile complete."
 
-test_job:
-    stage: test
+unit-test-job: 
+    stage: test 
     script:
         - npm test
         - node ./specs/start.js ./specs/async.spec.js
-        - echo "Testing"
+        - echo "Running unit tests... This will take about 60 seconds."
+        - sleep 60
+        - echo "Code coverage is 90%"
 
-deploy_job:
+deploy-job:    
     stage: deploy
-    script:
-        - echo "Deploying"
-        - echo "Application Successfully Deployed!"
     environment: production
+    script:
+        - echo "Deploying application..."
+        - echo "Application successfully deployed."
