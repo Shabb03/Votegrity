@@ -15,7 +15,7 @@ stages:
 build-job:
     stage: build
     script:
-        - npm install
+        #- npm install
         - echo "Compiling the code..."
         - echo "Compile complete."
 
