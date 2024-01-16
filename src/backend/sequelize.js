@@ -2,10 +2,10 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    host: 'votegirty',      // Replace with your MySQL server host
-    username: 'sidhur2',  // Replace with your MySQL username
-    password: 'PASSWORD',  // Replace with your MySQL password
-    database: 'votegrity',  // Replace with your desired database name
+    host: '127.0.0.1',
+    username: 'root',
+    password: 'Crimsondragon9332',
+    database: 'votegrity',
 });
 
 
@@ -141,6 +141,40 @@ const Admin = sequelize.define('Admin', {
     }
 });
 
+const Block = sequelize.define('Block', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    /*
+    previousHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        references: {
+              model: Block,
+              key: 'hash',
+        },
+    },
+    */
+    previousHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    proof: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    timestamp: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    hash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+});
+
 const Vote = sequelize.define('Vote', {
     id: {
         type: DataTypes.INTEGER,
@@ -148,26 +182,26 @@ const Vote = sequelize.define('Vote', {
         autoIncrement: true,
     },
     voterId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-              model: 'Voter',
+              model: Voter,
               key: 'id',
         },
     },
     candidateId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-              model: 'Candidate',
+              model: Candidate,
               key: 'id',
         },
     },
     blockId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-              model: 'Block',
+              model: Block,
               key: 'id',
         },
     },
@@ -180,26 +214,26 @@ const Transaction = sequelize.define('Transaction', {
         autoIncrement: true,
     },
     blockId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-              model: 'Block',
+              model: Block,
               key: 'id',
         },
     },
     candidateId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-              model: 'Candidate',
+              model: Candidate,
               key: 'id',
         },
     },
     voterId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-              model: 'Voter',
+              model: Voter,
               key: 'id',
         },
     },
@@ -217,41 +251,20 @@ const Transaction = sequelize.define('Transaction', {
     }
 });
 
-const Block = sequelize.define('Block', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    previousHash: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        references: {
-              model: 'Block',
-              key: 'hash',
-        },
-    },
-    proof: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    timestamp: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    hash: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-});
-
 const Blockchain = sequelize.define('Blockchain', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    chain
+    chain: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+              model: Block,
+              key: 'id',
+        },
+    },
 });
 
 const Election = sequelize.define('Election', {
@@ -309,10 +322,10 @@ const Result = sequelize.define('Result', {
         autoIncrement: true,
     },
     winner: {
-        type: DataTypes.INT,
+        type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-              model: 'Candidate',
+              model: Candidate,
               key: 'id',
         },
     },
