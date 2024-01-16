@@ -4,7 +4,7 @@ const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
     username: 'root',
-    password: 'Crimsondragon9332',
+    password: '',      //Add MySQL root password
     database: 'votegrity',
 });
 
