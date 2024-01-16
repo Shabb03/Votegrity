@@ -48,7 +48,7 @@ const Voter = sequelize.define('Voter', {
     },
     document: {
         type: DataTypes.BLOB,
-        allowNull: false,
+        allowNull: true,
     },
     authenticated: {
         type: DataTypes.BOOLEAN,
@@ -60,27 +60,27 @@ const Voter = sequelize.define('Voter', {
     },
     privateKey: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     publicKey: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     securityQuestion1: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     securityAnswer1: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     securityQuestion2: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     securityAnswer2: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
 
 });
@@ -101,7 +101,7 @@ const Candidate = sequelize.define('Candidate', {
     },
     party: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     image: {
         type: DataTypes.BLOB,
@@ -109,80 +109,221 @@ const Candidate = sequelize.define('Candidate', {
     },
     dateOfBirth: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
     },
     biography: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    }
+});
+
+const Admin = sequelize.define('Admin', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    privateKey: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    publicKey: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    }
+});
+
+const Vote = sequelize.define('Vote', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    voterId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+              model: 'Voter',
+              key: 'id',
+        },
+    },
+    candidateId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+              model: 'Candidate',
+              key: 'id',
+        },
+    },
+    blockId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        references: {
+              model: 'Block',
+              key: 'id',
+        },
+    },
+});
+
+const Transaction = sequelize.define('Transaction', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    blockId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+              model: 'Block',
+              key: 'id',
+        },
+    },
+    candidateId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+              model: 'Candidate',
+              key: 'id',
+        },
+    },
+    voterId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+              model: 'Voter',
+              key: 'id',
+        },
+    },
+    privateKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    publicKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    signature: {
         type: DataTypes.STRING,
         allowNull: false,
     }
 });
 
-const Admin = sequelize.define('Admin', {
--id
--email
--password
--privateKey
--publicKey
-});
-
-const Vote = sequelize.define('Vote', {
--id
--voterId
--candidateId
--blockId
-});
-
-const Transaction = sequelize.define('Transaction', {
--id
--blockId
--candidateId
--voterId
--privateKey
--publicKey
--signature
-});
-
 const Block = sequelize.define('Block', {
--id
--previousHash
--proof
--timestamp
--hash
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    previousHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        references: {
+              model: 'Block',
+              key: 'hash',
+        },
+    },
+    proof: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    timestamp: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    hash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 });
 
 const Blockchain = sequelize.define('Blockchain', {
--id
--chain
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    chain
 });
 
 const Election = sequelize.define('Election', {
--id
--title
--description
--startDate
--endDate
--resultDate
--candidateNumber
--ageRestriction
--authenticationMethod
--privateKey
--publicKey
-});
-
-const VoteInformation = sequelize.define('VoteInformation', {
--id
--daysLeft
--voteCount
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    startDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    endDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    resultDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    candidateNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    ageRestriction: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    authenticationMethod: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    privateKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    publicKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 });
 
 const Result = sequelize.define('Result', {
--id
--winner
--voteCount
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    winner: {
+        type: DataTypes.INT,
+        allowNull: true,
+        references: {
+              model: 'Candidate',
+              key: 'id',
+        },
+    },
+    voteCount: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    }
 });
 
 
-// Synchronize the models with the database (create tables)
+
 async function syncDatabase() {
   try {
     await sequelize.sync({ force: true });
