@@ -9,7 +9,7 @@ stages:
     - deploy
 
 variables:
-    NODE_MODULES_PATH: "/src/backend/node_modules"
+    NODE_MODULES_PATH: "./src/backend/node_modules"
 
 before_script:
     - cd /src/backend
