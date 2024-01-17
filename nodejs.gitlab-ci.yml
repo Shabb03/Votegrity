@@ -12,7 +12,7 @@ variables:
     NODE_MODULES_PATH: "./src/backend/node_modules"
 
 before_script:
-    - cd /src/backend
+    - cd ./src/backend
     - npm install
     - echo "Compiling the code..."
     - echo "Compile complete."
