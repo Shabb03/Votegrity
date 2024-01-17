@@ -3,15 +3,18 @@ image: node:18.17.0
 #services:
 #    - mysql:latest
 
+stages:
+    - build
+    - test
+    - deploy
+
 cache:
     paths:
         - src/frontend/node_modules/
         - src/backend/node_modules/
 
-stages:
-    - build
-    - test
-    - deploy
+before_script:
+    - cd src/backend/node_modules/
 
 build-job:
     stage: build
