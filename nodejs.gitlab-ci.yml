@@ -1,40 +1,30 @@
 image: node:18.17.0
 
-#services:
-#    - mysql:latest
-
 stages:
-    - build
-    - test
-    - deploy
+  - build
+  - test
+  - deploy
 
 variables:
-    NODE_MODULES_PATH: "./src/backend/node_modules"
+  NODE_MODULES_PATH: "./src/backend/node_modules"
 
 before_script:
-    - cd ./src/backend
-    - npm install
-    - echo "Compiling the code..."
-    - echo "Compile complete."
+  - cd ./src/backend
+  - npm install
+  - echo "Compiling the code..."
+  - echo "Compile complete."
 
-#build-job:
-#    stage: build
-#    script:
-#        - npm install
-#        - echo "Compiling the code..."
-#        - echo "Compile complete."
+unit-test-job:
+  stage: test
+  script:
+    - npm test
+    - echo "Running unit tests... This will take about 60 seconds."
+    - sleep 60
+    - echo "Code coverage is 90%"
 
-unit-test-job: 
-    stage: test 
-    script:
-        - npm test
-        - echo "Running unit tests... This will take about 60 seconds."
-        - sleep 60
-        - echo "Code coverage is 90%"
-
-deploy-job:    
-    stage: deploy
-    environment: production
-    script:
-        - echo "Deploying application..."
-        - echo "Application successfully deployed."
+deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
