@@ -3,22 +3,26 @@ image: node:18.17.0
 #services:
 #    - mysql:latest
 
-cache:
-    paths:
-        - src/frontend/node_modules/
-        - src/backend/node_modules/
-
 stages:
     - build
     - test
     - deploy
 
-build-job:
-    stage: build
-    script:
-        - npm install
-        - echo "Compiling the code..."
-        - echo "Compile complete."
+variables:
+    NODE_MODULES_PATH: "./src/backend/node_modules"
+
+before_script:
+    - cd ./src/backend
+    - npm install
+    - echo "Compiling the code..."
+    - echo "Compile complete."
+
+#build-job:
+#    stage: build
+#    script:
+#        - npm install
+#        - echo "Compiling the code..."
+#        - echo "Compile complete."
 
 unit-test-job: 
     stage: test 
