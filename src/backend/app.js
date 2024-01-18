@@ -1,26 +1,18 @@
 const express = require('express');
+const passport = require('passport');
+const routes = require('./routes');
 const app = express();
 
 app.use(express.json());
 
+/*
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
-
-/*
-app.get('/greet/:name', (req, res) => {
-  const { name } = req.params;
-    res.send(`Hello, ${name}!`);
-});
 */
 
-/*
-app.post('/api/data', (req, res) => {
-    const data = req.body;
-    // Do something with the posted data
-    res.json({ message: 'Data received successfully!', data });
-});
-*/
+app.use('/', routes);
+app.use(passport.initialize());
 
 // Handle 404 errors
 app.use((req, res) => {
@@ -28,8 +20,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Internal Server Error');
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
 });
 
 module.exports = app;
