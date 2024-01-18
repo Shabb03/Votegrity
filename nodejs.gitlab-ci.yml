@@ -1,7 +1,6 @@
 image: node:18.17.0
 
 stages:
-  - build
   - test
   - deploy
 
