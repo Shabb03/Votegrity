@@ -1,10 +1,11 @@
+require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
     username: 'root',
-    password: '',      //Add MySQL root password
+    password: process.env.SQL_PASSWORD,
     database: 'votegrity',
 });
 
