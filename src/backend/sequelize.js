@@ -336,17 +336,30 @@ const Result = sequelize.define('Result', {
     }
 });
 
-
-
 async function syncDatabase() {
   try {
     await sequelize.sync({ force: true });
     console.log('Tables synchronized successfully');
-  } catch (err) {
+  } 
+  catch (err) {
     console.error('Error synchronizing tables:', err);
-  } finally {
-    await sequelize.close();
-  }
+  } 
+  //finally {
+  //  await sequelize.close();
+  //}
 }
 
 syncDatabase();
+
+module.exports = {
+    sequelize,
+    Voter,
+    Candidate,
+    Admin,
+    Block,
+    Vote,
+    Transaction,
+    Blockchain,
+    Election,
+    Result,
+};
