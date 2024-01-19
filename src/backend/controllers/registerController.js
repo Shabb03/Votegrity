@@ -19,6 +19,8 @@ exports.signup = async (req, res) => {
             specialNumber,
             citizenship,
             phoneNumber,
+            authenticated: false,
+            voted: false,
         });
 
         const userResponse = {

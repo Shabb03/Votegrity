@@ -19,6 +19,8 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
+app.use('/api/register', registerRoute);
+
 /*
 app.use('/', routes);
 app.use(passport.initialize());
