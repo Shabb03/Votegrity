@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const voterController = require('../controllers/{{FILENAME}}');
+const registerController = require('../controllers/registerController');
 
-router.post('/api/register', {{FILENAME}}.signup);
+router.post('/api/register', registerController.signup);
 
 module.exports = router;

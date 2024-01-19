@@ -1,18 +1,16 @@
 const express = require('express');
 const passport = require('passport');
 
-/*
-const addCandidateRoute = require('./routes/addCandidateRoute');
-const addElectionRoute = require('./routes/addElectionRoute');
-const dashboardRoute = require('./routes/dashboardRoute');
-const loginRoute = require('./routes/loginRoute');
-const profileRoute = require('./routes/profileRoute');
+//const addCandidateRoute = require('./routes/addCandidateRoute');
+//const addElectionRoute = require('./routes/addElectionRoute');
+//const dashboardRoute = require('./routes/dashboardRoute');
+//const loginRoute = require('./routes/loginRoute');
+//const profileRoute = require('./routes/profileRoute');
 const registerRoute = require('./routes/registerRoute');
-const resetPasswordRoute = require('./routes/resetPasswordRoute');
-const resetRoute = require('./routes/resetRoute');
-const voteRoute = require('./routes/voteRoute');
-const winnerRoute = require('./routes/winnerRoute');
-*/
+//const resetPasswordRoute = require('./routes/resetPasswordRoute');
+//const resetRoute = require('./routes/resetRoute');
+//const voteRoute = require('./routes/voteRoute');
+//const winnerRoute = require('./routes/winnerRoute');
 
 const app = express();
 app.use(express.json());
