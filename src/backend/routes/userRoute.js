@@ -14,14 +14,14 @@ router.post('/login', loginController.login);
 router.post('/logout', authenticateToken, loginController.logout);
 
 router.get('/userinfo', authenticateToken, profileController.userInfo);
-/*
-router.post('/useremail/:id/:string', profileController.changeUserEmail)
-router.post('/usernumber/:id/:string', profileController.changeUserNumber)
+router.post('/useremail', authenticateToken, profileController.changeUserEmail)
+router.post('/usernumber/', authenticateToken, profileController.changeUserNumber)
 
-router.get('/authenticateaccount', passwordController.authAccount);
-router.get('/authenticationcode', passwordController.authCode);
-router.post('/resetpassword', passwordController.resetPassword);
-router.post('/changepassword', passwordController.changePassword);
+/*
+router.get('/authenticateaccount', authenticateToken, passwordController.authAccount);
+router.get('/authenticationcode', authenticateToken, passwordController.authCode);
+router.post('/resetpassword', authenticateToken, passwordController.resetPassword);
+router.post('/changepassword', authenticateToken, passwordController.changePassword);
 */
 
 module.exports = router;
