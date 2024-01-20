@@ -35,3 +35,10 @@ exports.login = async (req, res) => {
         })
     }
 }
+
+exports.logout = async (req, res) => {
+    const {message} = req.body
+    res.send({
+        message: "Logged out"
+    })
+}

@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const secretKey = process.env.SECRET_KEY
 
-// Middleware to authenticate the user using a JWT token
 function authenticateToken(req, res, next) {
-    const token = req.header('Authorization');
-
-    if (!token) {
+    const tokenString = req.header('Authorization');
+    if (!tokenString) {
         return res.status(401).json({ message: 'Access denied. Token not provided.' });
     }
+    const token = tokenString.replace("Bearer ", "");
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {

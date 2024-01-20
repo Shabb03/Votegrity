@@ -337,7 +337,7 @@ const Result = sequelize.define('Result', {
 
 async function syncDatabase() {
   try {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({});
     console.log('Tables synchronized successfully');
   } 
   catch (err) {

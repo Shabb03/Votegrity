@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const bodyParser = require('body-parser')
 
 const userRoute = require('./routes/userRoute');
 //const adminRoute = require('./routes/adminRoute');
@@ -7,6 +8,9 @@ const userRoute = require('./routes/userRoute');
 
 const app = express();
 app.use(express.json());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.send('Hello World');
