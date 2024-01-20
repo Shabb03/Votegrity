@@ -5,17 +5,16 @@ const authenticateToken = require('../middleware/authenticate');
 
 const registerController = require('../controllers/registerController');
 const loginController = require('../controllers/loginController');
-//const profileController = require('../controllers/profileController');
+const profileController = require('../controllers/profileController');
 //const passwordController = require('../controllers/passwordController');
 
 router.post('/register', registerController.signup);
 
 router.post('/login', loginController.login);
-
 router.post('/logout', authenticateToken, loginController.logout);
 
+router.get('/userinfo', authenticateToken, profileController.userInfo);
 /*
-router.get('/user', profileController.userInfo);
 router.post('/useremail/:id/:string', profileController.changeUserEmail)
 router.post('/usernumber/:id/:string', profileController.changeUserNumber)
 
