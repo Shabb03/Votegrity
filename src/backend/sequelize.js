@@ -4,11 +4,10 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
-    username: 'root',
+    username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
-    database: 'votegrity',
+    database: process.env.SQL_DATABASE,
 });
-
 
 
 const Voter = sequelize.define('Voter', {
@@ -338,7 +337,7 @@ const Result = sequelize.define('Result', {
 
 async function syncDatabase() {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
     console.log('Tables synchronized successfully');
   } 
   catch (err) {
