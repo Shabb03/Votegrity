@@ -5,7 +5,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const { Voter } = require('../sequelize');
 
 exports.login = async (req, res) => {
-    console.log("HERE!!\n\n");
     try {
         const {email, password} = req.body
         const user = await Voter.findOne({
@@ -24,7 +23,7 @@ exports.login = async (req, res) => {
                 error: 'The login information was incorrect'
             })
         }
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY); // Replace with your secret key
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         res.send({
             email: user.email,
             token: token
