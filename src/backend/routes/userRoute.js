@@ -6,7 +6,7 @@ const authenticateToken = require('../middleware/authenticate');
 const registerController = require('../controllers/registerController');
 const loginController = require('../controllers/loginController');
 const profileController = require('../controllers/profileController');
-//const passwordController = require('../controllers/passwordController');
+const passwordController = require('../controllers/passwordController');
 
 router.post('/register', registerController.signup);
 

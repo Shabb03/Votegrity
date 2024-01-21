@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { Voter } = require('../sequelize');
 
@@ -80,7 +81,9 @@ exports.getAuthToken = async (req, res) => {
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
         await user.save();
-        res.json({authToken: sixDigitCode});
+
+        sendEmail("Authentication Token", user.email, "Here is your authentication code: " + sixDigitCode);
+        res.json({message: "Email sent"});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
@@ -97,7 +100,7 @@ exports.authAccount = async (req, res) => {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
-            return res.status(200).json({ message: 'New user successfully registered' });
+            return res.status(200).json({ message: 'New user successfully authenticated' });
         } 
         else {
             return res.status(401).json({ message: 'Invalid authToken' });
