@@ -11,9 +11,7 @@ exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+
         res.json({
             name: user.username,
             email: user.email,
@@ -32,9 +30,7 @@ exports.changeUserEmail = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+
         const newEmail = req.body.email;
         const existingEmail = await Voter.findOne({ where: { email: newEmail } });
         if (existingEmail) {
@@ -58,9 +54,6 @@ exports.changeUserNumber = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
 
         const newNumber = req.body.phoneNumber;
         const existingNumber = await Voter.findOne({ where: { phoneNumber: newNumber } });
@@ -81,15 +74,13 @@ exports.changeUserNumber = async (req, res) => {
 
 exports.getAuthToken = async (req, res) => {
     try {
+        
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
 
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
-            res.json({message: 'User is already authenticated'});
+            return res.json({message: 'User is already authenticated'});
         }
         const sixDigitToken = generateSixDigitToken();
         user.authToken = sixDigitToken;
@@ -105,9 +96,6 @@ exports.authAccount = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
 
         const authToken = req.body.authToken;
         if (authToken === user.authToken) {
