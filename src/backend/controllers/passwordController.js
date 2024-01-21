@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { isSecurePassword, hashPassword } = require('./functions/password');
 const { Voter } = require('../sequelize');
@@ -11,7 +12,9 @@ exports.authCode = async (req, res) => {
         const sixDigitCode = generateSixDigitCode();
         user.resetToken = sixDigitCode;
         await user.save();
-        res.json({resetToken: sixDigitCode});
+
+        sendEmail("Reset Password Code", user.email, "Here is your password code: " + sixDigitCode);
+        res.json({message: "Email sent"});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
