@@ -50,6 +50,10 @@ const Voter = sequelize.define('Voter', {
         type: DataTypes.BLOB,
         allowNull: true,
     },
+    authToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     authenticated: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -80,6 +84,14 @@ const Voter = sequelize.define('Voter', {
     },
     securityAnswer2: {
         type: DataTypes.STRING,
+        allowNull: true,
+    },
+    resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    tokenAuthenticated: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
     },
 
