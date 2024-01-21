@@ -1,16 +1,5 @@
-const bcrypt = require('bcrypt');
-const { Voter } = require('../sequelize');
-
-const saltRounds = 10;
-
-function isSecurePassword(password) {
-    const hasNumber = /\d/.test(password);
-    const hasLowercase = /[a-z]/.test(password);
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
-    return hasNumber && hasLowercase && hasUppercase && hasSpecialChar;
-}
-  
+const { isSecurePassword, hashPassword } = require('./functions/password');
+const { Voter } = require('../sequelize');  
 
 exports.signup = async (req, res) => {
     try {
@@ -22,10 +11,10 @@ exports.signup = async (req, res) => {
 
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
-            res.send({message: 'Password is not strong enough'});
+            return res.send({message: 'Password is not strong enough'});
         }
 
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = hashPassword(password);
         const newUser = await Voter.create({
             name,
             email,

@@ -15,6 +15,6 @@ router.get('/admin/election', dashboardController.electionDetails);
 router.get('/admin/votes', dashboardController.getTotalVotes);
 
 //subject to change
-router.post('/admin/reset/:string', resetController.resetElection);
+router.post('/admin/reset/', resetController.resetElection);
 
 module.exports = router;

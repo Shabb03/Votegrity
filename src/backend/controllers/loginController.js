@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const { Voter } = require('../sequelize');
 
 exports.login = async (req, res) => {

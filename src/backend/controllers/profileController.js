@@ -1,11 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const generateSixDigitCode = require('./functions/generateCode');
 const { Voter } = require('../sequelize');
-
-function generateSixDigitToken() {
-    const randomSixDigitNumber = crypto.randomInt(100000, 1000000);
-    return randomSixDigitNumber.toString();
-}
 
 exports.userInfo = async (req, res) => {
     try {
@@ -74,7 +70,6 @@ exports.changeUserNumber = async (req, res) => {
 
 exports.getAuthToken = async (req, res) => {
     try {
-        
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
 
@@ -82,10 +77,10 @@ exports.getAuthToken = async (req, res) => {
         if (authenticatedUser) {
             return res.json({message: 'User is already authenticated'});
         }
-        const sixDigitToken = generateSixDigitToken();
-        user.authToken = sixDigitToken;
+        const sixDigitCode = generateSixDigitCode();
+        user.authToken = sixDigitCode;
         await user.save();
-        res.json({authToken: sixDigitToken});
+        res.json({authToken: sixDigitCode});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
