@@ -1,5 +1,11 @@
-const { Voter } = require('../sequelize');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { Voter } = require('../sequelize');
+
+function generateSixDigitToken() {
+    const randomSixDigitNumber = crypto.randomInt(100000, 1000000);
+    return randomSixDigitNumber.toString();
+}
 
 exports.userInfo = async (req, res) => {
     try {
@@ -72,3 +78,49 @@ exports.changeUserNumber = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+exports.getAuthToken = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await Voter.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const authenticatedUser = user.authenticated;
+        if (authenticatedUser) {
+            res.json({message: 'User is already authenticated'});
+        }
+        const sixDigitToken = generateSixDigitToken();
+        user.authToken = sixDigitToken;
+        await user.save();
+        res.json({authToken: sixDigitToken});
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+exports.authAccount = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await Voter.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const authToken = req.body.authToken;
+        if (authToken === user.authToken) {
+            user.authenticated = true;
+            user.authToken = null;
+            await user.save();
+            return res.status(200).json({ message: 'AuthToken is valid' });
+        } 
+        else {
+            return res.status(401).json({ message: 'Invalid authToken' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
