@@ -114,7 +114,7 @@ exports.authAccount = async (req, res) => {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
-            return res.status(200).json({ message: 'AuthToken is valid' });
+            return res.status(200).json({ message: 'New user successfully registered' });
         } 
         else {
             return res.status(401).json({ message: 'Invalid authToken' });
