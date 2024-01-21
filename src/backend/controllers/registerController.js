@@ -14,7 +14,7 @@ exports.signup = async (req, res) => {
             return res.send({message: 'Password is not strong enough'});
         }
 
-        const hashedPassword = hashPassword(password);
+        const hashedPassword = await hashPassword(password);
         const newUser = await Voter.create({
             name,
             email,

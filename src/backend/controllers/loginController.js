@@ -6,11 +6,7 @@ const { Voter } = require('../sequelize');
 exports.login = async (req, res) => {
     try {
         const {email, password} = req.body
-        const user = await Voter.findOne({
-            where: {
-                email: email
-            }
-        })
+        const user = await Voter.findOne({where: {email: email}})
         if (!user) {
             return res.status(403).send({
                 error: 'The login information was incorrect'
@@ -18,9 +14,7 @@ exports.login = async (req, res) => {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(403).send({
-                error: 'The login information was incorrect'
-            })
+            return res.status(403).send({error: 'The login information was incorrect'})
         }
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         res.send({

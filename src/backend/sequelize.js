@@ -7,6 +7,9 @@ const sequelize = new Sequelize({
     username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
+    //username: 'root',
+    //password: 'Crimsondragon9332',
+    //database: 'votegrity',
 });
 
 
@@ -350,7 +353,7 @@ const Result = sequelize.define('Result', {
 async function syncDatabase() {
   try {
     await sequelize.sync({});
-    console.log('Tables synchronized successfully');
+    console.log('Tables synchronized successfully\n\n\n');
   } 
   catch (err) {
     console.error('Error synchronizing tables:', err);

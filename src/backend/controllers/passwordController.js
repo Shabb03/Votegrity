@@ -52,7 +52,7 @@ exports.changePassword = async (req, res) => {
         if (!isSecure) {
             res.send({message: 'Password is not strong enough'});
         }
-        const hashedPassword = hashPassword(password);
+        const hashedPassword = await hashPassword(password);
         user.password = hashedPassword;
         await user.save();
         res.send({message: 'User password updated successfully'});

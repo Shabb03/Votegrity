@@ -11,7 +11,8 @@ function isSecurePassword(password) {
 }
 
 async function hashPassword(password) {
-    return bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
 }
 
 module.exports = {
