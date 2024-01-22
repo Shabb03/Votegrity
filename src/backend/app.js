@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 
 const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/adminRoute');
-//const electionRoute = require('./routes/electionRoute');
+const electionRoute = require('./routes/electionRoute');
 
 const app = express();
 app.use(express.json());
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
-//app.use('/api/election', electionRoute);
+app.use('/api/election', electionRoute);
 
 app.use(passport.initialize());
 
