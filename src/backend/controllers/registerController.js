@@ -16,17 +16,17 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await hashPassword(password);
         const newUser = await Voter.create({
-            name,
-            email,
+            name: name,
+            email: email,
             password: hashedPassword,
-            dateOfBirth,
-            specialNumber,
-            citizenship,
-            phoneNumber,
-            securityQuestion1, 
-            securityAnswer1, 
-            securityQuestion2, 
-            securityAnswer2
+            dateOfBirth: dateOfBirth,
+            specialNumber: specialNumber,
+            citizenship: citizenship,
+            phoneNumber: phoneNumber,
+            securityQuestion1: securityQuestion1, 
+            securityAnswer1: securityAnswer1, 
+            securityQuestion2: securityQuestion2, 
+            securityAnswer: securityAnswer2
         });
 
         const userResponse = {
