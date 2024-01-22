@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const isAdmin = require('../middleware/isadmin');
 
 const loginController = require('../controllers/loginController');
 //const candidateController = require('../controllers/candidateController');
@@ -10,16 +11,16 @@ const loginController = require('../controllers/loginController');
 router.post('/login', loginController.adminLogin);
 
 /*
-router.get('/admin/candidateCount', candidateController.getCandidateCount);
-router.post('/admin/addCandidate', candidateController.addCandidate);
+router.get('/admin/candidateCount', isAdmin, candidateController.getCandidateCount);
+router.post('/admin/addCandidate', isAdmin, candidateController.addCandidate);
 
-router.post('/admin/addElection', electionController.addElection);
+router.post('/admin/addElection', isAdmin, electionController.addElection);
 
-router.get('/admin/election', dashboardController.electionDetails);
-router.get('/admin/votes', dashboardController.getTotalVotes);
+router.get('/admin/election', isAdmin, dashboardController.electionDetails);
+router.get('/admin/votes', isAdmin, dashboardController.getTotalVotes);
 
 //subject to change
-router.post('/admin/reset/', resetController.resetElection);
+router.post('/admin/reset/', isAdmin, resetController.resetElection);
 */
 
 module.exports = router;
