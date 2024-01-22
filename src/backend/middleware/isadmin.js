@@ -3,6 +3,7 @@ const { Admin } = require('../sequelize');
 require('dotenv').config();
 const secretKey = process.env.ADMIN_SECRET_KEY
 
+//Check if the user is an admin using jwt authentication token
 async function authenticateAdmin(req, res, next) {
     const tokenString = req.header('Authorization');
     if (!tokenString) {

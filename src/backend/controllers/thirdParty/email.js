@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
+//Send an email using the nodemailer framework with the provided subject, recipient and body of email
 async function sendEmail(subject, recipient, body) {
     try {
         const transporter = nodemailer.createTransport({

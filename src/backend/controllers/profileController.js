@@ -4,6 +4,7 @@ const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { Voter } = require('../sequelize');
 
+//Get the information of the user
 exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -23,6 +24,7 @@ exports.userInfo = async (req, res) => {
     }
 };
 
+//Change the user's email
 exports.changeUserEmail = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -47,6 +49,7 @@ exports.changeUserEmail = async (req, res) => {
     }
 };
 
+//Change the user's phone number
 exports.changeUserNumber = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -69,6 +72,7 @@ exports.changeUserNumber = async (req, res) => {
     }
 };
 
+//Get a six digit token via email for new users to verify themselves and successfully log into the system
 exports.getAuthToken = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -90,6 +94,7 @@ exports.getAuthToken = async (req, res) => {
     }
 }
 
+//Submit the 6 digit token received to verify the user
 exports.authAccount = async (req, res) => {
     try {
         const userId = req.user.id;

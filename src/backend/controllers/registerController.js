@@ -1,6 +1,7 @@
 const { isSecurePassword, hashPassword } = require('./functions/password');
 const { Voter } = require('../sequelize');  
 
+//Register a new user
 exports.signup = async (req, res) => {
     try {
         const { name, email, password, dateOfBirth, specialNumber, citizenship, phoneNumber, securityQuestion1, securityAnswer1, securityQuestion2, securityAnswer2 } = req.body;

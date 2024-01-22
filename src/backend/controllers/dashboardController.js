@@ -1,5 +1,6 @@
 const { Vote, Election } = require('../sequelize');
 
+//Get the details of the current election
 exports.electionDetails = async (req, res) => {
     try {
         const activeElection = await Election.findOne({where: {isActive: true}});
@@ -23,6 +24,7 @@ exports.electionDetails = async (req, res) => {
     }
 };
 
+//Get the total number of votes cast in the election
 exports.getTotalVotes = async (req, res) => {
     try {
         const totalVoteCount = await Vote.count();

@@ -12,10 +12,13 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/*
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
+*/
 
+//API Routes, HOST:PORT/URL (localhost:3000/api/user)
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/election', electionRoute);

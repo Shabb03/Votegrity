@@ -9,7 +9,7 @@ const sequelize = new Sequelize({
     database: process.env.SQL_DATABASE,
 });
 
-
+//Models
 const Voter = sequelize.define('Voter', {
     id: {
         type: DataTypes.INTEGER,
@@ -369,18 +369,15 @@ const Election = sequelize.define('Election', {
 });
 
 
-
+//Synchronize with MySQL database
 async function syncDatabase() {
   try {
-    await sequelize.sync({});
-    console.log('Tables synchronized successfully\n\n\n');
-  } 
-  catch (err) {
-    console.error('Error synchronizing tables:', err);
-  } 
-  //finally {
-  //  await sequelize.close();
-  //}
+        await sequelize.sync({});
+        console.log('Tables synchronized successfully\n\n\n');
+    } 
+    catch (err) {
+        console.error('Error synchronizing tables:', err);
+    }
 }
 
 syncDatabase();

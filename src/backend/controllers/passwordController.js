@@ -4,6 +4,7 @@ const generateSixDigitCode = require('./functions/generateCode');
 const { isSecurePassword, hashPassword } = require('./functions/password');
 const { Voter } = require('../sequelize');
 
+//Send a six digit code via email if the user has forgotten their password
 exports.authCode = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -21,6 +22,7 @@ exports.authCode = async (req, res) => {
     }
 }
 
+//Submit the 6 digit token received to verify it is the user attempting to change their password
 exports.resetPassword = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -43,6 +45,7 @@ exports.resetPassword = async (req, res) => {
     }
 }
 
+//Change the user's password
 exports.changePassword = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -56,6 +59,7 @@ exports.changePassword = async (req, res) => {
         user.password = hashedPassword;
         await user.save();
         res.send({message: 'User password updated successfully'});
+        //May want to come back and make this more secure
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });

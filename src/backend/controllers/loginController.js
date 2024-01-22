@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { Admin, Voter } = require('../sequelize');
 
+//Generate a login authentication token for the user with the correct login credentials
 exports.login = async (req, res) => {
     try {
         const {email, password} = req.body;
@@ -25,6 +26,7 @@ exports.login = async (req, res) => {
     }
 }
 
+//Generate a login authentication token for the admin with the correct login credentials
 exports.adminLogin = async (req, res) => {
     try {
         const {email, password} = req.body;

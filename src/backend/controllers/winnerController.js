@@ -1,5 +1,6 @@
 const { Result, Election } = require('../sequelize');
 
+//Get the resulting winner of current election
 exports.getResults = async (req, res) => {
     try {
         const activeElection = await Election.findOne({where: { isActive: true }});

@@ -1,5 +1,6 @@
 const { Candidate, Election } = require('../sequelize');
 
+//Create a new election
 exports.addElection = async (req, res) => {
     try {
         const activeElection = await Election.findOne({where: {isActive: true}});
@@ -25,6 +26,7 @@ exports.addElection = async (req, res) => {
     }
 };
 
+//Get the total number of candidates the newly created election must have
 exports.getCandidateCount = async (req, res) => {
     try {
         const activeElection = await Election.findOne({where: {isActive: true}});
@@ -38,6 +40,7 @@ exports.getCandidateCount = async (req, res) => {
     }
 };
 
+//Add a new candidate to the newly created election
 exports.addCandidate = async (req, res) => {
     try {
         const activeElection = await Election.findOne({where: {isActive: true}});

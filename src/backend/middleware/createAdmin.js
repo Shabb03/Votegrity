@@ -9,6 +9,7 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+//Create an admin via terminal command line interface
 async function createAdmin() {
     try {
         const email = await askQuestion('Enter admin email: ');
