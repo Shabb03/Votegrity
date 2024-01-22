@@ -11,7 +11,6 @@ const passwordController = require('../controllers/passwordController');
 router.post('/register', registerController.signup);
 
 router.post('/login', loginController.login);
-router.post('/logout', authenticateToken, loginController.logout);
 
 router.get('/userinfo', authenticateToken, profileController.userInfo);
 router.post('/useremail', authenticateToken, profileController.changeUserEmail)

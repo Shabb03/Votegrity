@@ -5,7 +5,7 @@ const voteController = require('../controllers/voteController');
 const winnerController = require('../controllers/winnerController');
 
 router.get('/candidates', voteController.getAllCandidates)
-router.post('/vote/:voterId/:candidateId', voteController.submitVote);
+router.post('/vote', voteController.submitVote);
 
 router.get('/results', winnerController.getResults);
 

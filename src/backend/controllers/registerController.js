@@ -23,8 +23,6 @@ exports.signup = async (req, res) => {
             specialNumber,
             citizenship,
             phoneNumber,
-            authenticated: false,
-            voted: false,
             securityQuestion1, 
             securityAnswer1, 
             securityQuestion2, 

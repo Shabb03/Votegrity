@@ -3,7 +3,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser')
 
 const userRoute = require('./routes/userRoute');
-//const adminRoute = require('./routes/adminRoute');
+const adminRoute = require('./routes/adminRoute');
 //const electionRoute = require('./routes/electionRoute');
 
 const app = express();
@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/user', userRoute);
-//app.use('/api/admin', adminRoute);
+app.use('/api/admin', adminRoute);
 //app.use('/api/election', electionRoute);
 
 app.use(passport.initialize());

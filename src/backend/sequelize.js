@@ -7,9 +7,6 @@ const sequelize = new Sequelize({
     username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
-    //username: 'root',
-    //password: 'Crimsondragon9332',
-    //database: 'votegrity',
 });
 
 
@@ -60,10 +57,12 @@ const Voter = sequelize.define('Voter', {
     authenticated: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
     },
     voted: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
     },
     privateKey: {
         type: DataTypes.STRING,
@@ -95,7 +94,8 @@ const Voter = sequelize.define('Voter', {
     },
     tokenAuthenticated: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: false,
     },
 
 });
@@ -120,7 +120,7 @@ const Candidate = sequelize.define('Candidate', {
     },
     image: {
         type: DataTypes.BLOB,
-        allowNull: false,
+        allowNull: true,
     },
     dateOfBirth: {
         type: DataTypes.DATEONLY,
@@ -129,6 +129,11 @@ const Candidate = sequelize.define('Candidate', {
     biography: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    isWinner: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
     }
 });
 
@@ -282,6 +287,26 @@ const Blockchain = sequelize.define('Blockchain', {
     },
 });
 
+const Result = sequelize.define('Result', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    winner: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+              model: Candidate,
+              key: 'id',
+        },
+    },
+    voteCount: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    }
+});
+
 const Election = sequelize.define('Election', {
     id: {
         type: DataTypes.INTEGER,
@@ -318,37 +343,32 @@ const Election = sequelize.define('Election', {
     },
     authenticationMethod: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
     },
     privateKey: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     publicKey: {
         type: DataTypes.STRING,
-        allowNull: false,
-    }
-});
-
-const Result = sequelize.define('Result', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+        allowNull: true,
     },
-    winner: {
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+    },
+    results: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-              model: Candidate,
+              model: Result,
               key: 'id',
         },
-    },
-    voteCount: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
     }
 });
+
+
 
 async function syncDatabase() {
   try {
