@@ -76,7 +76,7 @@ exports.getAuthToken = async (req, res) => {
 
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
-            return res.json({message: 'User is already authenticated'});
+            return res.json({error: 'User is already authenticated'});
         }
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;

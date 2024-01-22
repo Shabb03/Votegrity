@@ -8,9 +8,7 @@ exports.login = async (req, res) => {
         const {email, password} = req.body;
         const user = await Voter.findOne({where: {email: email}});
         if (!user) {
-            return res.status(403).send({
-                error: 'The login information was incorrect'
-            })
+            return res.status(403).send({error: 'The login information was incorrect'})
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
@@ -23,9 +21,7 @@ exports.login = async (req, res) => {
         })
     } 
     catch (error) {
-        res.status(500).send({
-            error: 'An error has occured trying to log in'
-        })
+        res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }
 
@@ -34,9 +30,7 @@ exports.adminLogin = async (req, res) => {
         const {email, password} = req.body;
         const user = await Admin.findOne({where: {email: email}});
         if (!user) {
-            return res.status(403).send({
-                error: 'The login information was incorrect'
-            })
+            return res.status(403).send({error: 'The login information was incorrect'})
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
@@ -49,8 +43,6 @@ exports.adminLogin = async (req, res) => {
         })
     } 
     catch (error) {
-        res.status(500).send({
-            error: 'An error has occured trying to log in'
-        })
+        res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }
