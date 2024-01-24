@@ -1,7 +1,10 @@
 <template>
     <div class="hello">
       <h1>{{ msg }}</h1>
-      <h1>TEST</h1>
+      <h1 style="margin-top: 5rem">TEST</h1>
+      <v-btn variant="tonal">
+  Button
+</v-btn>
     </div>
   </template>
   
@@ -16,6 +19,6 @@
   
   <style scoped>
   h1 {
-    margin: 40px 0 0;
+    font-size: 4rem;
   }
   </style>  

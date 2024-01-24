@@ -1,31 +1,51 @@
 <template>
+  <header>
     <nav class="navbar">
-      <router-link to="/" class="nav-link">Home</router-link>
-      <router-link to="/register" class="nav-link">About</router-link>
+      <LogoutButton />
+      <v-app>
+      <v-btn variant="tonal">
+  Button
+</v-btn>
+</v-app>
+<v-card-text>
+            Hello, this is a Vuetify dialog.
+          </v-card-text>
     </nav>
-  </template>
+  </header>
+</template>
   
-  <script>
+<script>
+import LogoutButton from './LogoutButton.vue';
+
   export default {
     name: 'NavigationBar',
+    components: {
+      LogoutButton
+  }
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   /* Add your styling for the navigation bar here */
+  header {
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top:0; left: 0;
+    /*z-index: 1000;*/
+  }
   .navbar {
-    background-color: #333;
+    background-color: #fff;
+    display: flex;
     padding: 10px;
-  }
-  
-  .nav-link {
-    color: white;
-    margin-right: 10px;
-    text-decoration: none;
-  }
-  
-  .nav-link:hover {
-    text-decoration: underline;
+    width: 100%;
+    align-items: right;
+    justify-content: flex-end;
+    /*box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);*/
+    box-shadow: 0 7px 4px rgba(0,0,0,.08), 0 10px 10px rgba(0,0,0,.08);
+    border-bottom: 5px solid #00e5ff;
   }
   </style>
   
