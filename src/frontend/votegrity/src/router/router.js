@@ -6,7 +6,7 @@ import UserRegister from '@/views/UserRegister.vue'
 //import VoteCandidate from '@/views/VoteCandidate.vue'
 //import ResetPassword from '@/views/ResetPassword.vue'
 //import ChangePassword from '@/views/ChangePassword.vue'
-//import ThankYou from '@/views/ThankYou.vue'
+import ThankYou from '@/views/ThankYou.vue'
 //import ElectionResults from '@/views/ElectionResults.vue'
 //import AdminLogin from '@/views/AdminLogin.vue'
 //import AdminDashboard from '@/views/AdminDashboard.vue'
@@ -24,7 +24,7 @@ const router = createRouter({
         //{ path: '/vote', component: VoteCandidate, name: 'Vote' },
         //{ path: '/resetpassword', component: ResetPassword, name: 'Enter Code' },
         //{ path: '/changepassword', component: ChangePassword, name: 'Enter New Password' },
-        //{ path: '/thankyou', component: ThankYou, name: 'Thank You' },
+        { path: '/thankyou', component: ThankYou, name: 'Thank You For Voting' },
         //{ path: '/results', component: ElectionResults, name: 'Results' },
         //{ path: '/admin/login', component: AdminLogin, name: 'Login' },
         //{ path: '/admin/dashboard', component: AdminDashboard, name: 'Dashboard' },

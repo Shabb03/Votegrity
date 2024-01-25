@@ -1,13 +1,13 @@
 <template>
-    <v-btn variant="tonal" @click="logout">Logout</v-btn>
+    <v-btn variant="tonal" @click="goToProfile">Profile</v-btn>
 </template>
 
 <script>
 export default {
-  name: 'LogoutButton',
+  name: 'ProfileButton',
   methods: {
-    logout() {
-      localStorage.setItem("votegrityToken","");
+    goToProfile() {
+      this.$router.push('/profile');
     },
   },
 };
