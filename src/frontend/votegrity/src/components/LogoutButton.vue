@@ -1,5 +1,5 @@
 <template>
-    <button class="navButton" @click="logout">Logout</button>
+    <v-btn variant="tonal" @click="logout">Logout</v-btn>
 </template>
 
 <script>
@@ -8,16 +8,14 @@ export default {
   methods: {
     logout() {
       localStorage.setItem("votegrityToken","");
-      //this.$router.push({ name: 'login' });
     },
   },
 };
 </script>
 
 <style scoped>
-    .navButton {
-      font-size: 1.5rem;
-      margin: 1rem, 2rem;
-      font-weight: bold;
-    }
+.v-btn {
+  font-size: 1.2em;
+  font-weight: bold;
+}
 </style>

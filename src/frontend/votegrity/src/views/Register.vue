@@ -1,24 +1,33 @@
 <template>
     <div class="hello">
-      <h1>{{ msg }}</h1>
-      <h1 style="margin-top: 5rem">TEST</h1>
-      <v-btn variant="tonal">
-  Button
-</v-btn>
+      <NavigationBar/>
+      <PageTitle/>
+      <PageSubTitle :pageSubTitle="pageSubTitle" />
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
+import PageTitle from '../components/PageTitle.vue';
+import NavigationBar from '../components/NavigationBar.vue';
+import PageSubTitle from '../components/PageSubTitle.vue';
+
   export default {
-    name: 'TEST',
+    name: 'TESTName',
+    components: {
+      PageTitle,
+      NavigationBar,
+      PageSubTitle
+    },
     props: {
       msg: String
-    }
+    },
+    data() {
+      return {
+        pageSubTitle: 'TestSubText',
+      };
+    },
   }
   </script>
   
   <style scoped>
-  h1 {
-    font-size: 4rem;
-  }
   </style>  
