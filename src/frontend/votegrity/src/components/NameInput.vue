@@ -12,8 +12,8 @@ import { ref } from 'vue';
 const value = ref('');
 const rules = [
   value => {
-    if (value?.length > 3) return true;
-    return 'Full Name must be more than 3 characters';
+    if (value?.length > 0) return true;
+    return 'This field is required';
   },
 ];
 </script>

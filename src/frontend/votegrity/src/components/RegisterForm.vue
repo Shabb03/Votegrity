@@ -4,21 +4,24 @@
     <NameInput/>
     <EmailInput/>
     <PasswordInput/>
+    <CitizenshipInput/>
     <SpecialNumberInput/>
+    <PhoneNumberInput/>
     <DateInput/>
 
     <div class="d-flex flex-row">
         <v-btn color="success" class="mt-4" @click="validate">
-          Validate
+          Sign Up!
         </v-btn>
-        <v-btn color="error" class="mt-4 ml-4" @click="reset">
+        <v-btn color="error" class="mt-4 ml-10" @click="reset">
           Reset
         </v-btn>
-        <v-btn color="error" class="mt-4 ml-4" @click="test">
+        <v-btn class="mt-4 ml-10" @click="test">
           Test
         </v-btn>
       </div>
   </v-form>
+  <router-link class="form-link" to="/login">Login</router-link>
   </div>
 </template>
 
@@ -26,7 +29,9 @@
 import NameInput from './NameInput.vue';
 import EmailInput from './EmailInput.vue';
 import PasswordInput from './PasswordInput.vue';
+import CitizenshipInput from './CitizenshipInput.vue';
 import SpecialNumberInput from './SpecialNumberInput.vue';
+import PhoneNumberInput from './PhoneNumberInput.vue';
 import DateInput from './DateInput.vue';
 
 export default {
@@ -34,7 +39,9 @@ export default {
     NameInput,
     EmailInput,
     PasswordInput,
+    CitizenshipInput,
     SpecialNumberInput,
+    PhoneNumberInput,
     DateInput,
   },
   methods: {
@@ -62,5 +69,11 @@ export default {
     @media (max-width: 600px) {
       width: 100%;
     }
+  }
+
+  .form-link {
+    color: blue; 
+    margin-top: 2em;
+    display: block;
   }
 </style>
