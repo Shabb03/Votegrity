@@ -2,6 +2,7 @@
     <v-text-field
       v-model="value"
       label="Email"
+      type="email"
       :rules="rules"
     ></v-text-field>
   </template>

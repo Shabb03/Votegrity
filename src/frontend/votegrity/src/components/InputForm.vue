@@ -3,16 +3,19 @@
   <v-form ref="form">
     <NameInput/>
     <EmailInput/>
-    <!--<SelectField v-model="select" :items="items" label="Item" required />
-    <CheckboxField v-model="checkbox" label="Do you agree?" required />-->
+    <PasswordInput/>
+    <SpecialNumberInput/>
+    <DateInput/>
 
     <div class="d-flex flex-row">
         <v-btn color="success" class="mt-4" @click="validate">
           Validate
         </v-btn>
-
         <v-btn color="error" class="mt-4 ml-4" @click="reset">
           Reset
+        </v-btn>
+        <v-btn color="error" class="mt-4 ml-4" @click="test">
+          Test
         </v-btn>
       </div>
   </v-form>
@@ -22,43 +25,29 @@
 <script>
 import NameInput from './NameInput.vue';
 import EmailInput from './EmailInput.vue';
-/*import SelectField from './SelectField.vue';
-import CheckboxField from './CheckboxField.vue';
-import ValidationButton from './ValidationButton.vue';
-import ResetButton from './ResetButton.vue';
-import ResetValidationButton from './ResetValidationButton.vue';*/
+import PasswordInput from './PasswordInput.vue';
+import SpecialNumberInput from './SpecialNumberInput.vue';
+import DateInput from './DateInput.vue';
 
 export default {
   components: {
     NameInput,
     EmailInput,
-    /*TextField,
-    SelectField,
-    CheckboxField,
-    ValidationButton,
-    ResetButton,
-    ResetValidationButton,*/
+    PasswordInput,
+    SpecialNumberInput,
+    DateInput,
   },
-  data: () => ({
-    //name: '',
-    /*nameRules: [
-      v => !!v || 'Name is required',
-      v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-    ],*/
-    /*email: ''*/
-    //select: null,
-    //items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-    //checkbox: false,
-  }),
   methods: {
       async validate() {
         const { valid } = await this.$refs.form.validate()
-
         if (valid) alert('Form is valid')
       },
       reset() {
         this.$refs.form.reset()
       },
+      test() {
+        console.log(this.date);
+      }
     },
 };
 </script>
