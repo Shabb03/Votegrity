@@ -26,7 +26,7 @@
 </template>
 
 <script>
-//import axios from 'axios';
+import axios from 'axios';
 import NameInput from './NameInput.vue';
 import EmailInput from './EmailInput.vue';
 import PasswordInput from './PasswordInput.vue';
@@ -57,7 +57,29 @@ export default {
   methods: {
       async validate() {
         const { valid } = await this.$refs.form.validate()
-        if (valid) alert('Form is valid')
+        if (valid) {
+          const postData = {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            dateOfBirth: this.date,
+            specialNumber: this.specialNumber,
+            citizenship: this.citizenship,
+            phoneNumber: this.phoneNumber,
+            securityQuestion1: 'SQ1',
+            securityAnswer1: 'SA1',
+            securityQuestion2: 'SQ2',
+            securityAnswer2: 'SA2',
+          };
+          try {
+            const response = await axios.post('http://localhost:3000/api/user/register', postData);
+            console.log(response.data);
+            //this.$router.push('/login');
+          } 
+          catch (error) {
+            alert('Error during registration:', error);
+          }
+        }
       },
       reset() {
         this.$refs.form.reset()
