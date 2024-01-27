@@ -1,7 +1,7 @@
 <template>
   <div class="form-container">
   <v-form ref="form">
-    <NameInput/>
+    <NameInput @update:name="nameValue"/>
     <EmailInput/>
     <PasswordInput/>
     <CitizenshipInput/>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+//import axios from 'axios';
 import NameInput from './NameInput.vue';
 import EmailInput from './EmailInput.vue';
 import PasswordInput from './PasswordInput.vue';
@@ -44,9 +45,20 @@ export default {
     PhoneNumberInput,
     DateInput,
   },
+  data: () => ({
+      name: '',
+  }),
   methods: {
       async validate() {
         const { valid } = await this.$refs.form.validate()
+        //console.log(this.value);
+        console.log(this.name);
+        /*console.log();
+        console.log();
+        console.log();
+        console.log();
+        console.log();
+        console.log();*/
         if (valid) alert('Form is valid')
       },
       reset() {
@@ -54,7 +66,10 @@ export default {
       },
       test() {
         console.log(this.date);
-      }
+      },
+      nameValue(params) {
+        this.name = params;
+      },
     },
 };
 </script>

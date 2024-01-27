@@ -1,19 +1,25 @@
 <template>
   <v-text-field
-    v-model="value"
+    v-model="name"
     label="Full Name"
-    :rules="rules"
+    :rules="nameRules"
+    @input="updateName"
   ></v-text-field>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-
-const value = ref('');
-const rules = [
-  value => {
-    if (value?.length > 0) return true;
-    return 'This field is required';
+<script>
+export default {
+data: () => ({
+    name: '',
+    nameRules: [
+      v => !!v || 'Name is required',
+      v => /^[a-zA-Z]+$/.test(v) || 'Only letters are allowed',
+    ],
+  }),
+  methods: {
+    updateName() {
+      this.$emit('update:name', this.name);
+    },
   },
-];
+};
 </script>
