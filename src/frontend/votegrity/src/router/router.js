@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import UserRegister from "@/views/UserRegister.vue";
 import UserLogin from '@/views/UserLogin.vue'
-//import UserAuthentication from '@/views/UserAuthentication.vue'
-//import UserProfile from '@/views/UserProfile.vue'
+import UserAuthentication from '@/views/UserAuthentication.vue'
+import UserProfile from '@/views/UserProfile.vue'
 //import VoteCandidate from '@/views/VoteCandidate.vue'
 //import ResetPassword from '@/views/ResetPassword.vue'
 //import ChangePassword from '@/views/ChangePassword.vue'
@@ -19,8 +19,8 @@ const router = createRouter({
   routes: [
     { path: "/register", component: UserRegister, name: "Register" },
     { path: '/login', component: UserLogin, name: 'Login' },
-    //{ path: '/authentication', component: UserAuthentication, name: 'Authentication' },
-    //{ path: '/profile', component: UserProfile, name: 'Profile' },
+    { path: '/authentication', component: UserAuthentication, name: 'Authentication' },
+    { path: '/profile', component: UserProfile, name: 'Profile' },
     //{ path: '/vote', component: VoteCandidate, name: 'Vote' },
     //{ path: '/resetpassword', component: ResetPassword, name: 'Enter Code' },
     //{ path: '/changepassword', component: ChangePassword, name: 'Enter New Password' },

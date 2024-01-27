@@ -13,7 +13,7 @@ export default {
     phoneNumber: '',
     phoneNumberRules: [
       v => !!v || 'phoneNumber is required',
-      v => /^\d+$/.test(v) || 'Only letters are allowed',
+      v => /^\d+$/.test(v) || 'Only numbers are allowed',
     ],
   }),
   methods: {
