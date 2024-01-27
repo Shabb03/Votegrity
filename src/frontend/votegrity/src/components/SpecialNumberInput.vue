@@ -1,19 +1,24 @@
 <template>
   <v-text-field
-    v-model="value"
+    v-model="specialNumber"
     label="Special Number"
-    :rules="rules"
+    :rules="specialNumberRules"
+    @input="updateSpecialNumber"
   ></v-text-field>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-
-const value = ref('');
-const rules = [
-  value => {
-    if (value?.length > 0) return true;
-    return 'This field is required';
+<script>
+export default {
+  data: () => ({
+    specialNumber: '',
+    specialNumberRules: [
+      v => !!v || 'specialNumber is required',
+    ],
+  }),
+  methods: {
+    updateSpecialNumber() {
+      this.$emit('update:specialNumber', this.specialNumber);
+    },
   },
-];
+};
 </script>

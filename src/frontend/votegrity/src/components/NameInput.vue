@@ -9,7 +9,7 @@
 
 <script>
 export default {
-data: () => ({
+  data: () => ({
     name: '',
     nameRules: [
       v => !!v || 'Name is required',

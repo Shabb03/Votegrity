@@ -1,19 +1,24 @@
 <template>
     <v-text-field
-      v-model="value"
+      v-model="citizenship"
       label="Citizenship"
-      :rules="rules"
+      :rules="citizenshipRules"
+      @input="updateCitizenship"
     ></v-text-field>
 </template>
   
-<script setup>
-  import { ref } from 'vue';
-  
-  const value = ref('');
-  const rules = [
-    value => {
-      if (value?.length > 0) return true;
-      return 'This field is required';
+<script>
+export default {
+  data: () => ({
+    citizenship: '',
+    citizenshipRules: [
+      v => !!v || 'citizenship is required',
+    ],
+  }),
+  methods: {
+    updateCitizenship() {
+      this.$emit('update:citizenship', this.citizenship);
     },
-  ];
+  },
+};
 </script>

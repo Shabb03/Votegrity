@@ -1,20 +1,25 @@
 <template>
     <v-text-field
-      v-model="value"
+      v-model="date"
       label="Birth Date"
       type="date"
-      :rules="rules"
+      :rules="dateRules"
+      @input="updateDate"
     ></v-text-field>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-
-const value = ref();
-const rules = [
-  value => {
-    if (value !== null && value !== undefined) return true;
-    return 'This field is required';
+<script>
+export default {
+  data: () => ({
+    date: '',
+    dateRules: [
+      v => !!v || 'Date is required',
+    ],
+  }),
+  methods: {
+    updateDate() {
+      this.$emit('update:date', this.date);
+    },
   },
-];
+};
 </script>

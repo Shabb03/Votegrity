@@ -1,21 +1,26 @@
 <template>
     <v-text-field
-      v-model="value"
+      v-model="email"
       label="Email"
       type="email"
-      :rules="rules"
+      :rules="emailRules"
+      @input="updateEmail"
     ></v-text-field>
-  </template>
+</template>
   
-  <script setup>
-  import { ref } from 'vue';
-  
-  const value = ref('');
-  const rules = [
-    value => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (emailRegex.test(value)) return true;
-      return 'Not a valid email';
+<script>
+export default {
+  data: () => ({
+    email: '',
+    emailRules: [
+      v => !!v || 'Email is required',
+      v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Not a valid email',
+    ],
+  }),
+  methods: {
+    updateEmail() {
+      this.$emit('update:email', this.email);
     },
-  ];
-  </script>
+  },
+};
+</script>

@@ -1,19 +1,25 @@
 <template>
     <v-text-field
-      v-model="value"
+      v-model="phoneNumber"
       label="Phone Number"
-      :rules="rules"
+      :rules="phoneNumberRules"
+      @input="updatePhoneNumber"
     ></v-text-field>
 </template>
   
-<script setup>
-  import { ref } from 'vue';
-  
-  const value = ref('');
-  const rules = [
-    value => {
-      if (value?.length > 0) return true;
-      return 'This field is required';
+<script>
+export default {
+  data: () => ({
+    phoneNumber: '',
+    phoneNumberRules: [
+      v => !!v || 'phoneNumber is required',
+      v => /^\d+$/.test(v) || 'Only letters are allowed',
+    ],
+  }),
+  methods: {
+    updatePhoneNumber() {
+      this.$emit('update:phoneNumber', this.phoneNumber);
     },
-  ];
+  },
+};
 </script>

@@ -2,12 +2,12 @@
   <div class="form-container">
   <v-form ref="form">
     <NameInput @update:name="nameValue"/>
-    <EmailInput/>
-    <PasswordInput/>
-    <CitizenshipInput/>
-    <SpecialNumberInput/>
-    <PhoneNumberInput/>
-    <DateInput/>
+    <EmailInput @update:email="emailValue"/>
+    <PasswordInput @update:password="passwordValue"/>
+    <CitizenshipInput @update:citizenship="citizenshipValue"/>
+    <SpecialNumberInput @update:specialNumber="specialNumberValue"/>
+    <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
+    <DateInput @update:date="dateValue"/>
 
     <div class="d-flex flex-row">
         <v-btn color="success" class="mt-4" @click="validate">
@@ -47,28 +47,50 @@ export default {
   },
   data: () => ({
       name: '',
+      email: '',
+      password: '',
+      citizenship: '',
+      specialNumber: '',
+      phoneNumber: '',
+      date: null,
   }),
   methods: {
       async validate() {
         const { valid } = await this.$refs.form.validate()
-        //console.log(this.value);
-        console.log(this.name);
-        /*console.log();
-        console.log();
-        console.log();
-        console.log();
-        console.log();
-        console.log();*/
         if (valid) alert('Form is valid')
       },
       reset() {
         this.$refs.form.reset()
       },
       test() {
+        console.log(this.name);
+        console.log(this.email);
+        console.log(this.password);
+        console.log(this.citizenship);
+        console.log(this.specialNumber);
+        console.log(this.phoneNumber);
         console.log(this.date);
       },
       nameValue(params) {
         this.name = params;
+      },
+      emailValue(params) {
+        this.email = params;
+      },
+      passwordValue(params) {
+        this.password = params;
+      },
+      citizenshipValue(params) {
+        this.citizenship = params;
+      },
+      specialNumberValue(params) {
+        this.specialNumber = params;
+      },
+      phoneNumberValue(params) {
+        this.phoneNumber = params;
+      },
+      dateValue(params) {
+        this.date = params;
       },
     },
 };
