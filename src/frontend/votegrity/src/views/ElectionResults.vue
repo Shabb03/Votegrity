@@ -1,10 +1,12 @@
 <template>
+  <div>
     <NavigationBar>
       <component :is="profileButton"></component>
       <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
-    <VoteContainer/>
+    <WinnerContainer/>
+  </div>
 </template>
   
 <script>
@@ -13,7 +15,7 @@ import NavigationBar from '../components/NavigationBar.vue';
 import ProfileButton from '../components/ProfileButton.vue';
 import LogoutButton from '../components/LogoutButton.vue';
 import PageTitle from '../components/PageTitle.vue';
-import VoteContainer from '../components/VoteContainer.vue';
+import WinnerContainer from '../components/WinnerContainer.vue';
 
 export default {
     components: {
@@ -21,7 +23,7 @@ export default {
       ProfileButton,
       LogoutButton,
       PageTitle,
-      VoteContainer,
+      WinnerContainer,
     },
     data() {
       return {

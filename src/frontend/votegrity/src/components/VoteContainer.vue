@@ -22,8 +22,12 @@
   
 <script>
 import axios from 'axios';
+import VoteCard from './VoteCard.vue';
 
 export default {
+  components: {
+      VoteCard,
+  },
   data: () => ({
         candidateData: [],
     }),
