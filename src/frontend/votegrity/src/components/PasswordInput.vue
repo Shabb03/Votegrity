@@ -5,6 +5,7 @@
       type="password"
       :rules="passwordRules"
       @input="updatePassword"
+      required
     ></v-text-field>
     
   </template>

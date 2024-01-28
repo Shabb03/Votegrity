@@ -2,20 +2,17 @@
     <div>
       <PageTitle/>
       <PasswordAuthForm/>
-      <PasswordForm/>
     </div>
 </template>
   
 <script>
 import PageTitle from '../components/PageTitle.vue';
 import PasswordAuthForm from '../components/PasswordAuthForm.vue';
-import PasswordForm from '../components/PasswordForm.vue';
 
 export default {
     components: {
       PageTitle,
       PasswordAuthForm,
-      PasswordForm,
     },
 }
 </script>

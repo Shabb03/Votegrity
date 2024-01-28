@@ -4,6 +4,7 @@
       label="Phone Number"
       :rules="phoneNumberRules"
       @input="updatePhoneNumber"
+      required
     ></v-text-field>
 </template>
   

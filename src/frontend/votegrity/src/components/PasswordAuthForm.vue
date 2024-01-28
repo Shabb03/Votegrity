@@ -39,7 +39,7 @@
             };
             try {
               const authToken = this.getAuthToken();
-              const response = await axios.post('http://localhost:3000/api/user/authenticateaccount', postData, {
+              const response = await axios.post('http://localhost:3000/api/user/resetpassword', postData, {
                 headers: {
                   Authorization: `Bearer ${authToken}`,
                 },
@@ -50,7 +50,7 @@
                 alert('Invalid Code');
               }
               else {
-                //this.$router.push('/vote');
+                //this.$router.push('/changepassword');
               }  
             } 
             catch (error) {
@@ -61,14 +61,11 @@
         async getAuthCode() {
           try {
               const authToken = this.getAuthToken();
-              const response = await axios.get('http://localhost:3000/api/user/registertoken', {
+              const response = await axios.get('http://localhost:3000/api/user/authenticationcode', {
                 headers: {
                   Authorization: `Bearer ${authToken}`,
                 },
               });
-              if (response.data.authenticated === true) {
-                this.$router.push('/vote');
-              }
               console.log(response.data);
           } 
           catch (error) {

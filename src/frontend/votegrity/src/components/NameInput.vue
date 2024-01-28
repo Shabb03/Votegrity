@@ -4,6 +4,7 @@
     label="Full Name"
     :rules="nameRules"
     @input="updateName"
+    required
   ></v-text-field>
 </template>
 

@@ -4,6 +4,7 @@
     label="Special Number"
     :rules="specialNumberRules"
     @input="updateSpecialNumber"
+    required
   ></v-text-field>
 </template>
 

@@ -8,6 +8,8 @@
     <SpecialNumberInput @update:specialNumber="specialNumberValue"/>
     <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
     <DateInput @update:date="dateValue"/>
+    <SecurityInput securityNumber="1" @update:securitySelect="sq1Value" @update:securityAnswer="sa1Value"/>
+    <SecurityInput securityNumber="2" @update:securitySelect="sq2Value" @update:securityAnswer="sa2Value"/>
 
     <div class="d-flex flex-row">
         <v-btn color="success" class="mt-4" @click="validate">
@@ -34,6 +36,7 @@ import CitizenshipInput from './CitizenshipInput.vue';
 import SpecialNumberInput from './SpecialNumberInput.vue';
 import PhoneNumberInput from './PhoneNumberInput.vue';
 import DateInput from './DateInput.vue';
+import SecurityInput from './SecurityInput.vue';
 
 export default {
   components: {
@@ -44,6 +47,7 @@ export default {
     SpecialNumberInput,
     PhoneNumberInput,
     DateInput,
+    SecurityInput,
   },
   data: () => ({
       name: '',
@@ -53,6 +57,10 @@ export default {
       specialNumber: '',
       phoneNumber: '',
       date: null,
+      sq1: '',
+      sa1: '',
+      sq2: '',
+      sa2: '',
   }),
   methods: {
       async validate() {
@@ -66,10 +74,10 @@ export default {
             specialNumber: this.specialNumber,
             citizenship: this.citizenship,
             phoneNumber: this.phoneNumber,
-            securityQuestion1: 'SQ1',
-            securityAnswer1: 'SA1',
-            securityQuestion2: 'SQ2',
-            securityAnswer2: 'SA2',
+            securityQuestion1: this.sq1,
+            securityAnswer1: this.sa1,
+            securityQuestion2: this.sq2,
+            securityAnswer2: this.sa2,
           };
           try {
             const response = await axios.post('http://localhost:3000/api/user/register', postData);
@@ -91,12 +99,16 @@ export default {
       },
       test() {
         console.log(this.name);
-        console.log(this.email);
+        /*console.log(this.email);
         console.log(this.password);
         console.log(this.citizenship);
         console.log(this.specialNumber);
         console.log(this.phoneNumber);
-        console.log(this.date);
+        console.log(this.date);*/
+        console.log(this.sq1);
+        console.log(this.sa1);
+        console.log(this.sq2);
+        console.log(this.sa2);
       },
       nameValue(params) {
         this.name = params;
@@ -118,6 +130,18 @@ export default {
       },
       dateValue(params) {
         this.date = params;
+      },
+      sq1Value(params) {
+        this.sq1 = params;
+      },
+      sa1Value(params) {
+        this.sa1 = params;
+      },
+      sq2Value(params) {
+        this.sq2 = params;
+      },
+      sa2Value(params) {
+        this.sa2 = params;
       },
     },
 };

@@ -4,6 +4,7 @@
       label="Enter Code"
       :rules="codeRules"
       @input="updateCode"
+      required
     ></v-text-field>
   </template>
   

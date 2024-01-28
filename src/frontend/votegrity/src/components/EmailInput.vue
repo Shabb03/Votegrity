@@ -5,6 +5,7 @@
       type="email"
       :rules="emailRules"
       @input="updateEmail"
+      required
     ></v-text-field>
 </template>
   

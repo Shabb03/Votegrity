@@ -5,6 +5,7 @@
       type="date"
       :rules="dateRules"
       @input="updateDate"
+      required
     ></v-text-field>
 </template>
 

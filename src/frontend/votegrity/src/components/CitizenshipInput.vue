@@ -4,6 +4,7 @@
       label="Citizenship"
       :rules="citizenshipRules"
       @input="updateCitizenship"
+      required
     ></v-text-field>
 </template>
   
