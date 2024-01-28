@@ -1,19 +1,26 @@
 <template>
     <v-text-field
       v-model="password"
-      label="Password"
-      type="password"
+      :label="label || 'Password'"
+      :type="showPassword ? 'text' : 'password'"
       :rules="passwordRules"
       @input="updatePassword"
       required
     ></v-text-field>
-    
-  </template>
-  
+    <v-checkbox v-model="showPassword" label="Show Password"></v-checkbox>
+</template>
+
 <script>
 export default {
+  props: {
+    label: {
+      type: String,
+      default: 'Password',
+    },
+  },
   data: () => ({
     password: '',
+    showPassword: false,
     passwordRules: [
       v => !!v || 'password is required',
       /*v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/.test(v)

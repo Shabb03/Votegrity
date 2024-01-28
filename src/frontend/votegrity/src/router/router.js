@@ -4,7 +4,6 @@ import UserLogin from '@/views/UserLogin.vue'
 import UserAuthentication from '@/views/UserAuthentication.vue'
 import UserProfile from '@/views/UserProfile.vue'
 //import VoteCandidate from '@/views/VoteCandidate.vue'
-import ResetPassword from '@/views/ResetPassword.vue'
 import ChangePassword from '@/views/ChangePassword.vue'
 import ThankYou from "@/views/ThankYou.vue";
 //import ElectionResults from '@/views/ElectionResults.vue'
@@ -22,7 +21,6 @@ const router = createRouter({
     { path: '/authentication', component: UserAuthentication, name: 'Authentication' },
     { path: '/profile', component: UserProfile, name: 'Profile' },
     //{ path: '/vote', component: VoteCandidate, name: 'Vote' },
-    { path: '/resetpassword', component: ResetPassword, name: 'Enter Code' },
     { path: '/changepassword', component: ChangePassword, name: 'Enter New Password' },
     { path: "/thankyou", component: ThankYou, name: "Thank You For Voting" },
     //{ path: '/results', component: ElectionResults, name: 'Results' },

@@ -79,7 +79,7 @@ export default {
       },
       async fetchUserData() {
         try {
-            const authToken = this.getAuthToken();
+            const authToken = localStorage.getItem("votegrityToken");
             const response = await axios.get('http://localhost:3000/api/user/userinfo', {
               headers: {
                 Authorization: `Bearer ${authToken}`,
