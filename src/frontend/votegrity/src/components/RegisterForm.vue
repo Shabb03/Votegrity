@@ -74,7 +74,12 @@ export default {
           try {
             const response = await axios.post('http://localhost:3000/api/user/register', postData);
             console.log(response.data);
-            //this.$router.push('/login');
+            if (response.data.error) {
+              alert(response.data.error);
+            }
+            else {
+              //this.$router.push('/login');
+            }
           } 
           catch (error) {
             alert('Error during registration:', error);

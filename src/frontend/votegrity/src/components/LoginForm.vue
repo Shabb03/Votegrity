@@ -44,12 +44,15 @@ export default {
           };
           try {
             const response = await axios.post('http://localhost:3000/api/user/login', postData);
-            const token = response.data.token;
-
-        // Store the token in local storage
-            localStorage.setItem("votegrityToken",token);
-            console.log(response.data);
-            //this.$router.push('/vote');
+            if (response.data.error) {
+              alert(response.data.error);
+            }
+            else {
+              const token = response.data.token;
+              localStorage.setItem("votegrityToken",token);
+              console.log(response.data);
+              //this.$router.push('/vote');
+            }
           } 
           catch (error) {
             alert('Error during login:', error);

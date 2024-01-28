@@ -45,7 +45,12 @@
               });
               //const userData = response.data;
               console.log(response.data);
-              //this.$router.push('/vote');
+              if (response.data.invalid) {
+                alert('Invalid Code');
+              }
+              else {
+                //this.$router.push('/vote');
+              }  
             } 
             catch (error) {
               alert('Error submitting authentication code:', error);
