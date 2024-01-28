@@ -10,6 +10,7 @@
 </template>
   
 <script>
+import { markRaw } from "vue";
 import NavigationBar from '../components/NavigationBar.vue';
 import VoteButton from '../components/VoteButton.vue';
 import LogoutButton from '../components/LogoutButton.vue';
@@ -26,8 +27,8 @@ export default {
     },
     data() {
       return {
-        voteButton: VoteButton,
-        logoutButton: LogoutButton,
+        voteButton: markRaw(VoteButton),
+        logoutButton: markRaw(LogoutButton),
       };
     },
 }

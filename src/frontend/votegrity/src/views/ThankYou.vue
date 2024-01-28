@@ -10,6 +10,7 @@
 </template>
   
 <script>
+import { markRaw } from "vue";
 import NavigationBar from '../components/NavigationBar.vue';
 import ProfileButton from '../components/ProfileButton.vue';
 import LogoutButton from '../components/LogoutButton.vue';
@@ -26,8 +27,8 @@ import PageSubTitle from '../components/PageSubTitle.vue';
     },
     data() {
       return {
-        profileButton: ProfileButton,
-        logoutButton: LogoutButton,
+        profileButton: markRaw(ProfileButton),
+        logoutButton: markRaw(LogoutButton),
         pageSubTitle: 'Each vote makes a difference',
       };
     },

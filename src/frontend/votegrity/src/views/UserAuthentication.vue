@@ -9,6 +9,7 @@
 </template>
   
 <script>
+import { markRaw } from "vue";
 import NavigationBar from '../components/NavigationBar.vue';
 import LogoutButton from '../components/LogoutButton.vue';
 import PageTitle from '../components/PageTitle.vue';
@@ -23,7 +24,7 @@ export default {
     },
     data() {
       return {
-        logoutButton: LogoutButton,
+        logoutButton: markRaw(LogoutButton),
       };
     },
 }
