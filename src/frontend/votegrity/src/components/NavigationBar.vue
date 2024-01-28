@@ -22,7 +22,7 @@
     justify-content: space-between;
     position: fixed;
     top:0; left: 0;
-    /*z-index: 1000;*/
+    z-index: 1000;
   }
   .v-app-bar {
     background-color: #D9D9D9;
