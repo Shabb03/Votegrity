@@ -2,7 +2,7 @@
     <div>
       <NavigationBar>
         <component :is="profileButton"></component>
-        <component  :is="logoutButton"></component>
+        <component :is="logoutButton"></component>
       </NavigationBar>
       <PageTitle/>
       <PageSubTitle :pageSubTitle="pageSubTitle" />
@@ -11,18 +11,18 @@
   
 <script>
 import NavigationBar from '../components/NavigationBar.vue';
-import PageTitle from '../components/PageTitle.vue';
-import PageSubTitle from '../components/PageSubTitle.vue';
 import ProfileButton from '../components/ProfileButton.vue';
 import LogoutButton from '../components/LogoutButton.vue';
+import PageTitle from '../components/PageTitle.vue';
+import PageSubTitle from '../components/PageSubTitle.vue';
 
   export default {
     components: {
       NavigationBar,
+      ProfileButton,
+      LogoutButton,
       PageTitle,
       PageSubTitle,
-      ProfileButton,
-      LogoutButton
     },
     data() {
       return {
