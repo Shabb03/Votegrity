@@ -12,6 +12,7 @@
           </v-btn>
         </div>
     </v-form>
+    <button class="form-link" @click="getAuthCode">Send Code Again</button>
     </div>
   </template>
   
@@ -26,9 +27,9 @@
     data: () => ({
         code: '',
     }),
-    created() {
+    /*created() {
       this.getAuthCode();
-    },
+    },*/
     methods: {
         async validate() {
           const { valid } = await this.$refs.form.validate()
