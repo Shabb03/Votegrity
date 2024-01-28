@@ -80,7 +80,7 @@ exports.getAuthToken = async (req, res) => {
 
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
-            return res.json({error: 'User is already authenticated'});
+            return res.json({error: 'User is already authenticated', authenticated: true});
         }
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
@@ -108,7 +108,7 @@ exports.authAccount = async (req, res) => {
             return res.status(200).json({ message: 'New user successfully authenticated' });
         } 
         else {
-            return res.status(401).json({ message: 'Invalid authToken' });
+            return res.status(401).json({ message: 'Invalid authToken', invalid: true });
         }
     }
     catch (error) {

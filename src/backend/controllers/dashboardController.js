@@ -16,7 +16,7 @@ exports.electionDetails = async (req, res) => {
                 authenticationMethod: activeElection.authenticationMethod
             });
         } else {
-            res.status(404).json({ message: 'No active election found' });
+            res.status(404).json({ message: 'No active election found', election: false });
         }
     }
     catch (error) {

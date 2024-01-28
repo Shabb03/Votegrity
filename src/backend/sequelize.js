@@ -10,6 +10,18 @@ const sequelize = new Sequelize({
 });
 
 //Models
+const SecurityQuestions = sequelize.define('SecurityQuestions', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    questions: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+});
+
 const Voter = sequelize.define('Voter', {
     id: {
         type: DataTypes.INTEGER,
@@ -73,16 +85,24 @@ const Voter = sequelize.define('Voter', {
         allowNull: true,
     },
     securityQuestion1: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+              model: SecurityQuestions,
+              key: 'id',
+        },
     },
     securityAnswer1: {
         type: DataTypes.STRING,
         allowNull: true,
     },
     securityQuestion2: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+              model: SecurityQuestions,
+              key: 'id',
+        },
     },
     securityAnswer2: {
         type: DataTypes.STRING,
@@ -384,6 +404,7 @@ syncDatabase();
 
 module.exports = {
     sequelize,
+    SecurityQuestions,
     Voter,
     Candidate,
     Admin,
@@ -391,6 +412,6 @@ module.exports = {
     Vote,
     Transaction,
     Blockchain,
-    Election,
     Result,
+    Election,
 };

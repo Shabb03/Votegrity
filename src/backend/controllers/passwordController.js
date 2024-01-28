@@ -37,7 +37,7 @@ exports.resetPassword = async (req, res) => {
             return res.status(200).json({ message: 'Reset token accepted' });
         } 
         else {
-            return res.status(401).json({ message: 'Invalid resetToken' });
+            return res.status(401).json({ message: 'Invalid resetToken', invalid: true });
         }
     }
     catch (error) {
@@ -51,6 +51,7 @@ exports.changePassword = async (req, res) => {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
 
+        const password = req.body.password;
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
             res.send({error: 'Password is not strong enough'});

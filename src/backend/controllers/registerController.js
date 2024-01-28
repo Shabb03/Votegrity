@@ -7,12 +7,12 @@ exports.signup = async (req, res) => {
         const { name, email, password, dateOfBirth, specialNumber, citizenship, phoneNumber, securityQuestion1, securityAnswer1, securityQuestion2, securityAnswer2 } = req.body;
         const existingUser = await Voter.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists' });
+            return res.status(400).json({ error: 'User already exists, email in use' });
         }
 
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
-            return res.send({error: 'Password is not strong enough'});
+            return res.send({error: 'Password is not strong enough' });
         }
 
         const hashedPassword = await hashPassword(password);

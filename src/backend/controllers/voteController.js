@@ -18,7 +18,7 @@ exports.submitVote = async (req, res) => {
         const user = await Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (!authenticatedUser) {
-            return res.json({error: 'User is not authenticated'});
+            return res.json({error: 'User is not authenticated', authenticated: false});
         }
         const { voterId, candidateId } = req.body;
         const vote = await Vote.create({
