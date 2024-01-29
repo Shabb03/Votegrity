@@ -7,7 +7,7 @@
     <ElectionDateInput :label="endDateLabel" @update:="endDateValue"/>
     <ElectionDateInput :label="resultDateLabel" @update:="resultDateValue"/>
     <NumberInput @update:number="numberValue"/>
-    <AgeInput @update:age="ageValue"/>
+    <AgeInput :label="ageLabel" @update:age="ageValue"/>
     <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
     <!--Add CitizenAuthenticationInput-->
 
@@ -48,6 +48,7 @@ export default {
     startDateLabel: "Election Start Date: ",
     endDateLabel: "Election End Date: ",
     resultDateLabel: "Election Results Date: ",
+    ageLabel: "Minimum Age Requirement (Optional)",
     title: '',
     description: '',
     startDate: null,
@@ -65,9 +66,10 @@ export default {
             title: this.title,
             description: this.description,
             candidateNumber: this.number,
+            //update this
           };
           try {
-            const response = await axios.post('http://localhost:3000/api//admin/addElection', postData);
+            const response = await axios.post('http://localhost:3000/api/admin/addelection', postData);
             if (response.data.error) {
               alert(response.data.error);
             }

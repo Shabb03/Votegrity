@@ -14,7 +14,7 @@ export default {
     title: '',
     titleRules: [
       v => !!v || 'Title is required',
-      v => /^[a-zA-Z]+$/.test(v) || 'Only letters are allowed',
+      v => /^[a-zA-Z\s]+$/.test(v) || 'Only letters are allowed',
     ],
   }),
   methods: {

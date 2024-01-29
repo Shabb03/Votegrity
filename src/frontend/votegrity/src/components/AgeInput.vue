@@ -1,7 +1,7 @@
 <template>
     <v-text-field
       v-model="age"
-      label="Minimum Age Requirement"
+      :label="label"
       @input="updateAge"
       type="number"
     ></v-text-field>
@@ -9,6 +9,12 @@
   
   <script>
   export default {
+    props: {
+      label: {
+        type: String,
+        required: true,
+      },
+    },
     data: () => ({
       age: '',
       /*ageRules: [
