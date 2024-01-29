@@ -12,7 +12,8 @@ import ElectionResults from '@/views/ElectionResults.vue';
 //import CreateElection from '@/views/CreateElection.vue';
 //import AddCandidate from '@/views/AddCandidate.vue';
 //import ResetElection from '@/views/ResetElection.vue';
-//import NotFound from '@/views/NotFound.vue';
+//import HomePage from '@views/HomePage.vue';
+import NotFound from '@/views/NotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -25,13 +26,15 @@ const router = createRouter({
     { path: '/changepassword', component: ChangePassword, name: 'Enter New Password' },
     { path: '/thankyou', component: ThankYou, name: 'Thank You For Voting' },
     { path: '/results', component: ElectionResults, name: 'Results' },
+
     //{ path: '/admin/login', component: AdminLogin, name: 'Login' },
     //{ path: '/admin/dashboard', component: AdminDashboard, name: 'Dashboard' },
     //{ path: '/admin/createelection', component: CreateElection, name: 'Create Election' },
     //{ path: '/admin/addcandidate', component: AddCandidate, name: 'Add Candidate' },
     //{ path: '/admin/reset', component: ResetElection, name: 'Reset Election' },
 
-    //{ path: '/:pathMatch(.*)*', component: NotFound, name: 'NotFound' },
+    //{ path: '/', component: HomePage, name: 'Loading' },
+    { path: '/:pathMatch(.*)*', component: NotFound, name: '404 Page Not Found' },
   ],
 });
 
