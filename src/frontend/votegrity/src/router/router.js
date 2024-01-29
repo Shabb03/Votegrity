@@ -7,7 +7,7 @@ import VoteCandidate from '@/views/VoteCandidate.vue';
 import ChangePassword from '@/views/ChangePassword.vue';
 import ThankYou from "@/views/ThankYou.vue";
 import ElectionResults from '@/views/ElectionResults.vue';
-//import AdminLogin from '@/views/AdminLogin.vue';
+import AdminLogin from '@/views/AdminLogin.vue';
 //import AdminDashboard from '@/views/AdminDashboard.vue';
 //import CreateElection from '@/views/CreateElection.vue';
 //import AddCandidate from '@/views/AddCandidate.vue';
@@ -27,12 +27,14 @@ const router = createRouter({
     { path: '/thankyou', component: ThankYou, name: 'Thank You For Voting' },
     { path: '/results', component: ElectionResults, name: 'Results' },
 
-    //{ path: '/admin/login', component: AdminLogin, name: 'Login' },
+    { path: '/admin/login', component: AdminLogin, name: 'Login' },
     //{ path: '/admin/dashboard', component: AdminDashboard, name: 'Dashboard' },
     //{ path: '/admin/createelection', component: CreateElection, name: 'Create Election' },
     //{ path: '/admin/addcandidate', component: AddCandidate, name: 'Add Candidate' },
     //{ path: '/admin/reset', component: ResetElection, name: 'Reset Election' },
 
+    //Add loading screen then functionality to get user info, not logged in, logged in or admin and redirect accordingly
+    //Add backend controller userStatus to determine if user is admin, is logged in but not authenticated, logged in or not logged in
     //{ path: '/', component: HomePage, name: 'Loading' },
     { path: '/:pathMatch(.*)*', component: NotFound, name: '404 Page Not Found' },
   ],
