@@ -1,5 +1,21 @@
 const { isSecurePassword, hashPassword } = require('./functions/password');
-const { Voter } = require('../sequelize');  
+const { SecurityQuestion, Voter } = require('../sequelize');  
+
+//test
+//Get all possible security questions
+exports.securityQuestions = async (req, res) => {
+    try {
+        const allSecurityQuestions = await SecurityQuestions.findAll({
+            attributes: ['questions'],
+            raw: true,
+        });
+        const questions = allSecurityQuestions.map(question => question.questions);
+        res.json({ questions });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 
 //Register a new user
 exports.signup = async (req, res) => {
@@ -15,6 +31,20 @@ exports.signup = async (req, res) => {
             return res.send({error: 'Password is not strong enough' });
         }
 
+        const sq1 = await SecurityQuestion.findOne({
+            where: { questions: securityQuestion1 },
+            attributes: ['id'],
+        });
+        const sq2 = await SecurityQuestion.findOne({
+            where: { questions: securityQuestion2 },
+            attributes: ['id'],
+        });
+
+        if (!sq1 || !sq2) {
+        } else {
+            res.status(404).json({ message: 'Security question not found' });
+        }
+
         const hashedPassword = await hashPassword(password);
         const newUser = await Voter.create({
             name: name,
@@ -24,9 +54,9 @@ exports.signup = async (req, res) => {
             specialNumber: specialNumber,
             citizenship: citizenship,
             phoneNumber: phoneNumber,
-            securityQuestion1: securityQuestion1, 
+            securityQuestion1: sq1.id, 
             securityAnswer1: securityAnswer1, 
-            securityQuestion2: securityQuestion2, 
+            securityQuestion2: sq2.id, 
             securityAnswer: securityAnswer2
         });
 

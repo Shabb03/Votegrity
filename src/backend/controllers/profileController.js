@@ -16,7 +16,9 @@ exports.userInfo = async (req, res) => {
             dateOfBirth: user.dateOfBirth,
             specialNumber: user.specialNumber,
             citizenship: user.citizenship,
-            phoneNumber: user.phoneNumber
+            phoneNumber: user.phoneNumber,
+            securityQuestion1: user.securityQuestion1,
+            securityQuestion2: user.securityQuestion2,
         });
     }
     catch (error) {

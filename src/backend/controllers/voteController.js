@@ -20,9 +20,9 @@ exports.submitVote = async (req, res) => {
         if (!authenticatedUser) {
             return res.json({error: 'User is not authenticated', authenticated: false});
         }
-        const { voterId, candidateId } = req.body;
+        const candidateId = req.body.candidateId;
         const vote = await Vote.create({
-            voterId: voterId,
+            voterId: userId,
             candidateId: candidateId,
         });
         res.json({ message: 'Vote submitted successfully'});

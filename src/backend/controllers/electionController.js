@@ -29,9 +29,11 @@ exports.addElection = async (req, res) => {
 //Get the total number of candidates the newly created election must have
 exports.getCandidateCount = async (req, res) => {
     try {
+        const addedCandidates = await Candidate.count({where: {isWinner: false}});
         const activeElection = await Election.findOne({where: {isActive: true}});
         const candidateCount = activeElection.candidateCount;
         res.json({
+            addedCandidates: addedCandidates,
             candidateCount: candidateCount 
         });
     }
