@@ -52,6 +52,9 @@ export default {
       party: null,
       image: null,
     }),
+    created() {
+      this.candidateCount();
+    },
     methods: {
         async validate() {
           const { valid } = await this.$refs.form.validate()
@@ -84,6 +87,23 @@ export default {
             catch (error) {
               alert('Error during login:', error);
             }
+          }
+        },
+        async candidateCount() {
+          try {
+            const authToken = localStorage.getItem("votegrityToken");
+            const response = await axios.get('http://localhost:3000/api/admin/candidatecount', {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            });
+            const data = response.data;
+            this.addedCandidates = data.addedCandidates;
+            this.candidateCount = data.candidateCount;
+            console.log(response.data);
+          } 
+          catch (error) {
+            alert('Error retrieving details:', error);
           }
         },
         reset() {
