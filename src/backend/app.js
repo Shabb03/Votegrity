@@ -26,7 +26,7 @@ app.use('/api/election', electionRoute);
 app.use(passport.initialize());
 
 app.use((req, res) => {
-    res.status(404).send('Page Not Found');
+    res.status(404).send('URL Not Found');
 });
 
 app.use((err, req, res, next) => {
