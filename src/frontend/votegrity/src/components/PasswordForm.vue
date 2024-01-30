@@ -58,7 +58,12 @@
               password: this.password,
             };
             try {
-              const response = await axios.post('http://localhost:3000/api/user/changepassword', postData);
+              const token = localStorage.getItem("votegrityToken");
+              const response = await axios.post('http://localhost:3000/api/user/changepassword', postData, {
+                headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              });
               if (response.data.error) {
                 alert(response.data.error);
               }
@@ -75,10 +80,10 @@
         },
         async getAuthCode() {
           try {
-              const authToken = this.getAuthToken();
+              const token = localStorage.getItem("votegrityToken");
               const response = await axios.get('http://localhost:3000/api/user/authenticationcode', {
                 headers: {
-                  Authorization: `Bearer ${authToken}`,
+                  Authorization: `Bearer ${token}`,
                 },
               });
               console.log(response.data);

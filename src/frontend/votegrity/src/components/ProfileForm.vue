@@ -62,10 +62,10 @@ export default {
             phoneNumber: this.phoneNumber,
           };
           try {
-            const authToken = this.getAuthToken();
+            const token = localStorage.getItem("votegrityToken");
             const response = await axios.post('http://localhost:3000/api/user/useremail', postData, {
               headers: {
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${token}`,
               },
             });
             //const userData = response.data;
@@ -79,10 +79,10 @@ export default {
       },
       async fetchUserData() {
         try {
-            const authToken = localStorage.getItem("votegrityToken");
+            const token = localStorage.getItem("votegrityToken");
             const response = await axios.get('http://localhost:3000/api/user/userinfo', {
               headers: {
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${token}`,
               },
             });
             const userData = response.data;

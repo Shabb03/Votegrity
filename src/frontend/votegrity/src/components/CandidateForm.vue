@@ -57,11 +57,23 @@ export default {
         async validate() {
           const { valid } = await this.$refs.form.validate()
           if (valid) {
-            const postData = {
-              name: this.name,
-            };
+            const formData = new FormData();
+            formData.append('name', this.name);
+            formData.append('image', this.image);
+            formData.append('age', this.age);
+            formData.append('biography', this.bio);
+            formData.append('voice', this.voice);
+            formData.append('party', this.party);
+            /*
+            dateOfBirth,
+            */
             try {
-              const response = await axios.post('http://localhost:3000/api/admin/addcandidate', postData);
+              const token = localStorage.getItem("votegrityToken");
+              const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
+                headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              });
               if (response.data.error) {
                 alert(response.data.error);
               }

@@ -69,7 +69,12 @@ export default {
             //update this
           };
           try {
-            const response = await axios.post('http://localhost:3000/api/admin/addelection', postData);
+            const token = localStorage.getItem("votegrityToken");
+            const response = await axios.post('http://localhost:3000/api/admin/addelection', postData, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
             if (response.data.error) {
               alert(response.data.error);
             }

@@ -38,10 +38,10 @@
                 authToken: this.code,
             };
             try {
-              const authToken = this.getAuthToken();
+              const token = localStorage.getItem("votegrityToken");
               const response = await axios.post('http://localhost:3000/api/user/authenticateaccount', postData, {
                 headers: {
-                  Authorization: `Bearer ${authToken}`,
+                  Authorization: `Bearer ${token}`,
                 },
               });
               //const userData = response.data;
@@ -60,10 +60,10 @@
         },
         async getAuthCode() {
           try {
-              const authToken = this.getAuthToken();
+              const token = localStorage.getItem("votegrityToken");
               const response = await axios.get('http://localhost:3000/api/user/registertoken', {
                 headers: {
-                  Authorization: `Bearer ${authToken}`,
+                  Authorization: `Bearer ${token}`,
                 },
               });
               if (response.data.authenticated === true) {
