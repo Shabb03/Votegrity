@@ -4,7 +4,7 @@
       <h3>Number of Candidates: {{addedCandidates}}/{{ candidateCount }}</h3>
       <NameInput @update:name="nameValue"/>
       <ImageInput @update:image="imageValue"/>
-      <AgeInput :label="ageLabel" @update:age="ageValue"/>
+      <DateInput @update:dateOfBirth="dateOfBirthValue"/>
       <BiographyInput @update:bio="bioValue"/>
       <VoiceInput @update:voice="voiceValue"/>
       <PartyInput @update:party="partyValue"/>
@@ -28,7 +28,7 @@
 import axios from 'axios';
 import NameInput from './NameInput.vue';
 import ImageInput from './ImageInput.vue';
-import AgeInput from './AgeInput.vue';
+import DateInput from './DateInput.vue';
 import BiographyInput from './BiographyInput.vue';
 import VoiceInput from './VoiceInput.vue';
 import PartyInput from './PartyInput.vue';
@@ -37,17 +37,16 @@ export default {
     components: {
       NameInput,
       ImageInput,
-      AgeInput,
+      DateInput,
       BiographyInput,
       VoiceInput,
       PartyInput,
     },
     data: () => ({
-      ageLabel: "Age",
       addedCandidates: 0,
       candidateCount: 0,
       name: '',
-      age: '',
+      dateOfBirth: null,
       bio: '',
       voice: null,
       party: null,
@@ -60,7 +59,7 @@ export default {
             const formData = new FormData();
             formData.append('name', this.name);
             formData.append('image', this.image);
-            formData.append('age', this.age);
+            formData.append('dateOfBirth', this.dateOfBirth);
             formData.append('biography', this.bio);
             formData.append('voice', this.voice);
             formData.append('party', this.party);
@@ -98,8 +97,8 @@ export default {
         nameValue(params) {
           this.name = params;
         },
-        ageValue(params) {
-            this.age = params;
+        dateOfBirthValue(params) {
+            this.dateOfBirth = params;
         },
         bioValue(params) {
             this.bio = params;

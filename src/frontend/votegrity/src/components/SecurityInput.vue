@@ -26,13 +26,26 @@
     },
     data: () => ({
       securitySelect: null,
-      securityItems: ['What is the name of your pet', 'What is your mother\'s maiden name', 'What is your favourite sport', 'What is your favourite animal', 'Who is your favourite person', 'Which city were you born in'],
+      securityItems: [],
       securityAnswer: '',
       securityRules: [
         v => !!v || 'Input is required',
       ],
     }),
+    /*created() {
+      this.fetchQuestions();
+    },*/
     methods: {
+      async fetchQuestions() {
+        try {
+          const response = await axios.get('http://localhost:3000/api/admin/election');
+          this.securityItems = response.data.questions;
+          console.log(response.data);
+      } 
+      catch (error) {
+        alert('Error retrieving security questions:', error);
+      }
+      },
       updateSecurityQuestion() {
         this.$emit('update:securitySelect', this.securitySelect);
       },
