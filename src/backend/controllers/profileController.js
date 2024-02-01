@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+//const crypto = require('crypto');
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { Voter } = require('../sequelize');

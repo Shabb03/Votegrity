@@ -19,7 +19,7 @@ exports.securityQuestions = async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
 
 //Register a new user
 exports.signup = async (req, res) => {
@@ -74,4 +74,4 @@ exports.signup = async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};

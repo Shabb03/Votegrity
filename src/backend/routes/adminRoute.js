@@ -13,7 +13,8 @@ router.get('/candidatecount', isAdmin, electionController.getCandidateCount);
 router.post('/addcandidate', isAdmin, electionController.addCandidate);
 
 //subject to change
-//router.post('/reset/', isAdmin, electionController.resetElection);
+//router.get('/resettoken', isAdmin, electionController.resetToken);
+//router.post('/reset', isAdmin, electionController.resetElection);
 
 router.get('/election', isAdmin, dashboardController.electionDetails);
 //router.get('/votes', isAdmin, dashboardController.getTotalVotes);

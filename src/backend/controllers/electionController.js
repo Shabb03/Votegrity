@@ -1,4 +1,6 @@
-const { Candidate, Election } = require('../sequelize');
+const sendEmail = require('./thirdParty/email');
+const generateSixDigitCode = require('./functions/generateCode');
+const { Candidate, Election, Admin } = require('../sequelize');
 
 //Create a new election
 exports.addElection = async (req, res) => {
@@ -67,3 +69,42 @@ exports.addCandidate = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+/*exports.resetToken = async (req, res) => {
+    try {
+        const adminId = req.user.id;
+        const user = await Admin.findByPk(userId);
+
+        const sixDigitCode = generateSixDigitCode();
+        const activeElection = await Election.findOne({where: {isActive: true}});
+
+        activeElection. = sixDigitCode;
+        await activeElection.save();
+
+        sendEmail("Authentication Code", user.email, "Here is the election reset code: " + sixDigitCode);
+        res.json({message: "Email sent"});
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};*/
+
+/*exports.resetElection = async (req, res) => {
+    try {
+        const resetCode = req.body.resetCode;
+        const election = await Election.findOne({where: {isActive: true}});
+        if (!election) {
+            return res.status(404).json({ error: 'No active election found.' });
+        }
+        if (resetCode !== election.) {
+            return res.status(401).json({ error: 'Invalid reset code.' });
+        }
+        election.isActive = false;
+        await election.save();
+        await Candidate.destroy({ where: { isWinner: false } });
+        return res.status(200).json({ message: 'Election reset successfully.' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};*/
