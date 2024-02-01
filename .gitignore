@@ -1,0 +1,5 @@
+## Ignore all Zone.Identifier files
+*Zone.Identifier
+
+## Ignore all node_modules
+node_modules/
