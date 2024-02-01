@@ -44,10 +44,10 @@ export default {
   },
   data: () => ({
       name: '',
-      email: '',
+      email: null,
       citizenship: '',
       specialNumber: '',
-      phoneNumber: '',
+      phoneNumber: null,
       date: null,
   }),
   created() {
@@ -63,7 +63,7 @@ export default {
           };
           try {
             const token = localStorage.getItem("votegrityToken");
-            const response = await axios.post('http://localhost:3000/api/user/useremail', postData, {
+            const response = await axios.post('http://localhost:3000/api/user/userdetails', postData, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
