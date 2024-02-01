@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
+//const passport = require('passport');
 const { Admin, Voter } = require('../sequelize');
 
 //Generate a login authentication token for the user with the correct login credentials

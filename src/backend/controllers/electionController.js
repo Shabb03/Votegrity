@@ -1,5 +1,5 @@
-const sendEmail = require('./thirdParty/email');
-const generateSixDigitCode = require('./functions/generateCode');
+//const sendEmail = require('./thirdParty/email');
+//const generateSixDigitCode = require('./functions/generateCode');
 const { Candidate, Election, Admin } = require('../sequelize');
 
 //Create a new election

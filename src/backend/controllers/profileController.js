@@ -83,7 +83,7 @@ exports.changeUserDetails = async (req, res) => {
         var message = "";
         var newToken = null;
 
-        if (newEmail && newNumber) {
+        if (newEmail && newNumber && newEmail !== null && newNumber !== null) {
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail && existingNumber) {
                 return res.status(400).json({ message: 'Number and email already in use' });   
@@ -94,7 +94,7 @@ exports.changeUserDetails = async (req, res) => {
             message = "Email and Number updated successfully";
             newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         }
-        else if (newEmail) {
+        else if (newEmail && newEmail !== null) {
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail) {
                 return res.status(400).json({ message: 'Email already in use' });
@@ -104,7 +104,7 @@ exports.changeUserDetails = async (req, res) => {
             message = "Email updated successfully";
             newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         }
-        else if (newNumber) {
+        else if (newNumber && newNumber !== null) {
             const existingNumber = await Voter.findOne({ where: { phoneNumber: newNumber } });
             if (existingNumber) {
                 return res.status(400).json({ message: 'Number already in use' });

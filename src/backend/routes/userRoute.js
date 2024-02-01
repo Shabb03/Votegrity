@@ -13,8 +13,9 @@ router.post('/register', registerController.signup);
 router.post('/login', loginController.login);
 
 router.get('/userinfo', authenticateToken, profileController.userInfo);
-router.post('/useremail', authenticateToken, profileController.changeUserEmail)
-router.post('/usernumber/', authenticateToken, profileController.changeUserNumber)
+//router.post('/useremail', authenticateToken, profileController.changeUserEmail);
+//router.post('/usernumber', authenticateToken, profileController.changeUserNumber);
+router.post('/userdetails', authenticateToken, profileController.changeUserDetails);
 router.get('/registertoken', authenticateToken, profileController.getAuthToken);
 router.post('/authenticateaccount', authenticateToken, profileController.authAccount);
 
