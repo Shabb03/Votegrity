@@ -1,9 +1,7 @@
 <template>
-    <div>
-      <PageTitle/>
-      <PageSubTitle :pageSubTitle="pageSubTitle" />
-      <HomeButton/>
-    </div>
+    <PageTitle/>
+    <PageSubTitle :pageSubTitle="pageSubTitle" />
+    <HomeButton/>
 </template>
   
 <script>
@@ -11,19 +9,19 @@ import PageTitle from '../components/PageTitle.vue';
 import PageSubTitle from '../components/PageSubTitle.vue';
 import HomeButton from '../components/HomeButton.vue';
 
-  export default {
+export default {
     components: {
-      PageTitle,
-      PageSubTitle,
-      HomeButton,
+        PageTitle,
+        PageSubTitle,
+        HomeButton,
     },
     data() {
-      return {
-        pageSubTitle: 'Uh oh, Looks like the page you are trying to access does not exist',
-      };
+        return {
+            pageSubTitle: 'Uh oh, Looks like the page you are trying to access does not exist',
+        };
     },
-  }
-  </script>
+}
+</script>
   
-  <style scoped>
-  </style>  
+<style scoped>
+</style>  

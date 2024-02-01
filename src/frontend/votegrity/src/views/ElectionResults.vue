@@ -1,12 +1,10 @@
 <template>
-  <div>
     <NavigationBar>
-      <component :is="profileButton"></component>
-      <component :is="logoutButton"></component>
+        <component :is="profileButton"></component>
+        <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
     <WinnerContainer/>
-  </div>
 </template>
   
 <script>
@@ -19,17 +17,17 @@ import WinnerContainer from '../components/WinnerContainer.vue';
 
 export default {
     components: {
-      NavigationBar,
-      ProfileButton,
-      LogoutButton,
-      PageTitle,
-      WinnerContainer,
+        NavigationBar,
+        ProfileButton,
+        LogoutButton,
+        PageTitle,
+        WinnerContainer,
     },
     data() {
-      return {
-        profileButton: markRaw(ProfileButton),
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            profileButton: markRaw(ProfileButton),
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

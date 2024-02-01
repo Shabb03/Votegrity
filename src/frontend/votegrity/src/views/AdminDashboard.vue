@@ -1,6 +1,6 @@
 <template>
     <NavigationBar>
-      <component :is="logoutButton"></component>
+        <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
     <DashboardContainer/>
@@ -15,15 +15,15 @@ import DashboardContainer from '../components/DashboardContainer.vue';
 
 export default {
     components: {
-      NavigationBar,
-      LogoutButton,
-      PageTitle,
-      DashboardContainer,
+        NavigationBar,
+        LogoutButton,
+        PageTitle,
+        DashboardContainer,
     },
     data() {
-      return {
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

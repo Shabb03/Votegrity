@@ -1,7 +1,7 @@
 <template>
     <NavigationBar>
-      <component :is="profileButton"></component>
-      <component :is="logoutButton"></component>
+        <component :is="profileButton"></component>
+        <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
     <VoteContainer/>
@@ -17,17 +17,17 @@ import VoteContainer from '../components/VoteContainer.vue';
 
 export default {
     components: {
-      NavigationBar,
-      ProfileButton,
-      LogoutButton,
-      PageTitle,
-      VoteContainer,
+        NavigationBar,
+        ProfileButton,
+        LogoutButton,
+        PageTitle,
+        VoteContainer,
     },
     data() {
-      return {
-        profileButton: markRaw(ProfileButton),
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            profileButton: markRaw(ProfileButton),
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

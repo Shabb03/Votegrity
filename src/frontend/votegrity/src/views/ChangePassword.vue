@@ -1,12 +1,10 @@
 <template>
-    <div>
-      <NavigationBar>
+    <NavigationBar>
         <component :is="voteButton"></component>
         <component :is="logoutButton"></component>
-      </NavigationBar>
-      <PageTitle/>
-      <PasswordForm/>
-    </div>
+    </NavigationBar>
+    <PageTitle/>
+    <PasswordForm/>
 </template>
   
 <script>
@@ -19,17 +17,17 @@ import PasswordForm from '../components/PasswordForm.vue';
 
 export default {
     components: {
-      NavigationBar,
-      VoteButton,
-      LogoutButton,
-      PageTitle,
-      PasswordForm,
+        NavigationBar,
+        VoteButton,
+        LogoutButton,
+        PageTitle,
+        PasswordForm,
     },
     data() {
-      return {
-        voteButton: markRaw(VoteButton),
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            voteButton: markRaw(VoteButton),
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <NavigationBar>
-      <component :is="logoutButton"></component>
+        <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
     <ResetForm/>
@@ -15,15 +15,15 @@ import ResetForm from '../components/ResetForm.vue';
 
 export default {
     components: {
-      NavigationBar,
-      LogoutButton,
-      PageTitle,
-      ResetForm,
+        NavigationBar,
+        LogoutButton,
+        PageTitle,
+        ResetForm,
     },
     data() {
-      return {
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

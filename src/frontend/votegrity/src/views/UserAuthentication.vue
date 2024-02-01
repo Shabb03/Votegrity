@@ -1,11 +1,9 @@
 <template>
-    <div>
-      <NavigationBar>
+    <NavigationBar>
         <component :is="logoutButton"></component>
-      </NavigationBar>
-      <PageTitle/>
-      <AuthenticationForm/>
-    </div>
+    </NavigationBar>
+    <PageTitle/>
+    <AuthenticationForm/>
 </template>
   
 <script>
@@ -17,15 +15,15 @@ import AuthenticationForm from '../components/AuthenticationForm.vue';
 
 export default {
     components: {
-      NavigationBar,
-      LogoutButton,
-      PageTitle,
-      AuthenticationForm,
+        NavigationBar,
+        LogoutButton,
+        PageTitle,
+        AuthenticationForm,
     },
     data() {
-      return {
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

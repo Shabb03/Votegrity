@@ -1,12 +1,10 @@
 <template>
-    <div>
-      <NavigationBar>
+    <NavigationBar>
         <component :is="voteButton"></component>
         <component :is="logoutButton"></component>
-      </NavigationBar>
-      <PageTitle/>
-      <ProfileForm/>
-    </div>
+    </NavigationBar>
+    <PageTitle/>
+    <ProfileForm/>
 </template>
   
 <script>
@@ -19,17 +17,17 @@ import ProfileForm from '../components/ProfileForm.vue';
 
 export default {
     components: {
-      NavigationBar,
-      VoteButton,
-      LogoutButton,
-      PageTitle,
-      ProfileForm,
+        NavigationBar,
+        VoteButton,
+        LogoutButton,
+        PageTitle,
+        ProfileForm,
     },
     data() {
-      return {
-        voteButton: markRaw(VoteButton),
-        logoutButton: markRaw(LogoutButton),
-      };
+        return {
+            voteButton: markRaw(VoteButton),
+            logoutButton: markRaw(LogoutButton),
+        };
     },
 }
 </script>

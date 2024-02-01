@@ -1,0 +1,56 @@
+<template>
+    <PageTitle/>
+    <PageLoader/>
+</template>
+  
+<script>
+import axios from 'axios';
+import PageTitle from '../components/PageTitle.vue';
+import PageLoader from '../components/PageLoader.vue';
+
+export default {
+    components: {
+        PageTitle,
+        PageLoader,
+    },
+    /*created() {
+      this.getStatus();
+    },*/
+    methods: {
+        async getStatus() {
+            try {
+                const response = await axios.get('http://localhost:3000/api/user/registertoken');
+                const status = response.data;
+              
+                if (status.admin) {
+                    if (status.election) {
+                        this.$router.push('/admin/dashboard');
+                    }
+                    else {
+                        this.$router.push('/admin/createelection');
+                    }
+                }
+                if (status.loggedIn) {
+                    if (status.authenticated) {
+                        this.$router.push('/vote');
+                    }
+                    else {
+                        this.$router.push('/authentication');
+                    }
+                }
+                else {
+                    this.$router.push('/login');
+                }
+
+                console.log(response.data);
+            } 
+            catch (error) {
+                alert('Server Error: ', error);
+            }
+        },
+    },
+}
+</script>
+  
+<style scoped>
+</style>  

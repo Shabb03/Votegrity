@@ -1,20 +1,18 @@
 <template>
-    <div>
-      <PageTitle/>
-      <AdminLoginForm/>
-    </div>
+    <PageTitle/>
+    <AdminLoginForm/>
 </template>
   
 <script>
 import PageTitle from '../components/PageTitle.vue';
 import AdminLoginForm from '../components/AdminLoginForm.vue';
 
-  export default {
+export default {
     components: {
-      PageTitle,
-      AdminLoginForm,
+        PageTitle,
+        AdminLoginForm,
     },
-  }
+}
 </script>
   
 <style scoped>

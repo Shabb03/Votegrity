@@ -1,20 +1,18 @@
 <template>
-    <div>
-      <PageTitle/>
-      <RegisterForm/>
-    </div>
+    <PageTitle/>
+    <RegisterForm/>
 </template>
   
 <script>
 import PageTitle from '../components/PageTitle.vue';
 import RegisterForm from '../components/RegisterForm.vue';
 
-  export default {
+export default {
     components: {
-      PageTitle,
-      RegisterForm,
+        PageTitle,
+        RegisterForm,
     },
-  }
+}
 </script>
   
 <style scoped>

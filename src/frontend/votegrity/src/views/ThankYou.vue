@@ -1,12 +1,10 @@
 <template>
-    <div>
-      <NavigationBar>
+    <NavigationBar>
         <component :is="profileButton"></component>
         <component :is="logoutButton"></component>
-      </NavigationBar>
-      <PageTitle/>
-      <PageSubTitle :pageSubTitle="pageSubTitle" />
-    </div>
+    </NavigationBar>
+    <PageTitle/>
+    <PageSubTitle :pageSubTitle="pageSubTitle" />
 </template>
   
 <script>
@@ -17,23 +15,23 @@ import LogoutButton from '../components/LogoutButton.vue';
 import PageTitle from '../components/PageTitle.vue';
 import PageSubTitle from '../components/PageSubTitle.vue';
 
-  export default {
+export default {
     components: {
-      NavigationBar,
-      ProfileButton,
-      LogoutButton,
-      PageTitle,
-      PageSubTitle,
+        NavigationBar,
+        ProfileButton,
+        LogoutButton,
+        PageTitle,
+        PageSubTitle,
     },
     data() {
-      return {
-        profileButton: markRaw(ProfileButton),
-        logoutButton: markRaw(LogoutButton),
-        pageSubTitle: 'Each vote makes a difference',
-      };
+        return {
+            profileButton: markRaw(ProfileButton),
+            logoutButton: markRaw(LogoutButton),
+            pageSubTitle: 'Each vote makes a difference',
+        };
     },
-  }
-  </script>
+}
+</script>
   
-  <style scoped>
-  </style>  
+<style scoped>
+</style>  
