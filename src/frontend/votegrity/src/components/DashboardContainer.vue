@@ -9,15 +9,18 @@
         </v-row>
       </v-container>
     </div>
+    <ResetButton/>
 </template>
 
 <script>
 import axios from 'axios';
 import DashboardCard from './DashboardCard.vue';
+import ResetButton from './ResetButton.vue';
 
 export default {
   components: {
     DashboardCard,
+    ResetButton,
   },
   data: () => ({
     title: '',

@@ -53,7 +53,7 @@ export default {
       image: null,
     }),
     created() {
-      this.candidateCount();
+      this.getCandidateCount();
     },
     methods: {
         async validate() {
@@ -89,7 +89,7 @@ export default {
             }
           }
         },
-        async candidateCount() {
+        async getCandidateCount() {
           try {
             const authToken = localStorage.getItem("votegrityToken");
             const response = await axios.get('http://localhost:3000/api/admin/candidatecount', {
