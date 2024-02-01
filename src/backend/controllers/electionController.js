@@ -102,7 +102,7 @@ exports.addCandidate = async (req, res) => {
         election.isActive = false;
         await election.save();
         await Candidate.destroy({ where: { isWinner: false } });
-        return res.status(200).json({ message: 'Election reset successfully.' });
+        return res.status(200).json({ message: 'Election reset successfully.', reset: true });
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });

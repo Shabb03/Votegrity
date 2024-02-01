@@ -27,7 +27,7 @@ exports.userInfo = async (req, res) => {
 };
 
 //Change the user's email
-exports.changeUserEmail = async (req, res) => {
+/*exports.changeUserEmail = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
@@ -49,10 +49,10 @@ exports.changeUserEmail = async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
     }
-};
+};*/
 
 //Change the user's phone number
-exports.changeUserNumber = async (req, res) => {
+/*exports.changeUserNumber = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
@@ -69,6 +69,60 @@ exports.changeUserNumber = async (req, res) => {
             message: 'Number updated successfully' 
         })
     } 
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};*/
+
+exports.changeUserDetails = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await Voter.findByPk(userId);
+
+        const { newEmail, newNumber } = req.body;
+        var message = "";
+        var newToken = null;
+
+        if (newEmail && newNumber) {
+            const existingEmail = await Voter.findOne({ where: { email: newEmail } });
+            if (existingEmail && existingNumber) {
+                return res.status(400).json({ message: 'Number and email already in use' });   
+            }
+            user.email = newEmail;
+            user.phoneNumber = newNumber;
+            await user.save();
+            message = "Email and Number updated successfully";
+            newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+        }
+        else if (newEmail) {
+            const existingEmail = await Voter.findOne({ where: { email: newEmail } });
+            if (existingEmail) {
+                return res.status(400).json({ message: 'Email already in use' });
+            }
+            user.email = newEmail;
+            await user.save();
+            message = "Email updated successfully";
+            newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+        }
+        else if (newNumber) {
+            const existingNumber = await Voter.findOne({ where: { phoneNumber: newNumber } });
+            if (existingNumber) {
+                return res.status(400).json({ message: 'Number already in use' });
+            }
+            user.phoneNumber = newNumber;
+            await user.save();
+            message = "Number updated successfully";
+        }
+        else {
+            return res.status(400).json({ error: 'Either email or phone must be provided.' });
+        }        
+        return res.json({ 
+            email: user.email, 
+            number: user.phoneNumber, 
+            message: message, 
+            token: newToken 
+        });
+    }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
     }
