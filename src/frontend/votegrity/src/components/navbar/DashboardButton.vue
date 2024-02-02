@@ -1,13 +1,13 @@
 <template>
-    <v-btn variant="tonal" @click="logout">Logout</v-btn>
+    <v-btn variant="tonal" @click="goToDashboard">Dashboard</v-btn>
 </template>
 
 <script>
 export default {
-  name: 'LogoutButton',
+  name: 'DashboardButton',
   methods: {
-    logout() {
-      localStorage.setItem("votegrityToken","");
+    goToDashboard() {
+      this.$router.push('/admin/dashboard');
     },
   },
 };

@@ -5,7 +5,7 @@
   
 <script>
 import axios from 'axios';
-import PageTitle from '../components/PageTitle.vue';
+import PageTitle from '../components/titles/PageTitle.vue';
 import PageLoader from '../components/PageLoader.vue';
 
 export default {

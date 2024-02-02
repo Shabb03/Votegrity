@@ -18,7 +18,7 @@
   
   <script>
   import axios from 'axios';
-  import CodeInput from './CodeInput.vue';
+  import CodeInput from '../inputs/CodeInput.vue';
   
   export default {
     components: {
@@ -28,7 +28,7 @@
         code: '',
     }),
     /*created() {
-      this.getResetCode();
+      this.getAuthCode();
     },*/
     methods: {
         async validate() {
@@ -39,14 +39,14 @@
             };
             try {
               const token = localStorage.getItem("votegrityToken");
-              const response = await axios.post('http://localhost:3000/api/admin/reset', postData, {
+              const response = await axios.post('http://localhost:3000/api/user/authenticateaccount', postData, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
               });
               //const userData = response.data;
               console.log(response.data);
-              if (response.data.error) {
+              if (response.data.invalid) {
                 alert('Invalid Code');
               }
               else {
@@ -58,16 +58,16 @@
             }
           }
         },
-        async getResetCode() {
+        async getAuthCode() {
           try {
               const token = localStorage.getItem("votegrityToken");
-              const response = await axios.get('http://localhost:3000/api/admin/resettoken', {
+              const response = await axios.get('http://localhost:3000/api/user/registertoken', {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
               });
-              if (response.data.reset === true) {
-                this.$router.push('/admin/createelection');
+              if (response.data.authenticated === true) {
+                this.$router.push('/vote');
               }
               console.log(response.data);
           } 

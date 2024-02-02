@@ -1,13 +1,13 @@
 <template>
-    <v-btn variant="tonal" @click="goToDashboard">Dashboard</v-btn>
+    <v-btn variant="tonal" @click="logout">Logout</v-btn>
 </template>
 
 <script>
 export default {
-  name: 'ProfileButton',
+  name: 'LogoutButton',
   methods: {
-    goToDashboard() {
-      this.$router.push('/admin/dashboard');
+    logout() {
+      localStorage.setItem("votegrityToken","");
     },
   },
 };
@@ -15,10 +15,11 @@ export default {
 
 <style scoped>
 .v-btn {
+  color: white;
   font-size: 1.2em;
   font-weight: bold;
   margin-right: 1.5em;
-  background-color: #fff;
+  background-color: #2616bb;
   border: 3px solid #000;
 }
 </style>

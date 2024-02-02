@@ -21,8 +21,8 @@
   
   <script>
   import axios from 'axios';
-  import EmailInput from './EmailInput.vue';
-  import PasswordInput from './PasswordInput.vue';
+  import EmailInput from '../inputs/EmailInput.vue';
+  import PasswordInput from '../inputs/PasswordInput.vue';
   
   export default {
     components: {

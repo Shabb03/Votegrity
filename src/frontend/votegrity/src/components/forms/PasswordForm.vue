@@ -24,9 +24,9 @@
   
   <script>
   import axios from 'axios';
-  import CodeInput from './CodeInput.vue';
-  import SecurityAnswerInput from './SecurityAnswerInput.vue';
-  import PasswordInput from './PasswordInput.vue';
+  import CodeInput from '../inputs/CodeInput.vue';
+  import SecurityAnswerInput from '../inputs/SecurityAnswerInput.vue';
+  import PasswordInput from '../inputs/PasswordInput.vue';
   
   export default {
     components: {

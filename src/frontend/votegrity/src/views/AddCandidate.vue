@@ -8,10 +8,10 @@
     
 <script>
 import { markRaw } from "vue";
-import NavigationBar from '../components/NavigationBar.vue';
-import LogoutButton from '../components/LogoutButton.vue';
-import PageTitle from '../components/PageTitle.vue';
-import CandidateForm from '../components/CandidateForm.vue';
+import NavigationBar from '../components/navbar/NavigationBar.vue';
+import LogoutButton from '../components/navbar/LogoutButton.vue';
+import PageTitle from '../components/titles/PageTitle.vue';
+import CandidateForm from '../components/forms/CandidateForm.vue';
   
 export default {
     components: {

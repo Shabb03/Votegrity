@@ -22,7 +22,7 @@
   
 <script>
 import axios from 'axios';
-import VoteCard from './VoteCard.vue';
+import VoteCard from '../cards/VoteCard.vue';
 
 export default {
   components: {

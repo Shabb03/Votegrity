@@ -26,12 +26,12 @@
   
 <script>
 import axios from 'axios';
-import NameInput from './NameInput.vue';
-import ImageInput from './ImageInput.vue';
-import DateInput from './DateInput.vue';
-import BiographyInput from './BiographyInput.vue';
-import VoiceInput from './VoiceInput.vue';
-import PartyInput from './PartyInput.vue';
+import NameInput from '../inputs/NameInput.vue';
+import ImageInput from '../inputs/ImageInput.vue';
+import DateInput from '../inputs/DateInput.vue';
+import BiographyInput from '../inputs/BiographyInput.vue';
+import VoiceInput from '../inputs/VoiceInput.vue';
+import PartyInput from '../inputs/PartyInput.vue';
   
 export default {
     components: {

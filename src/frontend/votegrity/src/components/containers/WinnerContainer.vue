@@ -18,8 +18,8 @@
   
 <script>
 import axios from 'axios';
-import ImageBox from './ImageBox.vue';
-import WinnerBox from './WinnerBox.vue';
+import ImageBox from '../cards/ImageBox.vue';
+import WinnerBox from '../cards/WinnerBox.vue';
 
 export default {
   components: {

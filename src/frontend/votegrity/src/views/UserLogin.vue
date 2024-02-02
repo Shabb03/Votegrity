@@ -4,8 +4,8 @@
 </template>
   
 <script>
-import PageTitle from '../components/PageTitle.vue';
-import LoginForm from '../components/LoginForm.vue';
+import PageTitle from '../components/titles/PageTitle.vue';
+import LoginForm from '../components/forms/LoginForm.vue';
 
 export default {
     components: {

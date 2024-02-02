@@ -14,8 +14,8 @@
 
 <script>
 import axios from 'axios';
-import DashboardCard from './DashboardCard.vue';
-import ResetButton from './ResetButton.vue';
+import DashboardCard from '../cards/DashboardCard.vue';
+import ResetButton from '../buttons/ResetButton.vue';
 
 export default {
   components: {

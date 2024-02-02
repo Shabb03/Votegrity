@@ -4,8 +4,8 @@
 </template>
   
 <script>
-import PageTitle from '../components/PageTitle.vue';
-import RegisterForm from '../components/RegisterForm.vue';
+import PageTitle from '../components/titles/PageTitle.vue';
+import RegisterForm from '../components/forms/RegisterForm.vue';
 
 export default {
     components: {

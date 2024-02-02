@@ -34,8 +34,8 @@
 
 <script>
 import axios from 'axios';
-import EmailInput from './EmailInput.vue';
-import PhoneNumberInput from './PhoneNumberInput.vue';
+import EmailInput from '../inputs/EmailInput.vue';
+import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 
 export default {
   components: {

@@ -28,12 +28,12 @@
 
 <script>
 import axios from 'axios';
-import TitleInput from './TitleInput.vue';
-import DescriptionInput from './DescriptionInput.vue';
-import ElectionDateInput from './ElectionDateInput.vue';
-import NumberInput from './NumberInput.vue';
-import AgeInput from './AgeInput.vue';
-import EmailAuthenticationInput from './EmailAuthenticationInput.vue';
+import TitleInput from '../inputs/TitleInput.vue';
+import DescriptionInput from '../inputs/DescriptionInput.vue';
+import ElectionDateInput from '../inputs/ElectionDateInput.vue';
+import NumberInput from '../inputs/NumberInput.vue';
+import AgeInput from '../inputs/AgeInput.vue';
+import EmailAuthenticationInput from '../inputs/EmailAuthenticationInput.vue';
 
 export default {
   components: {

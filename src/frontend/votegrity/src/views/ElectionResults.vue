@@ -9,11 +9,11 @@
   
 <script>
 import { markRaw } from "vue";
-import NavigationBar from '../components/NavigationBar.vue';
-import ProfileButton from '../components/ProfileButton.vue';
-import LogoutButton from '../components/LogoutButton.vue';
-import PageTitle from '../components/PageTitle.vue';
-import WinnerContainer from '../components/WinnerContainer.vue';
+import NavigationBar from '../components/navbar/NavigationBar.vue';
+import ProfileButton from '../components/navbar/ProfileButton.vue';
+import LogoutButton from '../components/navbar/LogoutButton.vue';
+import PageTitle from '../components/titles/PageTitle.vue';
+import WinnerContainer from '../components/containers/WinnerContainer.vue';
 
 export default {
     components: {

@@ -29,14 +29,14 @@
 
 <script>
 import axios from 'axios';
-import NameInput from './NameInput.vue';
-import EmailInput from './EmailInput.vue';
-import PasswordInput from './PasswordInput.vue';
-import CitizenshipInput from './CitizenshipInput.vue';
-import SpecialNumberInput from './SpecialNumberInput.vue';
-import PhoneNumberInput from './PhoneNumberInput.vue';
-import DateInput from './DateInput.vue';
-import SecurityInput from './SecurityInput.vue';
+import NameInput from '../inputs/NameInput.vue';
+import EmailInput from '../inputs/EmailInput.vue';
+import PasswordInput from '../inputs/PasswordInput.vue';
+import CitizenshipInput from '../inputs/CitizenshipInput.vue';
+import SpecialNumberInput from '../inputs/SpecialNumberInput.vue';
+import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
+import DateInput from '../inputs/DateInput.vue';
+import SecurityInput from '../inputs/SecurityInput.vue';
 
 export default {
   components: {
