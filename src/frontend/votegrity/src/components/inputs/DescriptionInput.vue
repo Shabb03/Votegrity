@@ -1,7 +1,7 @@
 <template>
   <v-textarea
     v-model="description"
-    label="Description"
+    :label="label || 'Description'"
     :rules="descriptionRules"
     @input="updateDescription"
     required
@@ -10,6 +10,12 @@
 
 <script>
 export default {
+  props: {
+    label: {
+      type: String,
+      default: 'Description',
+    },
+  },
   data: () => ({
     description: '',
     descriptionRules: [

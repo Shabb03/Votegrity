@@ -1,15 +1,7 @@
 <template>
-  <!--<v-text-field
-    v-model="image"
-    label="Candidate Photo"
-    :rules="imageRules"
-    @input="updateImage"
-    type="file"
-    required
-  ></v-text-field>-->
   <v-file-input
     ref="fileInput"
-    label="Candidate Photo"
+    :label="label || 'Image'"
     :rules="imageRules"
     @change="updateImage"
     required
@@ -18,6 +10,12 @@
 
 <script>
 export default {
+  props: {
+    label: {
+      type: String,
+      default: 'Image',
+    },
+  },
   data: () => ({
     image: null,
     imageRules: [

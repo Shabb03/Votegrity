@@ -1,13 +1,13 @@
 <template>
   <div class="form-container">
   <v-form ref="form">
-    <NameInput @update:name="nameValue"/>
+    <TextInput :label="nameLabel" :required="true" @update:name="nameValue"/>
     <EmailInput @update:email="emailValue"/>
     <PasswordInput @update:password="passwordValue"/>
     <CitizenshipInput @update:citizenship="citizenshipValue"/>
-    <SpecialNumberInput @update:specialNumber="specialNumberValue"/>
+    <TextInput :label="specialNumberLabel" :required="true" @update:specialNumber="specialNumberValue"/>
     <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
-    <DateInput @update:date="dateValue"/>
+    <DateInput :label="birthDateLabel" @update:date="dateValue"/>
     <SecurityInput securityNumber="1" @update:securitySelect="sq1Value" @update:securityAnswer="sa1Value"/>
     <SecurityInput securityNumber="2" @update:securitySelect="sq2Value" @update:securityAnswer="sa2Value"/>
 
@@ -29,27 +29,28 @@
 
 <script>
 import axios from 'axios';
-import NameInput from '../inputs/NameInput.vue';
+import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
 import CitizenshipInput from '../inputs/CitizenshipInput.vue';
-import SpecialNumberInput from '../inputs/SpecialNumberInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 import DateInput from '../inputs/DateInput.vue';
 import SecurityInput from '../inputs/SecurityInput.vue';
 
 export default {
   components: {
-    NameInput,
+    TextInput,
     EmailInput,
     PasswordInput,
     CitizenshipInput,
-    SpecialNumberInput,
     PhoneNumberInput,
     DateInput,
     SecurityInput,
   },
   data: () => ({
+      nameLabel: 'Full Name',
+      specialNumberLabel: 'Special Number',
+      birthDateLabel: 'Birth Date: ',
       name: '',
       email: '',
       password: '',

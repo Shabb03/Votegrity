@@ -25,7 +25,7 @@
     z-index: 1000;
   }
   .v-app-bar {
-    background-color: #D9D9D9;
+    background-color: #f7f8f8;
   }
 
   .spacer {

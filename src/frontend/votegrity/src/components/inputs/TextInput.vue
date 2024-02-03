@@ -1,10 +1,9 @@
 <template>
   <v-text-field
-    v-model="number"
-    :label="label || 'Number'"
-    :rules="numberRules"
-    @input="updateNumber"
-    type="number"
+    v-model="text"
+    :label="label || Text"
+    :rules="textRules"
+    @input="updateText"
     required
   ></v-text-field>
 </template>
@@ -14,7 +13,7 @@ export default {
   props: {
     label: {
       type: String,
-      default: 'Number',
+      default: 'Text',
     },
     required: {
       type: Boolean,
@@ -22,21 +21,20 @@ export default {
     },
   },
   data: () => ({
-    number: '',
+    text: '',
   }),
   computed: {
-    numberRules() {
+    textRules() {
       const validationRules = [];
       if (this.required) {
-        validationRules.push((v) => !!v || 'Number is required');
-        validationRules.push((v) => (v > 0) || 'Number must be greater than 0');
+        validationRules.push((v) => !!v || this.label + ' is required');
       }
       return validationRules;
     },
   },
   methods: {
-    updateNumber() {
-      this.$emit('update:number', this.number);
+    updateText() {
+      this.$emit('update:text', this.text);
     },
   },
 };

@@ -1,13 +1,13 @@
 <template>
   <div class="form-container">
   <v-form ref="form">
-    <TitleInput @update:title="titleValue"/>
+    <TextInput :label="titleLabel" :required="true" @update:title="titleValue"/>
     <DescriptionInput @update:description="descriptionValue"/>
-    <ElectionDateInput :label="startDateLabel" @update:="startDateValue"/>
-    <ElectionDateInput :label="endDateLabel" @update:="endDateValue"/>
-    <ElectionDateInput :label="resultDateLabel" @update:="resultDateValue"/>
-    <NumberInput @update:number="numberValue"/>
-    <AgeInput :label="ageLabel" @update:age="ageValue"/>
+    <DateInput :label="startDateLabel" @update:="startDateValue"/>
+    <DateInput :label="endDateLabel" @update:="endDateValue"/>
+    <DateInput :label="resultDateLabel" @update:="resultDateValue"/>
+    <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
+    <NumberInput :label="ageLabel" @update:age="ageValue"/>
     <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
     <!--Add CitizenAuthenticationInput-->
 
@@ -28,26 +28,26 @@
 
 <script>
 import axios from 'axios';
-import TitleInput from '../inputs/TitleInput.vue';
+import TextInput from '../inputs/TextInput.vue';
 import DescriptionInput from '../inputs/DescriptionInput.vue';
-import ElectionDateInput from '../inputs/ElectionDateInput.vue';
+import DateInput from '../inputs/DateInput.vue';
 import NumberInput from '../inputs/NumberInput.vue';
-import AgeInput from '../inputs/AgeInput.vue';
 import EmailAuthenticationInput from '../inputs/EmailAuthenticationInput.vue';
 
 export default {
   components: {
-    TitleInput,
+    TextInput,
     DescriptionInput,
-    ElectionDateInput,
+    DateInput,
     NumberInput,
-    AgeInput,
     EmailAuthenticationInput,
   },
   data: () => ({
+    titleLabel: "Election Title",
     startDateLabel: "Election Start Date: ",
     endDateLabel: "Election End Date: ",
     resultDateLabel: "Election Results Date: ",
+    numberLabel: "Number of Total Candidates",
     ageLabel: "Minimum Age Requirement (Optional)",
     title: '',
     description: '',

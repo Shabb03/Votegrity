@@ -1,7 +1,7 @@
 <template>
     <v-text-field
       v-model="phoneNumber"
-      label="Phone Number"
+      :label="label || 'Phone Number'"
       :rules="phoneNumberRules"
       @input="updatePhoneNumber"
       required
@@ -10,10 +10,16 @@
   
 <script>
 export default {
+  props: {
+    label: {
+      type: String,
+      default: 'Phone Number',
+    },
+  },
   data: () => ({
     phoneNumber: '',
     phoneNumberRules: [
-      v => !!v || 'phoneNumber is required',
+      v => !!v || 'Phone Number is required',
       v => /^\d+$/.test(v) || 'Only numbers are allowed',
     ],
   }),

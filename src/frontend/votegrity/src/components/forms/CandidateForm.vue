@@ -2,12 +2,12 @@
     <div class="form-container">
     <v-form ref="form">
       <h3>Number of Candidates: {{addedCandidates}}/{{ candidateCount }}</h3>
-      <NameInput @update:name="nameValue"/>
-      <ImageInput @update:image="imageValue"/>
-      <DateInput @update:dateOfBirth="dateOfBirthValue"/>
-      <BiographyInput @update:bio="bioValue"/>
-      <VoiceInput @update:voice="voiceValue"/>
-      <PartyInput @update:party="partyValue"/>
+      <TextInput :label="nameLabel" :required="true" @update:name="nameValue" />
+      <ImageInput :label="imageLabel" @update:image="imageValue"/>
+      <DateInput :label="birthDateLabel" @update:dateOfBirth="dateOfBirthValue"/>
+      <TextInput :label="bioLabel" :required="true" @update:bio="bioValue"/>
+      <TextInput :label="voiceLabel" @update:voice="voiceValue"/>
+      <TextInput :label="partyLabel" @update:party="partyValue"/>
   
       <div class="d-flex flex-row">
           <v-btn color="success" class="mt-4" @click="validate">
@@ -26,23 +26,23 @@
   
 <script>
 import axios from 'axios';
-import NameInput from '../inputs/NameInput.vue';
+import TextInput from '../inputs/TextInput.vue';
 import ImageInput from '../inputs/ImageInput.vue';
 import DateInput from '../inputs/DateInput.vue';
-import BiographyInput from '../inputs/BiographyInput.vue';
-import VoiceInput from '../inputs/VoiceInput.vue';
-import PartyInput from '../inputs/PartyInput.vue';
   
 export default {
     components: {
-      NameInput,
+      TextInput,
       ImageInput,
       DateInput,
-      BiographyInput,
-      VoiceInput,
-      PartyInput,
     },
     data: () => ({
+      nameLabel: 'Candidate Full Name',
+      birthDateLabel: 'Birth Date: ',
+      imageLabel: 'Candidate Photo',
+      bioLabel: 'Biography',
+      voiceLabel: 'Voice',
+      partyLabel: 'Party',
       addedCandidates: 0,
       candidateCount: 0,
       name: '',
@@ -52,9 +52,9 @@ export default {
       party: null,
       image: null,
     }),
-    created() {
+    /*created() {
       this.getCandidateCount();
-    },
+    },*/
     methods: {
         async validate() {
           const { valid } = await this.$refs.form.validate()

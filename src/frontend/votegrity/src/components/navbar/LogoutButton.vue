@@ -8,6 +8,7 @@ export default {
   methods: {
     logout() {
       localStorage.setItem("votegrityToken","");
+      this.$router.push('/login');
     },
   },
 };

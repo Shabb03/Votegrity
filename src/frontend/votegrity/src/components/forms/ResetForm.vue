@@ -50,7 +50,7 @@
                 alert('Invalid Code');
               }
               else {
-                //this.$router.push('/vote');
+                //this.$router.push('/createelection');
               }  
             } 
             catch (error) {

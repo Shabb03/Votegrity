@@ -20,10 +20,10 @@
 
   export default {
     data: () => ({
-      sq1: '',
-      sq2: '',
-      securityAnswer1: 'Security Question 1',
-      securityAnswer2: 'Secuirty Question 2',
+      sq1: 'Security Question 1',
+      sq2: 'Security Question 2',
+      securityAnswer1: '',
+      securityAnswer2: '',
       securityRules: [
         v => !!v || 'Input is required',
       ],

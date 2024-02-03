@@ -1,13 +1,17 @@
 <template>
-    <v-btn variant="tonal" @click="goToRoute">Profile</v-btn>
+    <v-btn variant="tonal" @click="goToRoute">{{ buttonText }}</v-btn>
 </template>
 
 <script>
 export default {
-  name: 'ProfileButton',
+  name: 'NavbarButton',
+  props: {
+    buttonText: String,
+    routeName: String,
+  },
   methods: {
     goToRoute() {
-      this.$router.push('/profile');
+      this.$router.push(this.routeName);
     },
   },
 };
@@ -18,7 +22,7 @@ export default {
   font-size: 1.2em;
   font-weight: bold;
   margin-right: 1.5em;
-  background-color: #00e5ff;
+  background-color: #fff;
   border: 3px solid #000;
 }
 </style>

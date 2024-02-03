@@ -40,7 +40,7 @@
     methods: {
       async fetchQuestions() {
         try {
-          const response = await axios.get('http://localhost:3000/api/admin/election');
+          const response = await axios.get('http://localhost:3000/api/user/securityquestions');
           this.securityItems = response.data.questions;
           console.log(response.data);
       } 

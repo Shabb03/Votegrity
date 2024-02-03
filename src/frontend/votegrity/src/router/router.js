@@ -16,26 +16,26 @@ import HomePage from '@/views/HomePage.vue';
 import NotFound from '@/views/NotFound.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    { path: '/register', component: UserRegister, name: 'Register' },
-    { path: '/login', component: UserLogin, name: 'Login' },
-    { path: '/authentication', component: UserAuthentication, name: 'Authentication' },
-    { path: '/profile', component: UserProfile, name: 'Profile' },
-    { path: '/vote', component: VoteCandidate, name: 'Vote' },
-    { path: '/changepassword', component: ChangePassword, name: 'Enter New Password' },
-    { path: '/thankyou', component: ThankYou, name: 'Thank You For Voting' },
-    { path: '/results', component: ElectionResults, name: 'Results' },
-
-    { path: '/adminlogin', component: AdminLogin, name: 'Admin Login' },
-    { path: '/admin/dashboard', component: AdminDashboard, name: 'Dashboard' },
-    { path: '/admin/createelection', component: CreateElection, name: 'Create Election' },
-    { path: '/admin/addcandidate', component: AddCandidate, name: 'Add Candidate' },
-    //{ path: '/admin/reset', component: ResetElection, name: 'Reset Election' },
-
-    { path: '/', component: HomePage, name: 'Loading...' },
-    { path: '/:pathMatch(.*)*', component: NotFound, name: '404 Page Not Found' },
-  ],
+    history: createWebHistory(),
+    routes: [
+        { path: '/register', component: UserRegister, name: 'Register' },
+        { path: '/login', component: UserLogin, name: 'Login' },
+        { path: '/authentication', component: UserAuthentication, name: 'Authentication' },
+        { path: '/profile', component: UserProfile, name: 'Profile' },
+        { path: '/vote', component: VoteCandidate, name: 'Vote' },
+        { path: '/changepassword', component: ChangePassword, name: 'Enter New Password' },
+        { path: '/thankyou', component: ThankYou, name: 'Thank You For Voting' },
+        { path: '/results', component: ElectionResults, name: 'Results' },
+    
+        { path: '/adminlogin', component: AdminLogin, name: 'Admin Login' },
+        { path: '/admin/dashboard', component: AdminDashboard, name: 'Dashboard' },
+        { path: '/admin/createelection', component: CreateElection, name: 'Create Election' },
+        { path: '/admin/addcandidate', component: AddCandidate, name: 'Add Candidate' },
+        //{ path: '/admin/reset', component: ResetElection, name: 'Reset Election' },
+    
+        { path: '/', component: HomePage, name: 'Loading...' },
+        { path: '/:pathMatch(.*)*', component: NotFound, name: '404 Page Not Found' },
+    ],
 });
 
 export default router;

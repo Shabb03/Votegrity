@@ -1,7 +1,7 @@
 <template>
     <v-text-field
       v-model="date"
-      label="Birth Date"
+      :label="label || 'Date'"
       type="date"
       :rules="dateRules"
       @input="updateDate"
@@ -11,6 +11,12 @@
 
 <script>
 export default {
+  props: {
+    label: {
+      type: String,
+      default: 'Date',
+    },
+  },
   data: () => ({
     date: '',
     dateRules: [

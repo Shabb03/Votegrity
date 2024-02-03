@@ -1,7 +1,7 @@
 <template>
     <v-text-field
       v-model="email"
-      label="Email"
+      :label="label || 'Email'"
       type="email"
       :rules="emailRules"
       @input="updateEmail"
@@ -11,6 +11,12 @@
   
 <script>
 export default {
+  props: {
+    label: {
+      type: String,
+      default: 'Email',
+    },
+  },
   data: () => ({
     email: '',
     emailRules: [
