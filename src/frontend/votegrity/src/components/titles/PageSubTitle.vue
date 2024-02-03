@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <h1>{{ pageSubTitle }}</h1>
-  </div>
+    <div>
+        <h1>{{ pageSubTitle }}</h1>
+    </div>
 </template>
   
 <script>
-  export default {
+export default {
     props: {
-      pageSubTitle: {
-        type: String,
-        required: true,
-      },
+        pageSubTitle: {
+            type: String,
+            required: true,
+        },
     },
-  };
+};
 </script>
   
 <style scoped>

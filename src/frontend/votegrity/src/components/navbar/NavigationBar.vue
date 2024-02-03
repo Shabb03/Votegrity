@@ -1,10 +1,10 @@
 <template>
-  <header>
-    <v-app-bar :elevation="9">
-      <div class="spacer"></div>
-      <slot></slot>
-    </v-app-bar>
-  </header>
+    <header>
+        <v-app-bar :elevation="9">
+            <div class="spacer"></div>
+            <slot></slot>
+        </v-app-bar>
+    </header>
 </template>
   
 <script>

@@ -68,11 +68,11 @@ export default {
 
 <style scoped>
 .v-btn {
-  font-size: 1em;
-  font-weight: bold;
-  margin: auto;
-  margin-bottom: 0.5em;
-  background-color: #fff;
-  border: 2px solid #000;
+    font-size: 1em;
+    font-weight: bold;
+    margin: auto;
+    margin-bottom: 0.5em;
+    background-color: #fff;
+    border: 2px solid #000;
 }
 </style>

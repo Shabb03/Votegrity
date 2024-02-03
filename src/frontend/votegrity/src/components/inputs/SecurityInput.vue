@@ -8,18 +8,18 @@
         required
     ></v-select>
     <v-text-field
-      v-model="securityAnswer"
-      :label="'Security Answer ' + securityNumber"
-      :rules="securityRules"
-      @input="updateSecurityAnswer"
-      required
+        v-model="securityAnswer"
+        :label="'Security Answer ' + securityNumber"
+        :rules="securityRules"
+        @input="updateSecurityAnswer"
+        required
     ></v-text-field>
-  </template>
+</template>
   
-  <script>
-  import axios from 'axios';
+<script>
+import axios from 'axios';
   
-  export default {
+export default {
     props: {
       securityNumber: {
         type: String,
@@ -38,22 +38,22 @@
       this.fetchQuestions();
     },*/
     methods: {
-      async fetchQuestions() {
-        try {
-          const response = await axios.get('http://localhost:3000/api/user/securityquestions');
-          this.securityItems = response.data.questions;
-          console.log(response.data);
-      } 
-      catch (error) {
-        alert('Error retrieving security questions:', error);
-      }
-      },
-      updateSecurityQuestion() {
-        this.$emit('update:securitySelect', this.securitySelect);
-      },
-      updateSecurityAnswer() {
-        this.$emit('update:securityAnswer', this.securityAnswer);
-      },
+        async fetchQuestions() {
+            try {
+                const response = await axios.get('http://localhost:3000/api/user/securityquestions');
+                this.securityItems = response.data.questions;
+                console.log(response.data);
+            } 
+            catch (error) {
+              alert('Error retrieving security questions:', error);
+            }
+        },
+        updateSecurityQuestion() {
+            this.$emit('update:securitySelect', this.securitySelect);
+        },
+        updateSecurityAnswer() {
+            this.$emit('update:securityAnswer', this.securityAnswer);
+        },
     },
-  };
-  </script>
+};
+</script>

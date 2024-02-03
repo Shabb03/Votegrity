@@ -32,7 +32,7 @@ export default {
     margin: 0 auto;
 }
 .card-text {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 </style>

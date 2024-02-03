@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <h1>{{ pageTitle }}</h1>
-  </div>
+    <div>
+        <h1>{{ pageTitle }}</h1>
+    </div>
 </template>
   
 <script>
-  export default {
+export default {
     computed: {
-      pageTitle() {
-        return this.$route.name
-      },
+        pageTitle() {
+            return this.$route.name
+        },
     },
-  };
+};
 </script>
   
 <style scoped>
