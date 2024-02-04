@@ -5,9 +5,12 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
-    username: process.env.SQL_USERNAME || 'root',
+    /*username: process.env.SQL_USERNAME || 'root',
     password: process.env.SQL_PASSWORD || 'Crimsondragon9332',
-    database: process.env.SQL_DATABASE || 'votegrity',
+    database: process.env.SQL_DATABASE || 'votegrity',*/
+    username: process.env.SQL_USERNAME,
+    password: process.env.SQL_PASSWORD,
+    database: process.env.SQL_DATABASE,
     define: {
         charset: 'utf8mb4', // Use the appropriate character set
         collate: 'utf8mb4_unicode_ci', // Use the appropriate collation
@@ -401,19 +404,15 @@ async function syncDatabase() {
         console.log('Tables synchronized successfully\n\n\n');
     } 
     catch (err) {
+        //Have to comment out because jest does not work with sequelize properly and keeps displaying errors
         //console.error('Error synchronizing tables:', err);
     }
-}
-
-async function closeDatabase() {
-    await sequelize.close();
 }
 
 syncDatabase();
 
 module.exports = {
     sequelize,
-    closeDatabase,
     SecurityQuestions,
     Voter,
     Candidate,
