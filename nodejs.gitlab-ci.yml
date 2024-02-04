@@ -11,20 +11,20 @@ before_script:
 unit-test-backend-job:
   stage: test
   script:
+    - echo "Running unit tests for backend... This will take about 60 seconds."
     - cd ./src/backend
     - npm install
     - npm test
-    - echo "Running unit tests for backend... This will take about 60 seconds."
     - sleep 60
     - echo "Code coverage is 90%"
 
 unit-test-frontend-job:
   stage: test
   script:
+    - echo "Running unit tests for frontend... This will take about 60 seconds."
     - cd ./src/frontend/votegrity
     - npm install
     - npm test
-    - echo "Running unit tests for frontend... This will take about 60 seconds."
     - sleep 60
     - echo "Code coverage is 90%"
 
