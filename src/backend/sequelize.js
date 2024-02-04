@@ -1,13 +1,19 @@
 require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
 
+
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
-    username: process.env.SQL_USERNAME,
-    password: process.env.SQL_PASSWORD,
-    database: process.env.SQL_DATABASE,
+    username: process.env.SQL_USERNAME || 'root',
+    password: process.env.SQL_PASSWORD || 'Crimsondragon9332',
+    database: process.env.SQL_DATABASE || 'votegrity',
+    define: {
+        charset: 'utf8mb4', // Use the appropriate character set
+        collate: 'utf8mb4_unicode_ci', // Use the appropriate collation
+    },
 });
+
 
 //Models
 const SecurityQuestions = sequelize.define('SecurityQuestions', {
@@ -117,7 +123,6 @@ const Voter = sequelize.define('Voter', {
         allowNull: false,
         defaultValue: false,
     },
-
 });
 
 const Candidate = sequelize.define('Candidate', {
@@ -132,7 +137,7 @@ const Candidate = sequelize.define('Candidate', {
     },
     voice: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false, //change
     },
     party: {
         type: DataTypes.STRING,
@@ -148,7 +153,7 @@ const Candidate = sequelize.define('Candidate', {
     },
     biography: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: true, //change
     },
     isWinner: {
         type: DataTypes.BOOLEAN,
@@ -385,25 +390,30 @@ const Election = sequelize.define('Election', {
               model: Result,
               key: 'id',
         },
-    }
+    },
 });
 
 
 //Synchronize with MySQL database
 async function syncDatabase() {
-  try {
+    try {
         await sequelize.sync({});
         console.log('Tables synchronized successfully\n\n\n');
     } 
     catch (err) {
-        console.error('Error synchronizing tables:', err);
+        //console.error('Error synchronizing tables:', err);
     }
+}
+
+async function closeDatabase() {
+    await sequelize.close();
 }
 
 syncDatabase();
 
 module.exports = {
     sequelize,
+    closeDatabase,
     SecurityQuestions,
     Voter,
     Candidate,
