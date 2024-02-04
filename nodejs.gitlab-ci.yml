@@ -12,6 +12,7 @@ unit-test-backend-job:
   stage: test
   script:
     - cd ./src/backend
+    - npm install
     - npm test
     - echo "Running unit tests for backend... This will take about 60 seconds."
     - sleep 60
@@ -21,6 +22,7 @@ unit-test-frontend-job:
   stage: test
   script:
     - cd ./src/frontend/votegrity
+    - npm install
     - npm test
     - echo "Running unit tests for frontend... This will take about 60 seconds."
     - sleep 60
