@@ -5,9 +5,6 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
-    /*username: process.env.SQL_USERNAME || 'root',
-    password: process.env.SQL_PASSWORD || 'Crimsondragon9332',
-    database: process.env.SQL_DATABASE || 'votegrity',*/
     username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
