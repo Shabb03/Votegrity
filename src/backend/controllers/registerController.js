@@ -5,15 +5,10 @@ const { SecurityQuestions, Voter } = require('../sequelize');
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
     try {
-        console.log("HERE 1");
         const allSecurityQuestions = await SecurityQuestions.findAll({
             attributes: ['questions']
         });
-        console.log("HERE 2");
-        console.log(allSecurityQuestions);
         const questions = allSecurityQuestions.map(question => question.questions);
-        console.log("HERE 3");
-        console.log(questions);
         res.json({ questions });
     }
     catch (error) {
