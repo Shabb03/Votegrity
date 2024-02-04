@@ -9,7 +9,7 @@ const electionRoute = require('./routes/electionRoute');
 const statusRoute = require('./routes/statusRoute');
 
 const corsOptions = {
-    origin: 'http://localhost:8080',
+    origin: process.env.ORIGIN || 'http://localhost:8080',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, 
     optionsSuccessStatus: 204, 
