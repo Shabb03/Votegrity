@@ -92,7 +92,7 @@ const Voter = sequelize.define('Voter', {
     },
     securityQuestion1: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
               model: SecurityQuestions,
               key: 'id',
@@ -100,11 +100,11 @@ const Voter = sequelize.define('Voter', {
     },
     securityAnswer1: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     securityQuestion2: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
               model: SecurityQuestions,
               key: 'id',
@@ -112,7 +112,7 @@ const Voter = sequelize.define('Voter', {
     },
     securityAnswer2: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     resetToken: {
         type: DataTypes.STRING,
