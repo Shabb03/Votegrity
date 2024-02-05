@@ -12,16 +12,28 @@ exports.addElection = async (req, res) => {
 
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authenticationMethod } = req.body;
         const newElection = await Election.create({
-            title,
-            description,
-            startDate,
-            endDate,
-            resultDate,
-            candidateNumber,
-            ageRestriction,
-            authenticationMethod
+            title: title,
+            description: description,
+            startDate: startDate,
+            endDate: endDate,
+            resultDate: resultDate,
+            candidateNumber: candidateNumber,
+            ageRestriction: ageRestriction,
+            authenticationMethod: authenticationMethod,
+            privateKey: null,
+            publicKey: null,
+            results: null
         });
-        res.status(201).json({election: newElection, message: 'Election created successfully'});
+        const electionResponse = {
+            title: newElection.title,
+            description: newElection.description,
+            startDate: newElection.startDate,
+            endDate: newElection.endDate,
+            resultDate: newElection.resultDate,
+            candidateNumber: newElection.candidateNumber,
+            ageRestriction: newElection.ageRestriction
+        }
+        res.status(201).json({election: electionResponse, message: 'Election created successfully'});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
