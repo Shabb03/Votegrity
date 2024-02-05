@@ -137,7 +137,7 @@ const Candidate = sequelize.define('Candidate', {
     },
     voice: {
         type: DataTypes.STRING,
-        allowNull: false, //change
+        allowNull: false,
     },
     party: {
         type: DataTypes.STRING,
@@ -145,7 +145,7 @@ const Candidate = sequelize.define('Candidate', {
     },
     image: {
         type: DataTypes.BLOB,
-        allowNull: true,
+        allowNull: false,
     },
     dateOfBirth: {
         type: DataTypes.DATEONLY,
@@ -153,11 +153,11 @@ const Candidate = sequelize.define('Candidate', {
     },
     biography: {
         type: DataTypes.STRING,
-        allowNull: true, //change
+        allowNull: false,
     },
     isWinner: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: false,
     }
 });

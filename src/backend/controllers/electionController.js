@@ -2,6 +2,7 @@
 //const generateSixDigitCode = require('./functions/generateCode');
 const { Candidate, Election, Admin } = require('../sequelize');
 
+
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
@@ -45,7 +46,7 @@ exports.getCandidateCount = async (req, res) => {
     try {
         const addedCandidates = await Candidate.count({where: {isWinner: false}});
         const activeElection = await Election.findOne({where: {isActive: true}});
-        const candidateCount = activeElection.candidateCount;
+        const candidateCount = activeElection.candidateNumber;
         res.json({
             addedCandidates: addedCandidates,
             candidateCount: candidateCount 
@@ -66,18 +67,20 @@ exports.addCandidate = async (req, res) => {
             return res.json({error: "Total number of candidates exceeded"});
         }
 
-        const { name, voice, party, image, dateOfBirth, biography } = req.body;
+        const { name, voice, party, dateOfBirth, biography } = req.body;
+        const image = req.file;
         const newCandidate = await Candidate.create({
-            name,
-            voice,
-            party,
-            image,
-            dateOfBirth,
-            biography
+            name: name,
+            voice: voice,
+            party: party,
+            image: image,
+            dateOfBirth: dateOfBirth,
+            biography: biography
         });
         res.status(201).json({candidate: newCandidate, message: 'Candidate created successfully'});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
