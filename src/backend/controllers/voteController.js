@@ -1,17 +1,40 @@
 const { Candidate, Vote } = require('../sequelize');
 
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const readFileAsync = promisify(fs.readFile);
+
 //Get the details of all candidates in the current election
 exports.getAllCandidates = async (req, res) => {
     try {
         const candidates = await Candidate.findAll({where: { isWinner: false }});
-        const testCan = await Candidate.findByPk(2);
-        res.json({image: testCan.image, image2: '../images/1707171968878-trump.jpg'});
-        //res.json({ candidates });
+        res.json({ candidates });
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+exports.getImage = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const candidate = await Candidate.findByPk(id);
+        if (!candidate) {
+            return res.status(404).json({ message: 'Candidate not found' });
+        }
+
+        //const imagePath = path.join(__dirname, '../images/1707171968878-trump.jpg');
+        const imagePath = path.join(__dirname, "../images/", candidate.image);
+        const imageData = await readFileAsync(imagePath);
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.send(imageData);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
 
 //Submit a vote cast by the user
 exports.submitVote = async (req, res) => {

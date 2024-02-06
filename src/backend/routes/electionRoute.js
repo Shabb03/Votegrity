@@ -8,6 +8,8 @@ const winnerController = require('../controllers/winnerController');
 //add a new route to display images
 router.get('/candidates', authenticateToken, voteController.getAllCandidates);  //yet to test
 
+router.get('/image/:id', voteController.getImage);
+
 router.post('/vote', authenticateToken, voteController.submitVote);  //yet to test
 
 router.get('/results', authenticateToken, winnerController.getResults);
