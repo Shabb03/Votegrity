@@ -8,7 +8,7 @@ const readFileAsync = promisify(fs.readFile);
 //Get the details of all candidates in the current election
 exports.getAllCandidates = async (req, res) => {
     try {
-        const candidates = await Candidate.findAll({where: { isWinner: false }});
+        const candidates = await Candidate.findAll({where: { isWinner: false }, attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography']});
         res.json({ candidates });
     }
     catch (error) {
