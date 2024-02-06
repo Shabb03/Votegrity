@@ -29,10 +29,10 @@ router.get('/candidatecount', isAdmin, electionController.getCandidateCount);
 router.post('/addcandidate', isAdmin, upload.single('image'), electionController.addCandidate);
 
 //subject to change
-//router.get('/resettoken', isAdmin, electionController.resetToken);
-//router.post('/reset', isAdmin, electionController.resetElection);
+//router.get('/resettoken', isAdmin, electionController.resetToken);  //yet to test
+//router.post('/reset', isAdmin, electionController.resetElection);  //yet to test
 
 router.get('/election', isAdmin, dashboardController.electionDetails);
-//router.get('/votes', isAdmin, dashboardController.getTotalVotes);
+//router.get('/votes', isAdmin, dashboardController.getTotalVotes);  //delete
 
 module.exports = router;

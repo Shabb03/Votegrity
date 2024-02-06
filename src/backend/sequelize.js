@@ -144,7 +144,7 @@ const Candidate = sequelize.define('Candidate', {
         allowNull: true,
     },
     image: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     dateOfBirth: {
