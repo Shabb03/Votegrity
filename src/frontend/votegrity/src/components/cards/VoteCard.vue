@@ -1,9 +1,9 @@
 <template>
     <v-col>
-        <v-card max-width="350" elevation="16">
+        <v-card max-width="350" min-width="350" elevation="16" style="max-width: 350px !important; width: 100% !important; margin: auto !important;">
             <v-img
                 class="align-end text-white"
-                height="200"
+                height="350"
                 :src="imageSrc || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
                 cover
             >
@@ -26,16 +26,54 @@
 import axios from 'axios';
 
 export default {
+    data: () => ({
+        imageSrc: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
+    }),
     props: {
         candidateId: Number,
-        imageSrc: String,
         name: String,
         dateOfBirth: Date,
         voice: String,
         party: String,
         biography: String,
     },
+    created() {
+        this.fetchImageData();
+    },
     methods: {
+        async fetchImageData() {
+            try {
+                console.log(this.candidateId);
+                const authToken = localStorage.getItem("votegrityToken");
+                const response = await axios.get('http://localhost:3000/api/election/image/'+this.candidateId, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                    responseType: 'arraybuffer',
+                });
+                
+
+                    const binaryData = new Uint8Array(response.data);
+                    const dataUrl = this.arrayBufferToBase64(binaryData);
+                    this.imageSrc = `data:image/jpeg;base64,${dataUrl}`;
+                
+
+                //this.imageSrc = response.data;
+                console.log(response.data);
+            } 
+            catch (error) {
+                console.log(error);
+                alert('Error retrieving images:', error);
+            }
+        },
+        arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        },
         calculateAge(dateOfBirth) {
             const today = new Date();
             const birthDate = new Date(dateOfBirth);
@@ -58,7 +96,8 @@ export default {
                     },
                 });
                 console.log(response.data);
-            } catch (error) {
+            } 
+            catch (error) {
                 alert('Error voting:', error);
             }
         },
@@ -72,7 +111,7 @@ export default {
     font-weight: bold;
     margin: auto;
     margin-bottom: 0.5em;
-    background-color: #fff;
+    background-color: #00e5ff;
     border: 2px solid #000;
 }
 </style>

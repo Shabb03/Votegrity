@@ -1,22 +1,22 @@
 <template>
     <div class="card-container">
+        <div v-if="candidateData.length > 0">
         <v-container v-for="(group, index) in candidateData" :key="index">
             <v-row>
                 <div v-for="(candidate, cardIndex) in group" :key="cardIndex">
                     <VoteCard
                         :key="index"
                         :candidateId="candidate.id"
-                        :imageSrc="candidate.image"
                         :name="candidate.name"
-                        :dateOfBirth="candidate.dateOfBirth"
+                        :dateOfBirth="parseDate(candidate.dateOfBirth)"
                         :voice="candidate.voice"
                         :party="candidate.party"
                         :biography="candidate.biography"
-                        @vote-click="handleVoteClick"
                     />
                 </div>
             </v-row>
         </v-container>
+        </div>
     </div>
 </template>
   
@@ -35,6 +35,10 @@ export default {
         this.fetchCandidates();
     },
     methods: {
+        parseDate(dateString) {
+            const [year, month, day] = dateString.split('-');
+            return new Date(year, month - 1, day);
+        },
         async fetchCandidates() {
             try {
                 const authToken = localStorage.getItem("votegrityToken");
@@ -43,19 +47,20 @@ export default {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
-                const dataArray = response.data;
+                const dataArray = response.data.candidates;
                 const groupSize = 3
+                
                 for (let i = 0; i < dataArray.length; i += groupSize) {
                     if (i % 3 === 0) {
                         const group = dataArray.slice(i, i + groupSize);
                         this.candidateData.push(group);
                     }
                 }
-                console.log(response.data);
+                //this.candidateData = dataArray;
             } 
             catch (error) {
                 await alert('Error retrieving details:', error);
-                window.history.back();
+                //window.history.back();
             }
         }
     }

@@ -12,10 +12,10 @@
             <SecurityInput securityNumber="2" @update:securitySelect="sq2Value" @update:securityAnswer="sa2Value"/>
 
             <div class="d-flex flex-row">
-                <v-btn color="success" class="mt-4" @click="validate">
+                <v-btn class="mt-4 primary" @click="validate">
                     Sign Up!
                 </v-btn>
-                <v-btn color="error" class="mt-4 ml-10" @click="reset">
+                <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
                 <v-btn class="mt-4 ml-10" @click="test">
@@ -100,12 +100,12 @@ export default {
         },
         test() {
             console.log(this.name);
-            /*console.log(this.email);
+            console.log(this.email);
             console.log(this.password);
             console.log(this.citizenship);
             console.log(this.specialNumber);
             console.log(this.phoneNumber);
-            console.log(this.date);*/
+            console.log(this.date);
             console.log(this.sq1);
             console.log(this.sa1);
             console.log(this.sq2);
@@ -158,6 +158,15 @@ export default {
     @media (max-width: 600px) {
         width: 100%;
     }
+}
+
+.primary {
+    background-color: #00e5ff;
+}
+
+.secondary {
+    background-color: #2616bb;
+    color: white;
 }
 
 .form-link {

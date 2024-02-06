@@ -5,10 +5,10 @@
             <PasswordInput @update:password="passwordValue"/>
 
             <div class="d-flex flex-row">
-                <v-btn color="success" class="mt-4" @click="validate">
+                <v-btn class="mt-4 primary" @click="validate">
                     Login
                 </v-btn>
-                <v-btn color="error" class="mt-4 ml-10" @click="reset">
+                <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
                 <v-btn class="mt-4 ml-10" @click="test">
@@ -51,7 +51,7 @@ export default {
                         const token = response.data.token;
                         localStorage.setItem("votegrityToken",token);
                         console.log(response.data);
-                        //this.$router.push('/vote');
+                        //this.$router.push('/authentication');
                     }
                 } 
                 catch (error) {
@@ -86,6 +86,15 @@ export default {
     @media (max-width: 600px) {
         width: 100%;
     }
+}
+
+.primary {
+    background-color: #00e5ff;
+}
+
+.secondary {
+    background-color: #2616bb;
+    color: white;
 }
 
 .form-link {

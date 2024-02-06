@@ -14,13 +14,15 @@
         </v-sheet>
 
         <v-btn
-            class="my-4"
+            class="my-4 primary"
             height="40"
             variant="tonal"
             width="70%"
             @click="postAuthCode"
         >{{ button }}
         </v-btn>
+
+        <div>{{ code }}</div>
 
         <div class="text-caption">
             Didn't receive the code? <a href="#" @click="getAuthCode">Resend</a>
@@ -122,5 +124,9 @@ export default {
 <style scoped>
 .code-container {
     margin-top: 5em !important;
+}
+
+.primary {
+    background-color: #00e5ff;
 }
 </style>

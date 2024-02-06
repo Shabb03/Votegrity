@@ -21,7 +21,7 @@
             <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
 
             <div class="d-flex flex-row">
-                <v-btn color="success" class="mt-4" @click="validate">
+                <v-btn class="mt-4 primary" @click="validate">
                   Submit
                 </v-btn>
                 <v-btn class="mt-4 ml-10" @click="test">
@@ -50,9 +50,9 @@ export default {
         phoneNumber: null,
         date: null,
     }),
-    created() {
+    /*created() {
         this.fetchUserData();
-    },
+    },*/
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -126,5 +126,9 @@ export default {
     @media (max-width: 600px) {
         width: 100%;
     }
+}
+
+.primary {
+    background-color: #00e5ff;
 }
 </style>
