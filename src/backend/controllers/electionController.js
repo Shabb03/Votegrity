@@ -69,15 +69,17 @@ exports.addCandidate = async (req, res) => {
 
         const { name, voice, party, dateOfBirth, biography } = req.body;
         const image = req.file;
+        const imagePath = "../images/" + image.filename;
         const newCandidate = await Candidate.create({
             name: name,
             voice: voice,
             party: party,
-            image: image,
+            image: imagePath,
             dateOfBirth: dateOfBirth,
             biography: biography
         });
         res.status(201).json({candidate: newCandidate, message: 'Candidate created successfully'});
+        res.json({imagePath: image.filename});
     }
     catch (error) {
         console.log(error);

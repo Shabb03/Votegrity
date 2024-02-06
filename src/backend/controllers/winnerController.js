@@ -7,11 +7,11 @@ exports.getResults = async (req, res) => {
         if (!activeElection) {
             return res.status(404).json({ message: 'Active election not found' });
         }
-        const resultsId = activeElection.result;
+        const resultsId = activeElection.results;
         const results = await Result.findByPk(resultsId);
         const candidate = await Candidate.findByPk(results.winner);
         res.json({ 
-            name: canidate.name,
+            name: candidate.name,
             voice: candidate.voice,
             party: candidate.party,
             image: candidate.image,
@@ -20,6 +20,7 @@ exports.getResults = async (req, res) => {
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

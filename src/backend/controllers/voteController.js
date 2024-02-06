@@ -4,7 +4,9 @@ const { Candidate, Vote } = require('../sequelize');
 exports.getAllCandidates = async (req, res) => {
     try {
         const candidates = await Candidate.findAll({where: { isWinner: false }});
-        res.json({ candidates });
+        const testCan = await Candidate.findByPk(2);
+        res.json({image: testCan.image, image2: '../images/1707171968878-trump.jpg'});
+        //res.json({ candidates });
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });

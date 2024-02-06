@@ -5,7 +5,9 @@ const authenticateToken = require('../middleware/authenticate');
 const voteController = require('../controllers/voteController');
 const winnerController = require('../controllers/winnerController');
 
+//add a new route to display images
 router.get('/candidates', authenticateToken, voteController.getAllCandidates)
+
 router.post('/vote', authenticateToken, voteController.submitVote);
 
 router.get('/results', authenticateToken, winnerController.getResults);
