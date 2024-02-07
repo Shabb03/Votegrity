@@ -23,8 +23,6 @@ exports.getImage = async (req, res) => {
         if (!candidate) {
             return res.status(404).json({ message: 'Candidate not found' });
         }
-
-        //const imagePath = path.join(__dirname, '../images/1707171968878-trump.jpg');
         const imagePath = path.join(__dirname, "../images/", candidate.image);
         const imageData = await readFileAsync(imagePath);
         res.setHeader('Content-Type', 'image/jpeg');
@@ -46,6 +44,9 @@ exports.submitVote = async (req, res) => {
             return res.json({error: 'User is not authenticated', authenticated: false});
         }
         const candidateId = req.body.candidateId;
+        if (!candidateId) {
+            return res.json({error: 'No candidate selected'})
+        }
         const vote = await Vote.create({
             voterId: userId,
             candidateId: candidateId,
