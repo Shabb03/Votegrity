@@ -1,4 +1,5 @@
 <template>
+    <NotAuthenticated/>
     <NavigationBar>
         <component :is="logoutButton"></component>
     </NavigationBar>
@@ -8,6 +9,7 @@
 </template>
   
 <script>
+import NotAuthenticated from "../components/status/NotAuthenticated.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
 import LogoutButton from '../components/navbar/LogoutButton.vue';
@@ -17,6 +19,7 @@ import CodeInput from "../components/inputs/CodeInput.vue";
 
 export default {
     components: {
+        NotAuthenticated,
         NavigationBar,
         LogoutButton,
         PageTitle,

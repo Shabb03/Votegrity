@@ -1,4 +1,5 @@
 <template>
+    <LoggedIn/>
     <NavigationBar>
         <component :is="profileButton"></component>
         <component :is="logoutButton"></component>
@@ -8,6 +9,7 @@
 </template>
   
 <script>
+import LoggedIn from "../components/status/LoggedIn.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
 import ProfileButton from '../components/navbar/ProfileButton.vue';
@@ -17,6 +19,7 @@ import PageSubTitle from '../components/titles/PageSubTitle.vue';
 
 export default {
     components: {
+        LoggedIn,
         NavigationBar,
         ProfileButton,
         LogoutButton,

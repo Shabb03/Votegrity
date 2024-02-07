@@ -13,13 +13,19 @@ export default {
         PageTitle,
         PageLoader,
     },
-    /*created() {
+    created() {
       this.getStatus();
-    },*/
+    },
     methods: {
         async getStatus() {
             try {
-                const response = await axios.get('http://localhost:3000/api/user/registertoken');
+                const token = localStorage.getItem("votegrityToken");
+                const response = await axios.get('http://localhost:3000/api/status/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                console.log(response.data);
                 const status = response.data;
               
                 if (status.admin) {

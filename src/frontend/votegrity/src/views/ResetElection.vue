@@ -1,4 +1,5 @@
 <template>
+    <IsAdmin/>
     <NavigationBar>
         <component :is="logoutButton"></component>
     </NavigationBar>
@@ -8,6 +9,7 @@
 </template>
   
 <script>
+import IsAdmin from "../components/status/IsAdmin.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
 import LogoutButton from '../components/navbar/LogoutButton.vue';
@@ -17,6 +19,7 @@ import CodeInput from "../components/inputs/CodeInput.vue";
 
 export default {
     components: {
+        IsAdmin,
         NavigationBar,
         LogoutButton,
         PageTitle,
