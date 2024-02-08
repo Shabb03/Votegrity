@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import AdminDashboard from '../views/AdminDashboard.vue';
+import VoteCandidate from '../views/VoteCandidate.vue';
 
 const mockRoute = {name: 'mockedRouteName',};
 
@@ -28,9 +28,9 @@ global.mocks = {
     VRow,
 };
 
-describe('AdminDashboard View Test', () => {
+describe('VoteCandidate View Test', () => {
     it('renders correctly', () => {
-        const wrapper = mount(AdminDashboard, {
+        const wrapper = mount(VoteCandidate, {
             global: {
                 mocks: {
                     $route: mockRoute,

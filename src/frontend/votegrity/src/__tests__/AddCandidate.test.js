@@ -1,4 +1,3 @@
-//import { shallowMount } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
 import AddCandidate from '../views/AddCandidate.vue';
 

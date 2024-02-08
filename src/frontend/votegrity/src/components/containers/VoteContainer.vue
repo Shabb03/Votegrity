@@ -59,7 +59,11 @@ export default {
                 //this.candidateData = dataArray;
             } 
             catch (error) {
-                await alert('Error retrieving details:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } else {
+                    alert('Error retrieving details:', error);
+                }
                 //window.history.back();
             }
         }
