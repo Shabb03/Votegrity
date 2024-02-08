@@ -20,12 +20,12 @@ exports.signup = async (req, res) => {
     try {
         const { name, email, password, dateOfBirth, specialNumber, citizenship, phoneNumber, securityQuestion1, securityAnswer1, securityQuestion2, securityAnswer2 } = req.body;
         if (!name || !email || !password || !dateOfBirth || !specialNumber || !citizenship || !phoneNumber || !securityQuestion1 || !securityAnswer1 || !securityQuestion2 || !securityAnswer2) {
-            return res.sned({error: 'All required inputs not provided'});
+            return res.json({error: 'All required inputs not provided'});
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.send({error: 'Invalid Email'});
+            return res.json({error: 'Invalid Email'});
         }
         const existingUser = await Voter.findOne({ where: { email } });
         if (existingUser) {
@@ -34,20 +34,19 @@ exports.signup = async (req, res) => {
 
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
-            return res.send({error: 'Password is not strong enough' });
+            return res.json({error: 'Password is not strong enough' });
         }
 
-        const sq1 = await SecurityQuestion.findOne({
+        const sq1 = await SecurityQuestions.findOne({
             where: { questions: securityQuestion1 },
             attributes: ['id'],
         });
-        const sq2 = await SecurityQuestion.findOne({
+        const sq2 = await SecurityQuestions.findOne({
             where: { questions: securityQuestion2 },
             attributes: ['id'],
         });
 
         if (!sq1 || !sq2) {
-        } else {
             res.status(404).json({ message: 'Security question not found' });
         }
 
@@ -63,7 +62,7 @@ exports.signup = async (req, res) => {
             securityQuestion1: sq1.id, 
             securityAnswer1: securityAnswer1, 
             securityQuestion2: sq2.id, 
-            securityAnswer: securityAnswer2
+            securityAnswer2: securityAnswer2,
         });
 
         const userResponse = {
@@ -74,6 +73,7 @@ exports.signup = async (req, res) => {
         res.status(201).json({ user: userResponse, message: 'User created successfully' });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
