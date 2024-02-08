@@ -25,9 +25,9 @@ export default {
     data: () => ({
         title: '',
         description: '',
-        daysLeft: null,
-        candidateNumber: null,
-        voteCount: null,
+        daysLeft: '',
+        candidateNumber: '',
+        voteCount: '',
     }),
     created() {
         this.fetchInformation();
@@ -46,7 +46,8 @@ export default {
                 this.candidateNumber = electionData.candidateNumber + "/" + electionData.candidateNumber + " Candidates";
                 this.voteCount = electionData.voteCount + " Votes";
                 this.description = electionData.description + "\nResult Date: " + electionData.resultDate + "\nAge Restriction: " + electionData.ageRestriction;
-                this.daysLeft = this.getDaysDifference(electionData.startDate, electionData.endDate);
+                const daysDifference = this.getDaysDifference(electionData.startDate, electionData.endDate);
+                this.daysLeft = daysDifference.toString();
                 console.log(response.data);
             } 
             catch (error) {
