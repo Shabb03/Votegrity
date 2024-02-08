@@ -5,7 +5,6 @@
   
 <script>
 import axios from 'axios';
-//const axios = require('axios');
 import PageTitle from '../components/titles/PageTitle.vue';
 import PageLoader from '../components/PageLoader.vue';
 

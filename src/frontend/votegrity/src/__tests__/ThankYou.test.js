@@ -1,12 +1,11 @@
-//import { shallowMount } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
-import NotFound from '../views/NotFound.vue';
+import ThankYou from '../views/ThankYou.vue';
 
 const mockRoute = {
     name: 'mockedRouteName',
 };
 
-const VBtn = {
+const VAppBar = {
     template: '<div></div>',
 };
 
@@ -14,18 +13,18 @@ global.mocks = {
     $vuetify: {
         theme: {},
     },
-    VBtn,
+    VAppBar,
 };
 
-describe('NotFound View Test', () => {
+describe('ThankYou View Test', () => {
     it('renders correctly', () => {
-        const wrapper = mount(NotFound, {
+        const wrapper = mount(ThankYou, {
             global: {
                 mocks: {
                     $route: mockRoute,
                 },
                 components: {
-                    'v-btn': VBtn
+                    'v-app-bar': VAppBar
                 },
             },
         });
