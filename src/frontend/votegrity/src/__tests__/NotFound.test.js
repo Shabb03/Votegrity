@@ -2,13 +2,9 @@
 import { mount } from '@vue/test-utils';
 import NotFound from '../views/NotFound.vue';
 
-const mockRoute = {
-    name: 'mockedRouteName',
-};
+const mockRoute = {name: 'mockedRouteName',};
 
-const VBtn = {
-    template: '<div></div>',
-};
+const VBtn = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {

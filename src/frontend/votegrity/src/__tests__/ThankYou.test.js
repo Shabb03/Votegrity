@@ -1,13 +1,9 @@
 import { mount } from '@vue/test-utils';
 import ThankYou from '../views/ThankYou.vue';
 
-const mockRoute = {
-    name: 'mockedRouteName',
-};
+const mockRoute = {name: 'mockedRouteName',};
 
-const VAppBar = {
-    template: '<div></div>',
-};
+const VAppBar = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {

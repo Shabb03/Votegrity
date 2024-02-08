@@ -27,11 +27,10 @@ export default {
             this.loading = false;
         } 
         catch (error) {
-            //('Error fetching status:', error);
             if (process.env.NODE_ENV === 'test') {
                 console.log(error);
             } else {
-                alert('Server Error: ', error);
+                alert('Error fetching status: ', error);
             }
             this.loading = false;
         }

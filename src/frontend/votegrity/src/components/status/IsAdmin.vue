@@ -27,7 +27,11 @@ export default {
             this.loading = false;
         } 
         catch (error) {
-            console.error('Error fetching status:', error);
+            if (process.env.NODE_ENV === 'test') {
+                console.log(error);
+            } else {
+                alert('Error fetching status: ', error);
+            }
             this.loading = false;
         }
     },
