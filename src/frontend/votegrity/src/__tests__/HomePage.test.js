@@ -1,32 +1,33 @@
 //import { shallowMount } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
-import NotFound from '../views/NotFound.vue';
+//const axios = require('axios');
+import HomePage from '../views/HomePage.vue';
 
 const mockRoute = {
     name: 'mockedRouteName',
 };
-
+/*
 const VBtn = {
     template: '<div></div>',
 };
-
+*/
 global.mocks = {
     $vuetify: {
         theme: {},
     },
-    VBtn,
+    //VBtn,
   };
 
-describe('NotFound View Test', () => {
+describe('HomePage View Test', () => {
     it('renders correctly', () => {
-        const wrapper = mount(NotFound, {
+        const wrapper = mount(HomePage, {
             global: {
                 mocks: {
                     $route: mockRoute,
                 },
-                components: {
+                /*components: {
                     'v-btn': VBtn
-                },
+                },*/
             },
         });
         expect(wrapper.exists()).toBe(true);

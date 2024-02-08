@@ -5,6 +5,7 @@
   
 <script>
 import axios from 'axios';
+//const axios = require('axios');
 import PageTitle from '../components/titles/PageTitle.vue';
 import PageLoader from '../components/PageLoader.vue';
 
@@ -51,7 +52,13 @@ export default {
                 console.log(response.data);
             } 
             catch (error) {
-                alert('Server Error: ', error);
+                //window.alert('Server Error: ', error);
+                //console.log(error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } else {
+                    alert('Server Error: ', error);
+                }
             }
         },
     },
