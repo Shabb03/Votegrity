@@ -401,8 +401,11 @@ async function syncDatabase() {
         console.log('Tables synchronized successfully\n\n\n');
     } 
     catch (err) {
-        //Have to comment out because jest does not work with sequelize properly and keeps displaying errors
-        //console.error('Error synchronizing tables:', err);
+        if (process.env.NODE_ENV === 'test') {
+        } 
+        else {
+            console.log('Error synchronizing tables:', err);
+        }
     }
 }
 

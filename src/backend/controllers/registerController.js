@@ -1,7 +1,6 @@
 const { isSecurePassword, hashPassword } = require('./functions/password');
 const { SecurityQuestions, Voter } = require('../sequelize');  
 
-//test
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
     try {
