@@ -1,11 +1,10 @@
 //import { shallowMount } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
-import AddCandidate from '../views/AddCandidate.vue';
+import AdminLogin from '../views/AdminLogin.vue';
 
 const mockRoute = {name: 'mockedRouteName',};
 
 const VBtn = {template: '<div></div>',};
-const VAppBar = {template: '<div></div>',};
 const VForm = {template: '<div></div>',};
 
 global.mocks = {
@@ -13,20 +12,18 @@ global.mocks = {
         theme: {},
     },
     VBtn,
-    VAppBar,
     VForm,
 };
 
-describe('AddCandidate View Test', () => {
+describe('AdminLogin View Test', () => {
     it('renders correctly', () => {
-        const wrapper = mount(AddCandidate, {
+        const wrapper = mount(AdminLogin, {
             global: {
                 mocks: {
                     $route: mockRoute,
                 },
                 components: {
                     'v-btn': VBtn,
-                    'v-app-bar': VAppBar,
                     'v-form': VForm,
                 },
             },
