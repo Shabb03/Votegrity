@@ -10,7 +10,7 @@ app.set('port', port);
 const server = http.createServer(app);
 
 beforeAll(async () => {
-    await sequelize.sync();
+    //await sequelize.sync();
 });
   
 afterAll(async () => {
