@@ -26,25 +26,17 @@ exports.userInfo = async (req, res) => {
     }
 };
 
+//Change the user's email or phone number
 exports.changeUserDetails = async (req, res) => {
     try {
-        console.log("\nHERE 1\n");
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-
-        console.log("\nHERE 2\n");
 
         const { newEmail, newNumber } = req.body;
         var message = "";
         var newToken = null;
 
-        console.log("\nHERE 3\n");
-
-        console.log("EMAIL: ", newEmail);
-        console.log("NUMBER: ", newNumber);
-
         if (newEmail && newNumber && newEmail !== null && newNumber !== null) {
-            console.log("\nHERE 4\n");
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail && existingNumber) {
                 return res.status(400).json({ message: 'Number and email already in use' });   
@@ -56,7 +48,6 @@ exports.changeUserDetails = async (req, res) => {
             newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         }
         else if (newEmail && newEmail !== null) {
-            console.log("\nHERE 5\n");
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail) {
                 return res.status(400).json({ message: 'Email already in use' });
@@ -67,7 +58,6 @@ exports.changeUserDetails = async (req, res) => {
             newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         }
         else if (newNumber && newNumber !== null) {
-            console.log("\nHERE 6\n");
             const existingNumber = await Voter.findOne({ where: { phoneNumber: newNumber } });
             if (existingNumber) {
                 return res.status(400).json({ message: 'Number already in use' });
@@ -77,10 +67,8 @@ exports.changeUserDetails = async (req, res) => {
             message = "Number updated successfully";
         }
         else {
-            console.log("\nHERE 7\n");
             return res.status(400).json({ error: 'Either email or phone must be provided.' });
         }        
-        console.log("\nHERE 8\n");
         return res.json({ 
             email: user.email, 
             number: user.phoneNumber, 
@@ -89,7 +77,6 @@ exports.changeUserDetails = async (req, res) => {
         });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

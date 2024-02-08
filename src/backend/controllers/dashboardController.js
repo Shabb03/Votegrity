@@ -25,14 +25,3 @@ exports.electionDetails = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
-
-//Get the total number of votes cast in the election
-/*exports.getTotalVotes = async (req, res) => {
-    try {
-        const totalVoteCount = await Vote.count();
-        res.json({voteCount: totalVoteCount});
-    }
-    catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-};*/

@@ -12,6 +12,9 @@ exports.addElection = async (req, res) => {
         }
 
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authenticationMethod } = req.body;
+        if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
+            return res.status(400).json({ error: 'All required inputs not provided' });
+        }        
         const newElection = await Election.create({
             title: title,
             description: description,
@@ -68,6 +71,9 @@ exports.addCandidate = async (req, res) => {
         }
 
         const { name, voice, party, dateOfBirth, biography } = req.body;
+        if (!name || !voice || !party || !dateOfBirth || !biography) {
+            return res.status(400).json({ error: 'All required inputs not provided' });
+        }
         const image = req.file;
         const imagePath = image.filename;
         const newCandidate = await Candidate.create({

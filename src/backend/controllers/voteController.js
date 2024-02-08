@@ -16,6 +16,7 @@ exports.getAllCandidates = async (req, res) => {
     }
 };
 
+//Get the image of a candidate given their id
 exports.getImage = async (req, res) => {
     try {
         const { id } = req.params;
