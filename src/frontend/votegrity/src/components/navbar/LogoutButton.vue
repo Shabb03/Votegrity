@@ -7,7 +7,7 @@ export default {
     name: 'LogoutButton',
     methods: {
         logout() {
-            localStorage.setItem("votegrityToken","");
+            localStorage.setItem("votegrityToken", null);
             this.$router.push('/login');
         },
     },

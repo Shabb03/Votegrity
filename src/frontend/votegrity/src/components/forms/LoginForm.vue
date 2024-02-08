@@ -51,7 +51,7 @@ export default {
                         const token = response.data.token;
                         localStorage.setItem("votegrityToken",token);
                         console.log(response.data);
-                        //this.$router.push('/authentication');
+                        this.$router.push('/authentication');
                     }
                 } 
                 catch (error) {

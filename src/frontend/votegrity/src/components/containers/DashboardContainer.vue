@@ -29,9 +29,9 @@ export default {
         candidateNumber: null,
         voteCount: null,
     }),
-    /*created() {
+    created() {
         this.fetchInformation();
-    },*/
+    },
     methods: {
         async fetchInformation() {
             try {

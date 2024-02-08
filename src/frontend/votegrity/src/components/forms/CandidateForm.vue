@@ -52,9 +52,9 @@ export default {
         party: null,
         image: null,
     }),
-    /*created() {
+    created() {
         this.getCandidateCount();
-    },*/
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -66,9 +66,6 @@ export default {
                 formData.append('biography', this.bio);
                 formData.append('voice', this.voice);
                 formData.append('party', this.party);
-                /*
-                dateOfBirth,
-                */
                 try {
                     const token = localStorage.getItem("votegrityToken");
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {

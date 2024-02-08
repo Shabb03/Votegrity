@@ -20,12 +20,12 @@ export default {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            const { loggedIn, authenticated } = response.data;
-            if (!loggedIn) {
+            const { admin, election } = response.data;
+            if (!admin) {
                 this.$router.push('/');
             }
-            if (authenticated) {
-                this.$router.push('/vote');
+            if (election === true) {
+                this.$router.push('/admin/dashboard');
             }
             this.loading = false;
         } 
@@ -39,4 +39,3 @@ export default {
   
 <style scoped>
 </style>
-  

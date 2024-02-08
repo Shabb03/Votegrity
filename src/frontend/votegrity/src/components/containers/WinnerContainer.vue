@@ -34,9 +34,9 @@ export default {
         biography: '',
         voteCount: 0,
     }),
-    /*created() {
+    created() {
         this.fetchWinner();
-    },*/
+    },
     methods: {
         async fetchWinner() {
             try {

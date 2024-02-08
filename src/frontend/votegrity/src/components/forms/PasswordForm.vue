@@ -65,9 +65,9 @@
             v => !!v || 'code is required',
         ],
     }),
-    /*created() {
+    created() {
       this.getAuthCode();
-    },*/
+    },
     methods: {
         async validate() {
             if (this.password1 !== this.password2) {
@@ -93,9 +93,9 @@
                       alert(response.data.error);
                     }
                     else {
-                      localStorage.setItem("votegrityToken","");
+                      localStorage.setItem("votegrityToken", null);
                       console.log(response.data);
-                      //this.$router.push('/login');
+                      this.$router.push('/login');
                     }
                 } 
                 catch (error) {

@@ -50,9 +50,9 @@ export default {
         phoneNumber: null,
         date: null,
     }),
-    /*created() {
+    created() {
         this.fetchUserData();
-    },*/
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -68,7 +68,6 @@ export default {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    //const userData = response.data;
                     console.log(response.data);
                     window.location.reload();
                 } 

@@ -22,8 +22,6 @@ export default {
         informationTitle: String,
         informationText: String,
     },
-    /*methods: {
-    },*/
 }
 </script>
 

@@ -63,13 +63,10 @@ export default {
             v => !!v || 'code is required',
         ],
     }),
-    /*created() {
+    created() {
         this.getAuthCode();
-    },*/
+    },
     methods: {
-        /*updateCode() {
-            this.$emit('update:code', this.code);
-        },*/
         async getAuthCode() {
             try {
                 const url = 'http://localhost:3000/api' + this.getApiUrl;
@@ -104,13 +101,12 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                //const userData = response.data;
                 console.log(response.data);
                 if (response.data.invalid) {
                     alert('Invalid Code');
                 }
                 else {
-                    //this.$router.push(this.routeUrl);
+                    this.$router.push(this.routeUrl);
                 }  
             } 
             catch (error) {

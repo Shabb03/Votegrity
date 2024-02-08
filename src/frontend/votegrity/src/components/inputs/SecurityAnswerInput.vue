@@ -28,9 +28,9 @@ export default {
           v => !!v || 'Input is required',
         ],
     }),
-    /*created() {
+    created() {
       this.fetchUserData();
-    },*/
+    },
     methods: {
         async fetchUserData() {
             try {

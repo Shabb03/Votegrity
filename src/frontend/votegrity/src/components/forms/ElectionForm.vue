@@ -65,8 +65,12 @@ export default {
                 const postData = {
                     title: this.title,
                     description: this.description,
+                    startDate: this.startDate,
+                    endDate: this.endDate,
+                    resultDate: this.resultDate,
                     candidateNumber: this.number,
-                    //update this
+                    ageRestriction: this.age,
+                    authenticationMethod: false
                 };
                 try {
                     const token = localStorage.getItem("votegrityToken");
@@ -80,7 +84,7 @@ export default {
                     }
                     else {
                         console.log(response.data);
-                        //this.$router.push('/addcandidate');
+                        this.$router.push('/addcandidate');
                     }
                 } 
                 catch (error) {

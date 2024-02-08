@@ -52,13 +52,10 @@ export default {
                     responseType: 'arraybuffer',
                 });
                 
-
-                    const binaryData = new Uint8Array(response.data);
-                    const dataUrl = this.arrayBufferToBase64(binaryData);
-                    this.imageSrc = `data:image/jpeg;base64,${dataUrl}`;
+                const binaryData = new Uint8Array(response.data);
+                const dataUrl = this.arrayBufferToBase64(binaryData);
+                this.imageSrc = `data:image/jpeg;base64,${dataUrl}`;
                 
-
-                //this.imageSrc = response.data;
                 console.log(response.data);
             } 
             catch (error) {

@@ -50,7 +50,7 @@ export default {
                         const token = response.data.token;
                         localStorage.setItem("votegrityToken",token);
                         console.log(response.data);
-                        //this.$router.push('/admin/dashboard');
+                        this.$router.push('/admin/dashboard');
                     }
                 } 
                 catch (error) {
