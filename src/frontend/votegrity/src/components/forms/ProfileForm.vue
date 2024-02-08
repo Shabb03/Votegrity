@@ -17,8 +17,22 @@
                 v-model="citizenship"
                 label="Citizenship: "
             ></v-text-field>
-            <EmailInput @update:email="emailValue"/>
-            <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
+            <v-row>
+                <v-col>
+                    <v-text-field disabled
+                        v-model="currentEmail"
+                        label="Current Email: "
+                    ></v-text-field>
+                    <v-text-field disabled
+                        v-model="currentPhoneNumber"
+                        label="Current Phone Number: "
+                    ></v-text-field>
+                </v-col>
+                <v-col>
+                    <EmailInput :required=false @update:email="emailValue"/>
+                    <PhoneNumberInput :required=false @update:phoneNumber="phoneNumberValue"/>
+                </v-col>
+            </v-row>
 
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
@@ -44,9 +58,11 @@ export default {
     },
     data: () => ({
         name: '',
+        currentEmail: '',
         email: null,
         citizenship: '',
         specialNumber: '',
+        currentPhoneNumber: '',
         phoneNumber: null,
         date: null,
     }),
@@ -58,8 +74,8 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 const postData = {
-                    email: this.email,
-                    phoneNumber: this.phoneNumber,
+                    newEmail: this.email,
+                    newNumber: this.phoneNumber,
                 };
                 try {
                     const token = localStorage.getItem("votegrityToken");
@@ -86,11 +102,11 @@ export default {
                 });
                 const userData = response.data;
                 this.name = userData.name;
-                this.date = userData.date;
+                this.date = userData.dateOfBirth;
                 this.specialNumber = userData.specialNumber;
                 this.citizenship = userData.citizenship;
-                this.email = userData.email;
-                this.phoneNumber = userData.phoneNumber;
+                this.currentEmail = userData.email;
+                this.currentPhoneNumber = userData.phoneNumber;
                 console.log(response.data);
             } 
             catch (error) {

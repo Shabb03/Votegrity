@@ -1,10 +1,9 @@
 <template>
     <v-text-field
         v-model="text"
-        :label="label || Text"
+        :label="label || 'Text'"
         :rules="textRules"
         @input="updateText"
-        required
     ></v-text-field>
 </template>
 

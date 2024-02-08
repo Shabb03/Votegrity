@@ -16,7 +16,14 @@
                 </v-btn>
             </div>
         </v-form>
-        <router-link class="form-link" to="/register">Sign Up</router-link>
+        <v-row>
+            <v-col>
+                <router-link class="form-link" to="/register">Sign Up</router-link>
+            </v-col>
+            <v-col>
+                <router-link class="form-link" to="/changepassword">Forgot Password?</router-link>
+            </v-col>
+        </v-row>
     </div>
 </template>
 

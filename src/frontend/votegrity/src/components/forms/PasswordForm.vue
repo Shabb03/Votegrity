@@ -1,7 +1,15 @@
 <template>
     <div class="form-container">
         <v-form ref="form">
-
+            <v-card
+                class="py-8 px-6 text-center mx-auto mb-4"
+                elevation="12"
+                max-width="400"
+                width="100%"
+            >
+                <EmailInput @update:email="emailValue"/>
+                <v-btn class="my-4 primary" height="40" variant="tonal" width="70%" @click="getAuthCode">Send Code</v-btn>
+            </v-card>
             <v-card
                 class="py-8 px-6 text-center mx-auto mb-4"
                 elevation="12"
@@ -18,7 +26,7 @@
             </v-card>
 
 
-            <SecurityAnswerInput @update:securityAnswer1="sa1Value" @update:securityAnswer2="sa2Value"/>
+            <SecurityAnswerInput :label1 = "securityLabel1" :label2="securityLabel2" @update:securityAnswer1="sa1Value" @update:securityAnswer2="sa2Value"/>
             <v-row>
                 <v-col>
                     <PasswordInput :label="passwordLabel1" @update:password="password1Value"/>
@@ -45,17 +53,22 @@
   
 <script>
   import axios from 'axios';
+  import EmailInput from '../inputs/EmailInput.vue';
   import SecurityAnswerInput from '../inputs/SecurityAnswerInput.vue';
   import PasswordInput from '../inputs/PasswordInput.vue';
   
   export default {
     components: {
+      EmailInput,
       SecurityAnswerInput,
       PasswordInput,
     },
     data: () => ({
+        securityLabel1: "Security Question 1",
+        securityLabel2: "Security Question 2",
         passwordLabel1: "Enter New Password",
         passwordLabel2: "Confirm New Password",
+        email: '',
         code: '',
         sa1: '',
         sa2: '',
@@ -65,9 +78,6 @@
             v => !!v || 'code is required',
         ],
     }),
-    created() {
-      this.getAuthCode();
-    },
     methods: {
         async validate() {
             if (this.password1 !== this.password2) {
@@ -77,18 +87,14 @@
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 const postData = {
+                    email: this.email,
                     resetToken: this.code,
                     securityAnswer1: this.sa1,
                     securityAnswer2: this.sa2,
                     password: this.password,
                 };
                 try {
-                    const token = localStorage.getItem("votegrityToken");
-                    const response = await axios.post('http://localhost:3000/api/user/changepassword', postData, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
+                    const response = await axios.post('http://localhost:3000/api/user/changepassword', postData);
                     if (response.data.error) {
                       alert(response.data.error);
                     }
@@ -105,12 +111,13 @@
         },
         async getAuthCode() {
             try {
-                const token = localStorage.getItem("votegrityToken");
-                const response = await axios.get('http://localhost:3000/api/user/authenticationcode', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const postData = {
+                    email: this.email,
+                };
+                const response = await axios.post('http://localhost:3000/api/user/authenticationcode', postData);
+                const userData = response.data;
+                this.securityLabel1 = userData.securityQuestion1;
+                this.securityLabel2 = userData.securityQuestion2;
                 console.log(response.data);
             } 
             catch (error) {
@@ -122,6 +129,9 @@
         },
         test() {
             console.log(this.password);
+        },
+        emailValue(params) {
+            this.email = params;
         },
         codeValue(params) {
             this.code = params;

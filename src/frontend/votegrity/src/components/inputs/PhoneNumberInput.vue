@@ -4,7 +4,6 @@
         :label="label || 'Phone Number'"
         :rules="phoneNumberRules"
         @input="updatePhoneNumber"
-        required
     ></v-text-field>
 </template>
   
@@ -15,14 +14,27 @@ export default {
             type: String,
             default: 'Phone Number',
         },
+        required: {
+            type: Boolean,
+            default: true,
+        },
     },
     data: () => ({
         phoneNumber: '',
-        phoneNumberRules: [
+        /*phoneNumberRules: [
             v => !!v || 'Phone Number is required',
             v => /^\d+$/.test(v) || 'Only numbers are allowed',
-        ],
+        ],*/
     }),
+    computed: {
+        phoneNumberRules() {
+            const validationRules = [];
+            if (this.required) {
+                validationRules.push((v) => !!v || this.label + ' is required');
+            }
+            return validationRules;
+        },
+    },
     methods: {
         updatePhoneNumber() {
             this.$emit('update:phoneNumber', this.phoneNumber);

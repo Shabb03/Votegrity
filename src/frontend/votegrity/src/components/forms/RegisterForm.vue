@@ -1,11 +1,11 @@
 <template>
     <div class="form-container">
         <v-form ref="form">
-            <TextInput :label="nameLabel" :required="true" @update:name="nameValue"/>
+            <TextInput :label="nameLabel" :required="true" @update:text="nameValue"/>
             <EmailInput @update:email="emailValue"/>
             <PasswordInput @update:password="passwordValue"/>
             <CitizenshipInput @update:citizenship="citizenshipValue"/>
-            <TextInput :label="specialNumberLabel" :required="true" @update:specialNumber="specialNumberValue"/>
+            <TextInput :label="specialNumberLabel" :required="true" @update:text="specialNumberValue"/>
             <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
             <DateInput :label="birthDateLabel" @update:date="dateValue"/>
             <SecurityInput securityNumber="1" @update:securitySelect="sq1Value" @update:securityAnswer="sa1Value"/>

@@ -41,6 +41,14 @@ export default {
         this.fetchImageData();
     },
     methods: {
+        arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        },
         async fetchImageData() {
             try {
                 console.log(this.candidateId);
@@ -62,14 +70,6 @@ export default {
                 console.log(error);
                 alert('Error retrieving images:', error);
             }
-        },
-        arrayBufferToBase64(buffer) {
-            let binary = '';
-            const bytes = new Uint8Array(buffer);
-            for (let i = 0; i < bytes.byteLength; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            return btoa(binary);
         },
         calculateAge(dateOfBirth) {
             const today = new Date();
