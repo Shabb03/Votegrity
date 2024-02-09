@@ -1,14 +1,16 @@
 const jwt = require('jsonwebtoken');
-//const crypto = require('crypto');
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
-const { Voter } = require('../sequelize');
+const { Voter, SecurityQuestions } = require('../sequelize');
 
 //Get the information of the user
 exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
+
+        const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
+        const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
 
         res.json({
             name: user.name,
@@ -17,8 +19,8 @@ exports.userInfo = async (req, res) => {
             specialNumber: user.specialNumber,
             citizenship: user.citizenship,
             phoneNumber: user.phoneNumber,
-            securityQuestion1: user.securityQuestion1,
-            securityQuestion2: user.securityQuestion2,
+            securityQuestion1: sq1.questions,
+            securityQuestion2: sq2.questions,
         });
     }
     catch (error) {

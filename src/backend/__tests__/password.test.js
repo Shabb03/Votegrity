@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { isSecurePassword, hashPassword } = require('../controllers/functions/password');
 
+//check if the function tests the security level of the password
 describe('isSecurePassword', () => {
     test('should return true for a secure password', () => {
         const securePassword = 'SecurePassword1!';
@@ -13,6 +14,7 @@ describe('isSecurePassword', () => {
     });
 });
 
+//check if the password is hashed into a secure string
 describe('hashPassword', () => {
     test('should hash the password', async () => {
         const plainPassword = 'SecurePassword1!';

@@ -17,7 +17,7 @@ router.post('/userdetails', authenticateToken, profileController.changeUserDetai
 router.get('/registertoken', authenticateToken, profileController.getAuthToken);
 router.post('/authenticateaccount', authenticateToken, profileController.authAccount);
 
-router.get('/authenticationcode', passwordController.authCode);
+router.post('/authenticationcode', passwordController.authCode);
 router.post('/changepassword', passwordController.changePassword);
 
 module.exports = router;

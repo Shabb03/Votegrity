@@ -5,6 +5,7 @@ const isAdmin = require('../middleware/isadmin');
 const multer = require('multer');
 const path = require('path');
 
+//used to send images via a get request
 const destinationFolder = path.join(__dirname, '../images');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

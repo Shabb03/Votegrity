@@ -16,7 +16,8 @@ exports.getResults = async (req, res) => {
             return res.status(404).json({ message: 'Results not found' });
         }
         const candidate = await Candidate.findByPk(results.winner);
-        res.json({ 
+        res.json({
+            id: candidate.id,
             name: candidate.name,
             voice: candidate.voice,
             party: candidate.party,

@@ -19,6 +19,7 @@ afterAll(async () => {
     await server.close();
 });
 
+//check if the route returns a list of all security questions
 describe('GET /api/user/securityquestions', () => {
   test('should return an array of security questions', async () => {
     const mockSecurityQuestions = [

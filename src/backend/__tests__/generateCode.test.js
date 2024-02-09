@@ -1,5 +1,6 @@
 const generateSixDigitCode = require('../controllers/functions/generateCode');
 
+//check if the generateSixDigitCode creates a six digit code
 describe('generateSixDigitCode', () => {
     test('should generate a six-digit code', () => {
         const code = generateSixDigitCode();

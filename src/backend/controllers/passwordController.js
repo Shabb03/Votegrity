@@ -2,7 +2,7 @@
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { isSecurePassword, hashPassword } = require('./functions/password');
-const { Voter } = require('../sequelize');
+const { Voter, SecurityQuestions } = require('../sequelize');
 
 //Send a six digit code via email if the user has forgotten their password
 exports.authCode = async (req, res) => {
@@ -16,12 +16,15 @@ exports.authCode = async (req, res) => {
             return res.status(404).json({ error: 'User not found for the provided email' });
         }
 
+        const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
+        const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
+
         const sixDigitCode = generateSixDigitCode();
         user.resetToken = sixDigitCode;
         await user.save();
 
         sendEmail("Reset Password Code", email, "Here is your password code: " + sixDigitCode);
-        res.json({message: "Email sent"});
+        res.json({message: "Email sent", securityQuestion1: sq1.questions, securityQuestion2: sq2.questions});
         //res.json({code: sixDigitCode});
     }
     catch (error) {
@@ -33,6 +36,13 @@ exports.authCode = async (req, res) => {
 exports.changePassword = async (req, res) => {
     try {
         const { email, resetToken, securityAnswer1, securityAnswer2, password } = req.body;
+        console.log(req.body);
+        console.log(email);
+        console.log(resetToken);
+        console.log(securityAnswer1);
+        console.log(securityAnswer2);
+        console.log(password);
+
         if (!email || !resetToken || !securityAnswer1 || !securityAnswer2 || !password) {
             return res.status(400).json({ error: 'All required inputs not provided' });
         }
@@ -41,7 +51,7 @@ exports.changePassword = async (req, res) => {
             return res.status(404).json({ error: 'User not found for the provided email' });
         }
 
-        if (resetToken === user.resetToken && answer1 === user.securityAnswer1 && answer2 === user.securityAnswer2) {
+        if (resetToken === user.resetToken && securityAnswer1 === user.securityAnswer1 && securityAnswer2 === user.securityAnswer2) {
             const isSecure = isSecurePassword(password);
             if (!isSecure) {
                 return res.send({error: 'Password is not strong enough'});
@@ -57,6 +67,7 @@ exports.changePassword = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

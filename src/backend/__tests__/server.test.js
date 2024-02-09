@@ -22,6 +22,7 @@ async function closeServer(resolve) {
     await server.close(resolve);
 }
 
+//check if the server runs on port 3000
 describe('Server', () => {
     test('should listen on port 3000', async () => {
         await new Promise((resolve) => {
