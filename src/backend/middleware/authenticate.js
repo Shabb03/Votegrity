@@ -21,7 +21,7 @@ async function authenticateToken(req, res, next) {
         next();
     } 
     catch (err) {
-        return res.status(403).json({ message: 'Invalid token.' });
+        return res.status(403).json({ message: 'Access denied. Token not provided.' });
     }
 }
 

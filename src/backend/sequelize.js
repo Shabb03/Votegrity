@@ -1,15 +1,33 @@
 require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
 
+
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
     username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
+    define: {
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
+    },
 });
 
+
 //Models
+const SecurityQuestions = sequelize.define('SecurityQuestions', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    questions: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+});
+
 const Voter = sequelize.define('Voter', {
     id: {
         type: DataTypes.INTEGER,
@@ -73,20 +91,28 @@ const Voter = sequelize.define('Voter', {
         allowNull: true,
     },
     securityQuestion1: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+              model: SecurityQuestions,
+              key: 'id',
+        },
     },
     securityAnswer1: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     securityQuestion2: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+              model: SecurityQuestions,
+              key: 'id',
+        },
     },
     securityAnswer2: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     resetToken: {
         type: DataTypes.STRING,
@@ -97,7 +123,6 @@ const Voter = sequelize.define('Voter', {
         allowNull: false,
         defaultValue: false,
     },
-
 });
 
 const Candidate = sequelize.define('Candidate', {
@@ -119,8 +144,8 @@ const Candidate = sequelize.define('Candidate', {
         allowNull: true,
     },
     image: {
-        type: DataTypes.BLOB,
-        allowNull: true,
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     dateOfBirth: {
         type: DataTypes.DATEONLY,
@@ -128,11 +153,11 @@ const Candidate = sequelize.define('Candidate', {
     },
     biography: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     isWinner: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: false,
     }
 });
@@ -365,18 +390,22 @@ const Election = sequelize.define('Election', {
               model: Result,
               key: 'id',
         },
-    }
+    },
 });
 
 
 //Synchronize with MySQL database
 async function syncDatabase() {
-  try {
+    try {
         await sequelize.sync({});
         console.log('Tables synchronized successfully\n\n\n');
     } 
     catch (err) {
-        console.error('Error synchronizing tables:', err);
+        if (process.env.NODE_ENV === 'test') {
+        } 
+        else {
+            console.log('Error synchronizing tables:', err);
+        }
     }
 }
 
@@ -384,6 +413,7 @@ syncDatabase();
 
 module.exports = {
     sequelize,
+    SecurityQuestions,
     Voter,
     Candidate,
     Admin,
@@ -391,6 +421,6 @@ module.exports = {
     Vote,
     Transaction,
     Blockchain,
-    Election,
     Result,
+    Election,
 };

@@ -12,7 +12,7 @@ function isSecurePassword(password) {
     return hasNumber && hasLowercase && hasUppercase && hasSpecialChar && hasMinLength;
 }
 
-//Encrypt the password
+//Encrypt the password using hashing
 async function hashPassword(password) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     return hashedPassword;

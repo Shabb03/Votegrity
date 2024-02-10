@@ -10,7 +10,6 @@ async function authenticateAdmin(req, res, next) {
         return res.status(401).json({ message: 'Access denied. Token not provided.' });
     }
     const token = tokenString.replace("Bearer ", "");
-
     try {
         const acessAdmin = jwt.verify(token, secretKey);
         req.user = acessAdmin;

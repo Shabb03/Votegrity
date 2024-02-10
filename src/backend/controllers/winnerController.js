@@ -1,4 +1,4 @@
-const { Result, Election } = require('../sequelize');
+const { Result, Election, Candidate } = require('../sequelize');
 
 //Get the resulting winner of current election
 exports.getResults = async (req, res) => {
@@ -7,11 +7,27 @@ exports.getResults = async (req, res) => {
         if (!activeElection) {
             return res.status(404).json({ message: 'Active election not found' });
         }
-        const resultsId = activeElection.result;
+        const resultsId = activeElection.results;
+        if (!resultsId) {
+            return res.status(404).json({ message: 'Results not found' });
+        }
         const results = await Result.findByPk(resultsId);
-        res.json({ results});
+        if (!results) {
+            return res.status(404).json({ message: 'Results not found' });
+        }
+        const candidate = await Candidate.findByPk(results.winner);
+        res.json({
+            id: candidate.id,
+            name: candidate.name,
+            voice: candidate.voice,
+            party: candidate.party,
+            image: candidate.image,
+            biography: candidate.biography,
+            voteCount: results.voteCount 
+        });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

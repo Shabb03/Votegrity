@@ -1,18 +1,53 @@
 const { isSecurePassword, hashPassword } = require('./functions/password');
-const { Voter } = require('../sequelize');  
+const { SecurityQuestions, Voter } = require('../sequelize');  
+
+//Get all possible security questions
+exports.securityQuestions = async (req, res) => {
+    try {
+        const allSecurityQuestions = await SecurityQuestions.findAll({
+            attributes: ['questions']
+        });
+        const questions = allSecurityQuestions.map(question => question.questions);
+        res.json({ questions });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 //Register a new user
 exports.signup = async (req, res) => {
     try {
         const { name, email, password, dateOfBirth, specialNumber, citizenship, phoneNumber, securityQuestion1, securityAnswer1, securityQuestion2, securityAnswer2 } = req.body;
+        if (!name || !email || !password || !dateOfBirth || !specialNumber || !citizenship || !phoneNumber || !securityQuestion1 || !securityAnswer1 || !securityQuestion2 || !securityAnswer2) {
+            return res.json({error: 'All required inputs not provided'});
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.json({error: 'Invalid Email'});
+        }
         const existingUser = await Voter.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists' });
+            return res.status(400).json({ error: 'User already exists, email in use' });
         }
 
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
-            return res.send({error: 'Password is not strong enough'});
+            return res.json({error: 'Password is not strong enough' });
+        }
+
+        const sq1 = await SecurityQuestions.findOne({
+            where: { questions: securityQuestion1 },
+            attributes: ['id'],
+        });
+        const sq2 = await SecurityQuestions.findOne({
+            where: { questions: securityQuestion2 },
+            attributes: ['id'],
+        });
+
+        if (!sq1 || !sq2) {
+            res.status(404).json({ message: 'Security question not found' });
         }
 
         const hashedPassword = await hashPassword(password);
@@ -24,10 +59,10 @@ exports.signup = async (req, res) => {
             specialNumber: specialNumber,
             citizenship: citizenship,
             phoneNumber: phoneNumber,
-            securityQuestion1: securityQuestion1, 
+            securityQuestion1: sq1.id, 
             securityAnswer1: securityAnswer1, 
-            securityQuestion2: securityQuestion2, 
-            securityAnswer: securityAnswer2
+            securityQuestion2: sq2.id, 
+            securityAnswer2: securityAnswer2,
         });
 
         const userResponse = {
@@ -40,4 +75,4 @@ exports.signup = async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
