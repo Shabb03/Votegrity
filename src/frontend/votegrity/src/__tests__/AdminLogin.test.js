@@ -14,6 +14,7 @@ global.mocks = {
     VForm,
 };
 
+//test the AdminLogin View renders correctly
 describe('AdminLogin View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(AdminLogin, {

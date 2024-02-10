@@ -2,16 +2,16 @@
     <div class="form-container">
         <v-form ref="form">
             <h3>Number of Candidates: {{addedCandidates}}/{{ candidateCount }}</h3>
-            <TextInput :label="nameLabel" :required="true" @update:name="nameValue" />
+            <TextInput :label="nameLabel" :required="true" @update:text="nameValue" />
             <ImageInput :label="imageLabel" @update:image="imageValue"/>
-            <DateInput :label="birthDateLabel" @update:dateOfBirth="dateOfBirthValue"/>
-            <TextInput :label="bioLabel" :required="true" @update:bio="bioValue"/>
-            <TextInput :label="voiceLabel" @update:voice="voiceValue"/>
-            <TextInput :label="partyLabel" @update:party="partyValue"/>
+            <DateInput :label="birthDateLabel" @update:date="dateOfBirthValue"/>
+            <TextInput :label="bioLabel" :required="true" @update:text="bioValue"/>
+            <TextInput :label="voiceLabel" @update:text="voiceValue"/>
+            <TextInput :label="partyLabel" @update:text="partyValue"/>
   
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
-                    Login
+                    Add Candidate
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
@@ -66,6 +66,7 @@ export default {
                 formData.append('biography', this.bio);
                 formData.append('voice', this.voice);
                 formData.append('party', this.party);
+                console.log("formData", formData);
                 try {
                     const token = localStorage.getItem("votegrityToken");
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
@@ -74,11 +75,16 @@ export default {
                         },
                     });
                     if (response.data.error) {
-                      alert(response.data.error);
+                        alert(response.data.error);
                     }
                     else {
                       console.log(response.data);
-                      //this.$router.push('/addcandidate');
+                        if ((this.addedCandidates + 1) >= this.candidateCount) {
+                            this.$router.push('/admin/dashboard');
+                        } 
+                        else {
+                            window.location.reload();
+                        }
                     }
                 } 
                 catch (error) {
@@ -97,6 +103,9 @@ export default {
                 const data = response.data;
                 this.addedCandidates = data.addedCandidates;
                 this.candidateCount = data.candidateCount;
+                if (this.addedCandidates >= this.candidateCount) {
+                    this.$router.push('/admin/dashboard');
+                }
                 console.log(response.data);
             } 
             catch (error) {
@@ -149,8 +158,21 @@ export default {
     background-color: #00e5ff;
 }
 
+.primary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.primary:active {
+    cursor: wait;
+}
+
 .secondary {
     background-color: #2616bb;
     color: white;
+}
+
+.secondary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 </style>

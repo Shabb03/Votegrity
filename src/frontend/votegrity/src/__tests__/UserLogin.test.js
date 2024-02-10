@@ -16,6 +16,7 @@ global.mocks = {
     RouterLink,
 };
 
+//test the UserLogin View renders correctly
 describe('UserLogin View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(UserLogin, {

@@ -24,8 +24,13 @@ exports.getStatus = async (req, res) => {
 
         const admin = verifyToken(token, adminSecretKey);
         if (admin) {
+            let electionValue = false;
             const activeElection = await Election.findOne({where: {isActive: true}});
-            return res.send({status: 'Admin', admin: true, election: activeElection});
+            if (activeElection); {
+                electionValue = true;
+            }
+            console.log(electionValue);
+            return res.send({status: 'Admin', admin: true, election: electionValue});
         }
 
         const accessUser = verifyToken(token, secretKey);

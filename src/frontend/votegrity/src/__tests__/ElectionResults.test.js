@@ -28,6 +28,7 @@ global.mocks = {
     VContainer,
 };
 
+//test the ElectionResults View renders correctly
 describe('ElectionResults View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(ElectionResults, {

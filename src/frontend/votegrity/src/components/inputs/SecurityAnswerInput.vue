@@ -27,6 +27,9 @@ export default {
             default: 'Security Question 2',
         },
     },
+    created() {
+        console.log("LABELS: ", this.label1, this.label2);
+    },
     data: () => ({
         securityAnswer1: '',
         securityAnswer2: '',

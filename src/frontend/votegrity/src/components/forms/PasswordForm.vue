@@ -38,7 +38,7 @@
   
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
-                    Login
+                    Submit
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
@@ -91,20 +91,22 @@
                     resetToken: this.code,
                     securityAnswer1: this.sa1,
                     securityAnswer2: this.sa2,
-                    password: this.password,
+                    password: this.password1,
                 };
+                console.log(postData);
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/changepassword', postData);
+                    console.log(response.data);
                     if (response.data.error) {
                       alert(response.data.error);
                     }
                     else {
-                      localStorage.setItem("votegrityToken", null);
                       console.log(response.data);
                       this.$router.push('/login');
                     }
                 } 
                 catch (error) {
+                    console.log(error);
                     alert('Error changing password:', error);
                 }
             }
@@ -116,6 +118,7 @@
                 };
                 const response = await axios.post('http://localhost:3000/api/user/authenticationcode', postData);
                 const userData = response.data;
+                console.log(response.data);
                 this.securityLabel1 = userData.securityQuestion1;
                 this.securityLabel2 = userData.securityQuestion2;
                 console.log(response.data);
@@ -168,8 +171,21 @@
     background-color: #00e5ff;
 }
 
+.primary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.primary:active {
+    cursor: wait;
+}
+
 .secondary {
     background-color: #2616bb;
     color: white;
+}
+
+.secondary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 </style>

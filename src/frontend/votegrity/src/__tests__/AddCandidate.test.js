@@ -16,6 +16,7 @@ global.mocks = {
     VForm,
 };
 
+//test the AddCandidate View renders correctly
 describe('AddCandidate View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(AddCandidate, {

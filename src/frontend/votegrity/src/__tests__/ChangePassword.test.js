@@ -26,6 +26,7 @@ global.mocks = {
     VOtpInput,
 };
 
+//test the ChangePassword View renders correctly
 describe('ChangePassword View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(ChangePassword, {

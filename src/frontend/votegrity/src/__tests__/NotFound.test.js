@@ -13,6 +13,7 @@ global.mocks = {
     VBtn,
 };
 
+//test the NotFound View renders correctly
 describe('NotFound View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(NotFound, {

@@ -16,6 +16,7 @@ global.mocks = {
     RouterLink,
 };
 
+//test the UserRegister View renders correctly
 describe('UserRegister View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(UserRegister, {

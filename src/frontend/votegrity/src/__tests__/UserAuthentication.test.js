@@ -22,6 +22,7 @@ global.mocks = {
     VOtpInput,
 };
 
+//test the Userauthentication View renders correctly
 describe('UserAuthentication View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(UserAuthentication, {

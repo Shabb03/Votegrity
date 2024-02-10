@@ -48,7 +48,11 @@ export default {
                     },
                 });
                 const dataArray = response.data.candidates;
-                const groupSize = 3
+                const groupSize = 3;
+
+                if (dataArray.length === 0) {
+                    window.alert('Error: No Candidates added to election')
+                }
                 
                 for (let i = 0; i < dataArray.length; i += groupSize) {
                     if (i % 3 === 0) {

@@ -125,4 +125,14 @@ export default {
 .primary {
     background-color: #00e5ff;
 }
+
+.v-btn:hover {
+    cursor: 'pointer';
+    color: #00e5ff;
+    background-color: black;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.v-btn:active {
+    cursor: wait;
+}
 </style>

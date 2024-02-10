@@ -28,6 +28,7 @@ exports.addElection = async (req, res) => {
             publicKey: null,
             results: null
         });
+
         const electionResponse = {
             title: newElection.title,
             description: newElection.description,
@@ -66,6 +67,7 @@ exports.addCandidate = async (req, res) => {
         const activeElection = await Election.findOne({where: {isActive: true}});
         const candidateCount = activeElection.candidateCount;
         const totalCandidates = await Candidate.count({where: {isWinner: false}});
+
         if (totalCandidates >= candidateCount) {
             return res.json({error: "Total number of candidates exceeded"});
         }
@@ -88,7 +90,6 @@ exports.addCandidate = async (req, res) => {
         //res.json({imagePath: image.filename});
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

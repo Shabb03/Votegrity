@@ -16,6 +16,7 @@ global.mocks = {
     VForm,
 };
 
+//test the CreateElection View renders correctly
 describe('CreateElection View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(CreateElection, {

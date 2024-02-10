@@ -18,6 +18,7 @@ global.mocks = {
     VTextField,
 };
 
+//test the UserProfile View renders correctly
 describe('UserProfile View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(UserProfile, {

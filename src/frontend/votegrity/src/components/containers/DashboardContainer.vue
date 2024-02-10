@@ -33,6 +33,14 @@ export default {
         this.fetchInformation();
     },
     methods: {
+        formatResultDate(dateInput) {
+        const date = new Date(dateInput);
+            return date.toLocaleDateString('en-GB', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            });
+        },
         async fetchInformation() {
             try {
                 const authToken = localStorage.getItem("votegrityToken");
@@ -44,10 +52,11 @@ export default {
                 const electionData = response.data;
                 this.title = electionData.title;
                 this.candidateNumber = electionData.candidateNumber + "/" + electionData.candidateNumber + " Candidates";
-                this.voteCount = electionData.voteCount + " Votes";
-                this.description = electionData.description + "\nResult Date: " + electionData.resultDate + "\nAge Restriction: " + electionData.ageRestriction;
+                this.voteCount = electionData.voteCount + " Total Votes";
+                const resultDate = this.formatResultDate(electionData.resultDate);
+                this.description = electionData.description + "<br><br>Result Date: " + resultDate + "<br><br>Age Restriction: " + electionData.ageRestriction;
                 const daysDifference = this.getDaysDifference(electionData.startDate, electionData.endDate);
-                this.daysLeft = daysDifference.toString();
+                this.daysLeft = daysDifference.toString() + " Days Left";
                 console.log(response.data);
             } 
             catch (error) {

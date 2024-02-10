@@ -11,6 +11,7 @@ global.mocks = {
     },
 };
 
+//test the HomePage View renders correctly
 describe('HomePage View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(HomePage, {

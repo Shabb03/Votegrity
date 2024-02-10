@@ -36,7 +36,7 @@ export default {
                         this.$router.push('/admin/createelection');
                     }
                 }
-                if (status.loggedIn) {
+                else if (status.loggedIn) {
                     if (status.authenticated) {
                         this.$router.push('/vote');
                     }

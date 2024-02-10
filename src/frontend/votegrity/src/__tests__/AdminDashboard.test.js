@@ -28,6 +28,7 @@ global.mocks = {
     VContainer,
 };
 
+//test the AdminDashboard View renders correctly
 describe('AdminDashboard View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(AdminDashboard, {

@@ -75,8 +75,9 @@ export default {
                 console.log(response.data);
             } 
             catch (error) {
-                await alert('Error retrieving details:', error);
-                //window.history.back();
+                alert('Error: No winner for election');
+                //await alert('Error retrieving details:', error);
+                window.history.back();
             }
         }
     }

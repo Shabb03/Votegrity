@@ -9,7 +9,7 @@
             </v-img>
             <div>
                 <v-card-title class="card-text">{{informationTitle}}</v-card-title>
-                <v-card-text class="card-text">{{informationText}}</v-card-text>
+                <v-card-text class="card-text" v-html="informationText"></v-card-text>
             </div>
         </v-card>
     </v-col>

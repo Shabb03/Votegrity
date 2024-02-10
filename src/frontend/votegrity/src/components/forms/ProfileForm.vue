@@ -1,29 +1,35 @@
 <template>
     <div class="form-container">
         <v-form ref="form">
-            <v-text-field disabled
+            <v-text-field class="disabled"
+                disabled
                 v-model="name"
                 label="Name: "
             ></v-text-field>
-            <v-text-field disabled
+            <v-text-field class="disabled"
+                disabled
                 v-model="date"
                 label="Date of Birth: "
             ></v-text-field>
-            <v-text-field disabled
+            <v-text-field class="disabled"
+                disabled
                 v-model="specialNumber"
                 label="Special Number: "
             ></v-text-field>
-            <v-text-field disabled
+            <v-text-field class="disabled"
+                disabled
                 v-model="citizenship"
                 label="Citizenship: "
             ></v-text-field>
             <v-row>
                 <v-col>
-                    <v-text-field disabled
+                    <v-text-field class="disabled"
+                        disabled
                         v-model="currentEmail"
                         label="Current Email: "
                     ></v-text-field>
-                    <v-text-field disabled
+                    <v-text-field class="disabled"
+                        disabled
                         v-model="currentPhoneNumber"
                         label="Current Phone Number: "
                     ></v-text-field>
@@ -145,5 +151,17 @@ export default {
 
 .primary {
     background-color: #00e5ff;
+}
+
+.primary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.primary:active {
+    cursor: wait;
+}
+
+.disabled {
+    cursor: not-allowed;
 }
 </style>

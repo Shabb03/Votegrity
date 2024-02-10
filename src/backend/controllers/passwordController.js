@@ -36,13 +36,6 @@ exports.authCode = async (req, res) => {
 exports.changePassword = async (req, res) => {
     try {
         const { email, resetToken, securityAnswer1, securityAnswer2, password } = req.body;
-        console.log(req.body);
-        console.log(email);
-        console.log(resetToken);
-        console.log(securityAnswer1);
-        console.log(securityAnswer2);
-        console.log(password);
-
         if (!email || !resetToken || !securityAnswer1 || !securityAnswer2 || !password) {
             return res.status(400).json({ error: 'All required inputs not provided' });
         }
@@ -67,7 +60,6 @@ exports.changePassword = async (req, res) => {
         }
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

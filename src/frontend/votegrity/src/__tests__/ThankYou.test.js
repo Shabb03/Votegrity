@@ -12,6 +12,7 @@ global.mocks = {
     VAppBar,
 };
 
+//test the ThankYou View renders correctly
 describe('ThankYou View Test', () => {
     it('renders correctly', () => {
         const wrapper = mount(ThankYou, {

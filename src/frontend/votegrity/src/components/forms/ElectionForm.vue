@@ -1,19 +1,19 @@
 <template>
     <div class="form-container">
         <v-form ref="form">
-            <TextInput :label="titleLabel" :required="true" @update:title="titleValue"/>
+            <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
             <DescriptionInput @update:description="descriptionValue"/>
-            <DateInput :label="startDateLabel" @update:="startDateValue"/>
-            <DateInput :label="endDateLabel" @update:="endDateValue"/>
-            <DateInput :label="resultDateLabel" @update:="resultDateValue"/>
+            <DateInput :label="startDateLabel" @update:date="startDateValue"/>
+            <DateInput :label="endDateLabel" @update:date="endDateValue"/>
+            <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
             <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
-            <NumberInput :label="ageLabel" @update:age="ageValue"/>
+            <NumberInput :label="ageLabel" @update:number="ageValue"/>
             <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
             <!--Add CitizenAuthenticationInput-->
 
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
-                    Login
+                    Create Election
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
@@ -70,7 +70,7 @@ export default {
                     resultDate: this.resultDate,
                     candidateNumber: this.number,
                     ageRestriction: this.age,
-                    authenticationMethod: false
+                    authenticationMethod: false,
                 };
                 try {
                     const token = localStorage.getItem("votegrityToken");
@@ -84,10 +84,11 @@ export default {
                     }
                     else {
                         console.log(response.data);
-                        this.$router.push('/addcandidate');
+                        this.$router.push('/admin/addcandidate');
                     }
                 } 
                 catch (error) {
+                    console.log(error);
                     alert('Error creating election:', error);
                 }
             }
@@ -97,6 +98,9 @@ export default {
         },
         test() {
             console.log(this.title);
+            console.log(this.startDate);
+            console.log(this.endDate);
+            console.log(this.resultDate);
         },
         titleValue(params) {
             this.title = params;
@@ -142,8 +146,21 @@ export default {
     background-color: #00e5ff;
 }
 
+.primary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.primary:active {
+    cursor: wait;
+}
+
 .secondary {
     background-color: #2616bb;
     color: white;
+}
+
+.secondary:hover {
+    cursor: 'pointer';
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 </style>
