@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "ethereumjs-wallet": "^1.0.2"
+    "ethereumjs-wallet": "^1.0.2",
+    "paillier-bigint": "^3.4.3"
   }
 }
