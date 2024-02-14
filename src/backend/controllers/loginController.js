@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 //const passport = require('passport');
-const { Admin, Voter } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Generate a login authentication token for the user with the correct login credentials
 exports.login = async (req, res) => {
@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ error: 'All required inputs not provided' });
         }
-        const user = await Voter.findOne({where: {email: email}});
+        const user = await db.Voter.findOne({where: {email: email}});
         if (!user) {
             return res.status(403).send({error: 'The login information was incorrect'})
         }
@@ -36,7 +36,7 @@ exports.adminLogin = async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ error: 'All required inputs not provided' });
         }
-        const user = await Admin.findOne({where: {email: email}});
+        const user = await db.Admin.findOne({where: {email: email}});
         if (!user) {
             return res.status(403).send({error: 'The login information was incorrect'})
         }

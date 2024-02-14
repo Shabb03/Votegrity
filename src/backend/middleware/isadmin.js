@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Admin } = require('../sequelize');
+const db = require('../models/index.js');
 require('dotenv').config();
 const secretKey = process.env.ADMIN_SECRET_KEY
 
@@ -14,7 +14,7 @@ async function authenticateAdmin(req, res, next) {
         const acessAdmin = jwt.verify(token, secretKey);
         req.user = acessAdmin;
         const userId = req.user.id;
-        const user = await Admin.findByPk(userId);
+        const user = await db.Admin.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

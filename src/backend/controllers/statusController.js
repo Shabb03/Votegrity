@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Voter, Election } = require('../sequelize');
+const db = require('../models/index.js');
 require('dotenv').config();
 const secretKey = process.env.SECRET_KEY
 const adminSecretKey = process.env.ADMIN_SECRET_KEY
@@ -25,7 +25,7 @@ exports.getStatus = async (req, res) => {
         const admin = verifyToken(token, adminSecretKey);
         if (admin) {
             let electionValue = false;
-            const activeElection = await Election.findOne({where: {isActive: true}});
+            const activeElection = await db.Election.findOne({where: {isActive: true}});
             if (activeElection); {
                 electionValue = true;
             }
@@ -36,7 +36,7 @@ exports.getStatus = async (req, res) => {
         const accessUser = verifyToken(token, secretKey);
         if (accessUser) {
             req.user = accessUser;
-            const user = await Voter.findOne({ where: { email: req.user.email } });
+            const user = await db.Voter.findOne({ where: { email: req.user.email } });
             if (user) {
                 const authenticated = user.authenticated
                 return res.send({status: 'Not Authenticated', loggedIn: true, authenticated: authenticated});

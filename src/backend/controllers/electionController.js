@@ -1,12 +1,12 @@
 //const sendEmail = require('./thirdParty/email');
 //const generateSixDigitCode = require('./functions/generateCode');
-const { Candidate, Election, Admin } = require('../sequelize');
+const db = require('../models/index.js');
 
 
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
-        const activeElection = await Election.findOne({where: {isActive: true}});
+        const activeElection = await db.Election.findOne({where: {isActive: true}});
         if (activeElection) {
             return res.json({error: "An election is currently active, you must reset the election"});
         }
@@ -15,7 +15,7 @@ exports.addElection = async (req, res) => {
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
             return res.status(400).json({ error: 'All required inputs not provided' });
         }        
-        const newElection = await Election.create({
+        const newElection = await db.Election.create({
             title: title,
             description: description,
             startDate: startDate,
@@ -48,8 +48,8 @@ exports.addElection = async (req, res) => {
 //Get the total number of candidates the newly created election must have
 exports.getCandidateCount = async (req, res) => {
     try {
-        const addedCandidates = await Candidate.count({where: {isWinner: false}});
-        const activeElection = await Election.findOne({where: {isActive: true}});
+        const addedCandidates = await db.Candidate.count({where: {isWinner: false}});
+        const activeElection = await db.Election.findOne({where: {isActive: true}});
         const candidateCount = activeElection.candidateNumber;
         res.json({
             addedCandidates: addedCandidates,
@@ -64,9 +64,9 @@ exports.getCandidateCount = async (req, res) => {
 //Add a new candidate to the newly created election
 exports.addCandidate = async (req, res) => {
     try {
-        const activeElection = await Election.findOne({where: {isActive: true}});
+        const activeElection = await db.Election.findOne({where: {isActive: true}});
         const candidateCount = activeElection.candidateCount;
-        const totalCandidates = await Candidate.count({where: {isWinner: false}});
+        const totalCandidates = await db.Candidate.count({where: {isWinner: false}});
 
         if (totalCandidates >= candidateCount) {
             return res.json({error: "Total number of candidates exceeded"});
@@ -78,7 +78,7 @@ exports.addCandidate = async (req, res) => {
         }
         const image = req.file;
         const imagePath = image.filename;
-        const newCandidate = await Candidate.create({
+        const newCandidate = await db.Candidate.create({
             name: name,
             voice: voice,
             party: party,

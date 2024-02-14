@@ -1,14 +1,19 @@
-const { Candidate, Vote } = require('../sequelize');
+const db = require('../models/index.js');
 
 const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
+const Web3 = require('web3');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 //Get the details of all candidates in the current election
 exports.getAllCandidates = async (req, res) => {
     try {
-        const candidates = await Candidate.findAll({where: { isWinner: false }, attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography']});
+        const candidates = await db.Candidate.findAll({where: { isWinner: false }, attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography']});
         res.json({ candidates });
     }
     catch (error) {
@@ -39,7 +44,7 @@ exports.getImage = async (req, res) => {
 exports.submitVote = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (!authenticatedUser) {
             return res.json({error: 'User is not authenticated', authenticated: false});
@@ -48,7 +53,7 @@ exports.submitVote = async (req, res) => {
         if (!candidateId) {
             return res.json({error: 'No candidate selected'})
         }
-        const vote = await Vote.create({
+        const vote = await db.Vote.create({
             voterId: userId,
             candidateId: candidateId,
         });

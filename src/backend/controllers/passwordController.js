@@ -2,7 +2,7 @@
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { isSecurePassword, hashPassword } = require('./functions/password');
-const { Voter, SecurityQuestions } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Send a six digit code via email if the user has forgotten their password
 exports.authCode = async (req, res) => {
@@ -11,13 +11,13 @@ exports.authCode = async (req, res) => {
         if (!email) {
             return res.status(400).json({ error: 'Email is required in the request body' });
         }
-        const user = await Voter.findOne({ where: { email } });
+        const user = await db.Voter.findOne({ where: { email } });
         if (!user) {
             return res.status(404).json({ error: 'User not found for the provided email' });
         }
 
-        const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
-        const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
+        const sq1 = await db.SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
+        const sq2 = await db.SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
 
         const sixDigitCode = generateSixDigitCode();
         user.resetToken = sixDigitCode;

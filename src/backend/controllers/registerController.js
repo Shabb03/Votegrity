@@ -1,11 +1,11 @@
 const { isSecurePassword, hashPassword } = require('./functions/password');
-const { SecurityQuestions, Voter } = require('../sequelize');
+const db = require('../models/index.js');
 const paillier = require('paillier-bigint');
 
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
     try {
-        const allSecurityQuestions = await SecurityQuestions.findAll({
+        const allSecurityQuestions = await db.SecurityQuestions.findAll({
             attributes: ['questions']
         });
         const questions = allSecurityQuestions.map(question => question.questions);
@@ -28,7 +28,7 @@ exports.signup = async (req, res) => {
         if (!emailRegex.test(email)) {
             return res.json({error: 'Invalid Email'});
         }
-        const existingUser = await Voter.findOne({ where: { email } });
+        const existingUser = await db.Voter.findOne({ where: { email } });
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists, email in use' });
         }
@@ -38,11 +38,11 @@ exports.signup = async (req, res) => {
             return res.json({error: 'Password is not strong enough' });
         }
 
-        const sq1 = await SecurityQuestions.findOne({
+        const sq1 = await db.SecurityQuestions.findOne({
             where: { questions: securityQuestion1 },
             attributes: ['id'],
         });
-        const sq2 = await SecurityQuestions.findOne({
+        const sq2 = await db.SecurityQuestions.findOne({
             where: { questions: securityQuestion2 },
             attributes: ['id'],
         });
@@ -52,13 +52,12 @@ exports.signup = async (req, res) => {
         }
 
         const hashedPassword = await hashPassword(password);
-
-        // Generate Paillier key pair
-        const { paillierPublicKey, paillierPrivateKey } = paillier.generateRandomKeys(2048);
-
         const ethereumWallet = generateUserEthereumWallet();
 
-        const newUser = await Voter.create({
+        console.log(ethereumWallet.address);
+        console.log(ethereumWallet.privateKey);
+
+        const newUser = await db.Voter.create({
             name: name,
             email: email,
             password: hashedPassword,
@@ -66,8 +65,6 @@ exports.signup = async (req, res) => {
             specialNumber: specialNumber,
             citizenship: citizenship,
             phoneNumber: phoneNumber,
-            paillierPrivateKey: paillierPrivateKey,
-            paillierPublicKey: paillierPublicKey,
             walletPrivateKey: ethereumWallet.privateKey,
             walletAddress: ethereumWallet.address,
             securityQuestion1: sq1.id, 

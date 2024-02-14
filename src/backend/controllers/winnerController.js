@@ -1,9 +1,9 @@
-const { Result, Election, Candidate } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Get the resulting winner of current election
 exports.getResults = async (req, res) => {
     try {
-        const activeElection = await Election.findOne({where: { isActive: true }});
+        const activeElection = await db.Election.findOne({where: { isActive: true }});
         if (!activeElection) {
             return res.status(404).json({ message: 'Active election not found' });
         }
@@ -11,11 +11,11 @@ exports.getResults = async (req, res) => {
         if (!resultsId) {
             return res.status(404).json({ message: 'Results not found' });
         }
-        const results = await Result.findByPk(resultsId);
+        const results = await db.Result.findByPk(resultsId);
         if (!results) {
             return res.status(404).json({ message: 'Results not found' });
         }
-        const candidate = await Candidate.findByPk(results.winner);
+        const candidate = await db.Candidate.findByPk(results.winner);
         res.json({
             id: candidate.id,
             name: candidate.name,
