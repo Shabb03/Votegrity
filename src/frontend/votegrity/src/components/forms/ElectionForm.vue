@@ -58,6 +58,9 @@ export default {
         age: 0,
         emailDomain: null,
     }),
+    mounted() {
+        window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -91,6 +94,11 @@ export default {
                     console.log(error);
                     alert('Error creating election:', error);
                 }
+            }
+        },
+        handleKeyUp(event) {
+            if (event.keyCode === 13) { 
+                this.validate();
             }
         },
         reset() {

@@ -55,6 +55,9 @@ export default {
     created() {
         this.getCandidateCount();
     },
+    mounted() {
+        window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -110,6 +113,11 @@ export default {
             } 
             catch (error) {
                 alert('Error retrieving details:', error);
+            }
+        },
+        handleKeyUp(event) {
+            if (event.keyCode === 13) { 
+                this.validate();
             }
         },
         reset() {

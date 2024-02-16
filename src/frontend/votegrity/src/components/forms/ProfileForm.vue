@@ -75,6 +75,9 @@ export default {
     created() {
         this.fetchUserData();
     },
+    mounted() {
+        window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -118,6 +121,11 @@ export default {
             catch (error) {
                 await alert('Error retrieving details:', error);
                 window.history.back();
+            }
+        },
+        handleKeyUp(event) {
+            if (event.keyCode === 13) { 
+                this.validate();
             }
         },
         reset() {

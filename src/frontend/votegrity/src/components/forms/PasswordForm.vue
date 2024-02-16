@@ -78,6 +78,9 @@
             v => !!v || 'code is required',
         ],
     }),
+    mounted() {
+        window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    },
     methods: {
         async validate() {
             if (this.password1 !== this.password2) {
@@ -125,6 +128,11 @@
             } 
             catch (error) {
                 alert('Error retrieving code:', error);
+            }
+        },
+        handleKeyUp(event) {
+            if (event.keyCode === 13) { 
+                this.validate();
             }
         },
         reset() {

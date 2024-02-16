@@ -21,6 +21,7 @@
   
 <script>
 import axios from 'axios';
+import hashPassword from '../../functions/EncryptPassword.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
   
@@ -33,13 +34,17 @@ export default {
         email: '',
         password: '',
     }),
+    mounted() {
+        window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                const hashedPassword = await hashPassword(this.password);
                 const postData = {
                     email: this.email,
-                    password: this.password,
+                    password: hashedPassword,
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/admin/login', postData);
@@ -56,6 +61,11 @@ export default {
                 catch (error) {
                     alert('Error during login:', error);
                 }
+            }
+        },
+        handleKeyUp(event) {
+            if (event.keyCode === 13) { 
+                this.validate();
             }
         },
         reset() {

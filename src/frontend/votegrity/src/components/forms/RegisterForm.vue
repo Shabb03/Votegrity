@@ -29,6 +29,7 @@
 
 <script>
 import axios from 'axios';
+import hashPassword from '../../functions/EncryptPassword.vue';
 import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
@@ -63,14 +64,18 @@ export default {
         sq2: '',
         sa2: '',
     }),
+    mounted() {
+        window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    },
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                const hashedPassword = await hashPassword(this.password);
                 const postData = {
                     name: this.name,
                     email: this.email,
-                    password: this.password,
+                    password: hashedPassword,
                     dateOfBirth: this.date,
                     specialNumber: this.specialNumber,
                     citizenship: this.citizenship,
@@ -93,6 +98,11 @@ export default {
                 catch (error) {
                     alert('Error during registration:', error);
                 }
+            }
+        },
+        handleKeyUp(event) {
+            if (event.keyCode === 13) { 
+                this.validate();
             }
         },
         reset() {
