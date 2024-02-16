@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
         }
         const existingUser = await Voter.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists, email in use' });
+            return res.json({ error: 'User with email already exists' });
         }
 
         const isSecure = isSecurePassword(password);
@@ -47,7 +47,7 @@ exports.signup = async (req, res) => {
         });
 
         if (!sq1 || !sq2) {
-            res.status(404).json({ message: 'Security question not found' });
+            res.json({ message: 'Security question not found' });
         }
 
         const hashedPassword = await hashPassword(password);

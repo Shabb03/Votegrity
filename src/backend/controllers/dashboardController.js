@@ -18,7 +18,7 @@ exports.electionDetails = async (req, res) => {
                 voteCount: totalVoteCount
             });
         } else {
-            res.status(404).json({ message: 'No active election found', election: false });
+            res.json({ error: 'No active election found', election: false });
         }
     }
     catch (error) {

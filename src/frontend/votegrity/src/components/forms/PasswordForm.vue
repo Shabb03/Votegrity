@@ -101,11 +101,11 @@
                     const response = await axios.post('http://localhost:3000/api/user/changepassword', postData);
                     console.log(response.data);
                     if (response.data.error) {
-                      alert(response.data.error);
+                       alert(response.data.error);
                     }
                     else {
-                      console.log(response.data);
-                      this.$router.push('/login');
+                        console.log(response.data);
+                        this.$router.push('/login');
                     }
                 } 
                 catch (error) {
@@ -121,7 +121,9 @@
                 };
                 const response = await axios.post('http://localhost:3000/api/user/authenticationcode', postData);
                 const userData = response.data;
-                console.log(response.data);
+                if (userData.error) {
+                    alert(userData.error);
+                }
                 this.securityLabel1 = userData.securityQuestion1;
                 this.securityLabel2 = userData.securityQuestion2;
                 console.log(response.data);

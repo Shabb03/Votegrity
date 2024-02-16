@@ -13,7 +13,7 @@ exports.addElection = async (req, res) => {
 
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authenticationMethod } = req.body;
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }        
         const newElection = await Election.create({
             title: title,
@@ -74,7 +74,7 @@ exports.addCandidate = async (req, res) => {
 
         const { name, voice, party, dateOfBirth, biography } = req.body;
         if (!name || !voice || !party || !dateOfBirth || !biography) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const image = req.file;
         const imagePath = image.filename;
@@ -118,10 +118,10 @@ exports.addCandidate = async (req, res) => {
         const resetCode = req.body.resetCode;
         const election = await Election.findOne({where: {isActive: true}});
         if (!election) {
-            return res.status(404).json({ error: 'No active election found.' });
+            return res.json({ error: 'No active election found.' });
         }
         if (resetCode !== election.) {
-            return res.status(401).json({ error: 'Invalid reset code.' });
+            return res.json({ error: 'Invalid reset code.' });
         }
         election.isActive = false;
         await election.save();

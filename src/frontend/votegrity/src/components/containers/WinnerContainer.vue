@@ -55,24 +55,29 @@ export default {
                     },
                 });
                 const winnerData = response.data;
-                const candidateId = winnerData.id
-                this.name = winnerData.name;
-                this.voice = winnerData.voice;
-                this.party = winnerData.party;
-                //this.image = winnerData.image;
-                this.biography = winnerData.biography;
-                this.voteCount = winnerData.voteCount;
+                if (winnerData.error) {
+                    alert(winnerData.error);
+                }
+                else {
+                    const candidateId = winnerData.id
+                    this.name = winnerData.name;
+                    this.voice = winnerData.voice;
+                    this.party = winnerData.party;
+                    //this.image = winnerData.image;
+                    this.biography = winnerData.biography;
+                    this.voteCount = winnerData.voteCount;
 
-                const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+candidateId, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                    responseType: 'arraybuffer',
-                });
-                const binaryData = new Uint8Array(imageResponse.data);
-                const dataUrl = this.arrayBufferToBase64(binaryData);
-                this.image = `data:image/jpeg;base64,${dataUrl}`;
-                console.log(response.data);
+                    const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+candidateId, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                        responseType: 'arraybuffer',
+                    });
+                    const binaryData = new Uint8Array(imageResponse.data);
+                    const dataUrl = this.arrayBufferToBase64(binaryData);
+                    this.image = `data:image/jpeg;base64,${dataUrl}`;
+                    console.log(response.data);
+                }
             } 
             catch (error) {
                 alert('Error: No winner for election');

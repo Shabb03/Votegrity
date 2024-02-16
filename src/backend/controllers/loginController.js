@@ -8,15 +8,15 @@ exports.login = async (req, res) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const user = await Voter.findOne({where: {email: email}});
         if (!user) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Account with this email not found'});
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Password is incorrect'});
         }
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         return res.send({
@@ -34,15 +34,15 @@ exports.adminLogin = async (req, res) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const user = await Admin.findOne({where: {email: email}});
         if (!user) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Admin with this email not found'});
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Password is incorrect'});
         }
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.ADMIN_SECRET_KEY);
         return res.send({

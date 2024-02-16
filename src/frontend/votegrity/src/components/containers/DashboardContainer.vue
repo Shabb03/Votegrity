@@ -50,14 +50,20 @@ export default {
                     },
                 });
                 const electionData = response.data;
-                this.title = electionData.title;
-                this.candidateNumber = electionData.candidateNumber + "/" + electionData.candidateNumber + " Candidates";
-                this.voteCount = electionData.voteCount + " Total Votes";
-                const resultDate = this.formatResultDate(electionData.resultDate);
-                this.description = electionData.description + "<br><br>Result Date: " + resultDate + "<br><br>Age Restriction: " + electionData.ageRestriction;
-                const daysDifference = this.getDaysDifference(electionData.startDate, electionData.endDate);
-                this.daysLeft = daysDifference.toString() + " Days Left";
-                console.log(response.data);
+                if (electionData.error) {
+                    await alert(electionData.error);
+                    window.history.back();
+                }
+                else {
+                    this.title = electionData.title;
+                    this.candidateNumber = electionData.candidateNumber + "/" + electionData.candidateNumber + " Candidates";
+                    this.voteCount = electionData.voteCount + " Total Votes";
+                    const resultDate = this.formatResultDate(electionData.resultDate);
+                    this.description = electionData.description + "<br><br>Result Date: " + resultDate + "<br><br>Age Restriction: " + electionData.ageRestriction;
+                    const daysDifference = this.getDaysDifference(electionData.startDate, electionData.endDate);
+                    this.daysLeft = daysDifference.toString() + " Days Left";
+                    console.log(response.data);
+                }
             } 
             catch (error) {
                 await alert('Error retrieving details:', error);

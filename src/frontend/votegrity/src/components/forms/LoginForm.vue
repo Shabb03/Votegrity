@@ -50,10 +50,9 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 const hashedPassword = await hashPassword(this.password);
-                console.log("hashed", hashedPassword);
                 const postData = {
                     email: this.email,
-                    password: this.password,
+                    password: hashedPassword,
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);
@@ -68,6 +67,7 @@ export default {
                     }
                 } 
                 catch (error) {
+                    console.log(error);
                     alert('Error during login:', error);
                 }
             }
