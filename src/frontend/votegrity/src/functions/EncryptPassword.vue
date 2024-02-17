@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import bcrypt from 'bcryptjs';
+import CryptoJS from 'crypto-js';
 
-export default async function hashPassword(password) {
+export default async function encryptPassword(password) {
     try {
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        return hashedPassword;
+        const secretKey = 'yeJ9bz3LGO';
+        const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
+        return encryptedPassword;
     } catch (error) {
         console.log('Error hashing password:', error);
         return password;

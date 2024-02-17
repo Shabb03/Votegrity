@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-//const passport = require('passport');
+const { decryptPassword } = require('./functions/password');
 const { Admin, Voter } = require('../sequelize');
 
 //Generate a login authentication token for the user with the correct login credentials
@@ -14,7 +14,9 @@ exports.login = async (req, res) => {
         if (!user) {
             return res.json({error: 'Account with this email not found'});
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        const decryptedPassword = await decryptPassword(password);
+        const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
         if (!isPasswordValid) {
             return res.json({error: 'Password is incorrect'});
         }
@@ -25,6 +27,7 @@ exports.login = async (req, res) => {
         })
     } 
     catch (error) {
+        console.log(error);
         res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }
@@ -40,7 +43,9 @@ exports.adminLogin = async (req, res) => {
         if (!user) {
             return res.json({error: 'Admin with this email not found'});
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        const decryptedPassword = await decryptPassword(password);
+        const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
         if (!isPasswordValid) {
             return res.json({error: 'Password is incorrect'});
         }
@@ -51,6 +56,7 @@ exports.adminLogin = async (req, res) => {
         })
     } 
     catch (error) {
+        console.log(error);
         res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }

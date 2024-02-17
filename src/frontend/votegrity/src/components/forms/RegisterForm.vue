@@ -35,7 +35,7 @@
 
 <script>
 import axios from 'axios';
-import hashPassword from '../../functions/EncryptPassword.vue';
+import encryptPassword from '../../functions/EncryptPassword.vue';
 import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
@@ -77,11 +77,11 @@ export default {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                const hashedPassword = await hashPassword(this.password);
+                const encryptedPassword = await encryptPassword(this.password);
                 const postData = {
                     name: this.name,
                     email: this.email,
-                    password: hashedPassword,
+                    password: encryptedPassword,
                     dateOfBirth: this.date,
                     specialNumber: this.specialNumber,
                     citizenship: this.citizenship,

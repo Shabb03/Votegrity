@@ -1,7 +1,6 @@
-//const crypto = require('crypto');
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
-const { isSecurePassword, hashPassword } = require('./functions/password');
+const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const { Voter, SecurityQuestions } = require('../sequelize');
 
 //Send a six digit code via email if the user has forgotten their password
@@ -49,7 +48,9 @@ exports.changePassword = async (req, res) => {
             if (!isSecure) {
                 return res.json({error: 'Password is not strong enough'});
             }
-            const hashedPassword = await hashPassword(password);
+            
+            const decryptedPassword = await decryptPassword(password);
+            const hashedPassword = await hashPassword(decryptedPassword);
             user.password = hashedPassword;
             user.resetToken = null;
             await user.save();

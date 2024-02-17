@@ -1,4 +1,4 @@
-const { isSecurePassword, hashPassword } = require('./functions/password');
+const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const { SecurityQuestions, Voter } = require('../sequelize');  
 
 //Get all possible security questions
@@ -50,7 +50,9 @@ exports.signup = async (req, res) => {
             res.json({ message: 'Security question not found' });
         }
 
-        const hashedPassword = await hashPassword(password);
+        const decryptedPassword = await decryptPassword(password);
+        const hashedPassword = await hashPassword(decryptedPassword);
+
         const newUser = await Voter.create({
             name: name,
             email: email,
@@ -66,7 +68,6 @@ exports.signup = async (req, res) => {
         });
 
         const userResponse = {
-            id: newUser.id,
             name: newUser.name,
             email: newUser.email,
         };

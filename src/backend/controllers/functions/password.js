@@ -1,9 +1,12 @@
 const bcrypt = require('bcrypt');
+const CryptoJS = require('crypto-js');
+require('dotenv').config();
 
 const saltRounds = 10;
+const secretKey = process.env.DECRYPT_PASSWORD_KEY;
 
 //Check if the password meets the security requirements
-function isSecurePassword(password) {
+async function isSecurePassword(password) {
     const hasNumber = /\d/.test(password);
     const hasLowercase = /[a-z]/.test(password);
     const hasUppercase = /[A-Z]/.test(password);
@@ -18,7 +21,14 @@ async function hashPassword(password) {
     return hashedPassword;
 }
 
+async function decryptPassword(password) {
+    const bytes = await CryptoJS.AES.decrypt(password, secretKey);
+    const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
+    return decryptedPassword;
+}
+
 module.exports = {
     isSecurePassword,
     hashPassword,
+    decryptPassword,
 };

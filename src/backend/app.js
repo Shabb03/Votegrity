@@ -7,6 +7,7 @@ const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/adminRoute');
 const electionRoute = require('./routes/electionRoute');
 const statusRoute = require('./routes/statusRoute');
+const testRoute = require('./routes/testRoute');
 
 const corsOptions = {
     origin: process.env.ORIGIN || 'http://localhost:8080',
@@ -31,6 +32,7 @@ app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/election', electionRoute);
 app.use('/api/status', statusRoute);
+app.use('/api/test', testRoute);
 
 app.use(passport.initialize());
 

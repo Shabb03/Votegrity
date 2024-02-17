@@ -29,7 +29,7 @@
 
 <script>
 import axios from 'axios';
-import hashPassword from '../../functions/EncryptPassword.vue';
+import encryptPassword from '../../functions/EncryptPassword.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
 
@@ -49,10 +49,10 @@ export default {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                const hashedPassword = await hashPassword(this.password);
+                const encryptedPassword = await encryptPassword(this.password);
                 const postData = {
                     email: this.email,
-                    password: hashedPassword,
+                    password: encryptedPassword,
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);

@@ -53,6 +53,7 @@
   
 <script>
   import axios from 'axios';
+  import encryptPassword from '../../functions/EncryptPassword.vue';
   import EmailInput from '../inputs/EmailInput.vue';
   import SecurityAnswerInput from '../inputs/SecurityAnswerInput.vue';
   import PasswordInput from '../inputs/PasswordInput.vue';
@@ -89,12 +90,13 @@
             }
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                const encryptedPassword = await encryptPassword(this.password1);
                 const postData = {
                     email: this.email,
                     resetToken: this.code,
                     securityAnswer1: this.sa1,
                     securityAnswer2: this.sa2,
-                    password: this.password1,
+                    password: encryptedPassword,
                 };
                 console.log(postData);
                 try {
