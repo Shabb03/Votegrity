@@ -3,14 +3,18 @@ const { isSecurePassword, hashPassword } = require('../controllers/functions/pas
 
 //check if the function tests the security level of the password
 describe('isSecurePassword', () => {
-    test('should return true for a secure password', () => {
+    test('should return true for a secure password', async () => {
         const securePassword = 'SecurePassword1!';
-        expect(isSecurePassword(securePassword)).toBe(true);
+        const secure = await isSecurePassword(securePassword);
+        console.log("SECURE: ", secure)
+        expect(secure).toBe(true);
     });
 
-    test('should return false for an insecure password', () => {
+    test('should return false for an insecure password', async () => {
         const insecurePassword = 'insecure123';
-        expect(isSecurePassword(insecurePassword)).toBe(false);
+        const secure = await isSecurePassword(insecurePassword);
+        console.log("INSECURE: ", secure)
+        expect(secure).toBe(false);
     });
 });
 
