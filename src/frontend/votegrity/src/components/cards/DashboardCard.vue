@@ -28,6 +28,7 @@ export default {
 <style scoped>
 .card-box {
     margin: 0 auto;
+    padding: 30px;
 }
 .card-text {
     display: flex;

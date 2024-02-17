@@ -1,18 +1,24 @@
 <template>
-    <v-text-field
-        v-model="securityAnswer1"
-        :label="label1"
-        :rules="securityRules"
-        @input="updateSecurityAnswer1"
-        required
-    ></v-text-field>
-    <v-text-field
-        v-model="securityAnswer2"
-        :label="label2"
-        :rules="securityRules"
-        @input="updateSecurityAnswer2"
-        required
-    ></v-text-field>
+    <v-row>
+        <v-col>
+            <v-text-field
+                v-model="securityAnswer1"
+                :label="label1"
+                :rules="securityRules"
+                @input="updateSecurityAnswer1"
+                required
+            ></v-text-field>
+        </v-col>
+        <v-col>
+            <v-text-field
+                v-model="securityAnswer2"
+                :label="label2"
+                :rules="securityRules"
+                @input="updateSecurityAnswer2"
+                required
+            ></v-text-field>
+        </v-col>
+    </v-row>
 </template>
   
 <script>

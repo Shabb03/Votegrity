@@ -19,5 +19,9 @@ h1 {
     margin-top: 0.5em;
     font-size: 4.5em;
     text-align: center;
+
+    @media (max-width: 600px) {
+        font-size: 2.5em;
+    }
 }
 </style>

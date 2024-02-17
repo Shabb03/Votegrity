@@ -16,6 +16,7 @@
 }
     
 .loader {
+    background-color: white;
     border-image: linear-gradient(#2616bb, #00e5ff) 30;
     border-width: 15px;
     border-style: solid;

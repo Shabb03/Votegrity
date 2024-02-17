@@ -45,7 +45,7 @@ export default {
                 console.log(response.data);
             } 
             catch (error) {
-              alert('Error retrieving security questions:', error);
+                console.log(error);
             }
         },
         updateSecurityQuestion() {

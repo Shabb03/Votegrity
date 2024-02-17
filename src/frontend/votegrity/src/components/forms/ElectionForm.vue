@@ -3,9 +3,22 @@
         <v-form ref="form">
             <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
             <DescriptionInput @update:description="descriptionValue"/>
+            <v-row>
+                <v-col>
+                    <DateInput :label="startDateLabel" @update:date="startDateValue"/>
+                </v-col>
+                <v-col>
+                    <DateInput :label="endDateLabel" @update:date="endDateValue"/>
+                </v-col>
+                <v-col>
+                    <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
+                </v-col>
+            <!--
             <DateInput :label="startDateLabel" @update:date="startDateValue"/>
             <DateInput :label="endDateLabel" @update:date="endDateValue"/>
             <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
+            -->
+            </v-row>
             <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
             <NumberInput :label="ageLabel" @update:number="ageValue"/>
             <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
@@ -140,10 +153,14 @@ export default {
 
 <style scoped>
 .form-container {
+    background-color: white;
     margin-top: 5em !important;
+    margin-bottom: 5em !important;
     width: 50%;
     margin: auto;
     padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 
     @media (max-width: 600px) {
         width: 100%;
@@ -154,9 +171,12 @@ export default {
     background-color: #00e5ff;
 }
 
-.primary:hover {
+.primary:hover, 
+.primary:focus {
     cursor: 'pointer';
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    font-weight: bolder;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #2616bb;
+    transform: translateY(-0.25em);
 }
 .primary:active {
     cursor: wait;
@@ -167,8 +187,11 @@ export default {
     color: white;
 }
 
-.secondary:hover {
+.secondary:hover, 
+.secondary:focus {
     cursor: 'pointer';
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    font-weight: bolder;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #00e5ff;
+    transform: translateY(-0.25em);
 }
 </style>

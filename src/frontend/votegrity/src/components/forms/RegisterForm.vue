@@ -8,8 +8,14 @@
             <TextInput :label="specialNumberLabel" :required="true" @update:text="specialNumberValue"/>
             <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>
             <DateInput :label="birthDateLabel" @update:date="dateValue"/>
-            <SecurityInput securityNumber="1" @update:securitySelect="sq1Value" @update:securityAnswer="sa1Value"/>
-            <SecurityInput securityNumber="2" @update:securitySelect="sq2Value" @update:securityAnswer="sa2Value"/>
+            <v-row>
+                <v-col>
+                    <SecurityInput securityNumber="1" @update:securitySelect="sq1Value" @update:securityAnswer="sa1Value"/>
+                </v-col>
+                <v-col>
+                    <SecurityInput securityNumber="2" @update:securitySelect="sq2Value" @update:securityAnswer="sa2Value"/>
+                </v-col>
+            </v-row>
 
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
@@ -160,10 +166,14 @@ export default {
 
 <style scoped>
 .form-container {
+    background-color: white;
     margin-top: 5em !important;
+    margin-bottom: 5em !important;
     width: 50%;
     margin: auto;
     padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 
     @media (max-width: 600px) {
         width: 100%;
@@ -174,9 +184,12 @@ export default {
     background-color: #00e5ff;
 }
 
-.primary:hover {
+.primary:hover, 
+.primary:focus {
     cursor: 'pointer';
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    font-weight: bolder;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #2616bb;
+    transform: translateY(-0.25em);
 }
 .primary:active {
     cursor: wait;
@@ -187,9 +200,12 @@ export default {
     color: white;
 }
 
-.secondary:hover {
+.secondary:hover, 
+.secondary:focus {
     cursor: 'pointer';
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    font-weight: bolder;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #00e5ff;
+    transform: translateY(-0.25em);
 }
 
 .form-link {
