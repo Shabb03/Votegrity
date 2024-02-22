@@ -12,6 +12,9 @@ const VCardText = {template: '<div></div>',};
 const VCardTitle = {template: '<div></div>',};
 const VImg = {template: '<div></div>',};
 const VContainer = {template: '<div></div>',};
+const VDialog = {template: '<div></div>',};
+const VCardActions = {template: '<div></div>',};
+const VToolbar = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {
@@ -26,6 +29,9 @@ global.mocks = {
     VCardTitle,
     VImg,
     VContainer,
+    VDialog,
+    VCardActions,
+    VToolbar,
 };
 
 //test the VoteCandidate View renders correctly
@@ -46,6 +52,9 @@ describe('VoteCandidate View Test', () => {
                     'v-card-title': VCardTitle,
                     'v-img': VImg,
                     'v-container': VContainer,
+                    'v-dialog': VDialog,
+                    'v-card-actions': VCardActions,
+                    'v-toolbar': VToolbar,
                 },
             },
         });

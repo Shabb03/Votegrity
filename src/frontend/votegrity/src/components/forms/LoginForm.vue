@@ -39,6 +39,7 @@ export default {
         PasswordInput,
     },
     data: () => ({
+        successRoute: '/vote',
         email: '',
         password: '',
     }),
@@ -63,7 +64,10 @@ export default {
                         const token = response.data.token;
                         localStorage.setItem("votegrityToken",token);
                         console.log(response.data);
-                        this.$router.push('/authentication');
+                        if (!response.data.authenticated) {
+                            this.successRoute = '/authentication';
+                        }
+                        this.$router.push(this.successRoute);
                     }
                 } 
                 catch (error) {

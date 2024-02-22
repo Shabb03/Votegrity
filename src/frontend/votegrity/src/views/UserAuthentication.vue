@@ -4,7 +4,6 @@
         <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
-    <!--<AuthenticationForm/>-->
     <CodeInput :title="title" :button="button" :getApiUrl="getApiUrl" :postApiUrl="postApiUrl" :routeUrl="routeUrl"/>
 </template>
   
@@ -14,7 +13,6 @@ import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
 import LogoutButton from '../components/navbar/LogoutButton.vue';
 import PageTitle from '../components/titles/PageTitle.vue';
-//import AuthenticationForm from '../components/forms/AuthenticationForm.vue';
 import CodeInput from "../components/inputs/CodeInput.vue";
 
 export default {
@@ -23,7 +21,6 @@ export default {
         NavigationBar,
         LogoutButton,
         PageTitle,
-        //AuthenticationForm,
         CodeInput,
     },
     data() {

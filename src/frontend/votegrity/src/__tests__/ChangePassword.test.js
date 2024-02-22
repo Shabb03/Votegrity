@@ -11,6 +11,10 @@ const VCol = {template: '<div></div>',};
 const VCard = {template: '<div></div>',};
 const VSheet = {template: '<div></div>',};
 const VOtpInput = {template: '<div></div>',};
+const VDialog = {template: '<div></div>',};
+const VCardActions = {template: '<div></div>',};
+const VCardText = {template: '<div></div>',};
+const VToolbar = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {
@@ -24,6 +28,10 @@ global.mocks = {
     VCard,
     VSheet,
     VOtpInput,
+    VDialog,
+    VCardActions,
+    VCardText,
+    VToolbar,
 };
 
 //test the ChangePassword View renders correctly
@@ -43,6 +51,10 @@ describe('ChangePassword View Test', () => {
                     'v-card': VCard,
                     'v-sheet': VSheet,
                     'v-otp-input': VOtpInput,
+                    'v-dialog': VDialog,
+                    'v-card-actions': VCardActions,
+                    'v-card-text': VCardText,
+                    'v-toolbar': VToolbar,
                 },
             },
         });

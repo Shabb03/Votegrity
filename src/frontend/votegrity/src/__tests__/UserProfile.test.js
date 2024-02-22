@@ -7,6 +7,8 @@ const VBtn = {template: '<div></div>',};
 const VAppBar = {template: '<div></div>',};
 const VForm = {template: '<div></div>',};
 const VTextField = {template: '<div></div>',};
+const VRow = {template: '<div></div>',};
+const VCol = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {
@@ -16,6 +18,8 @@ global.mocks = {
     VAppBar,
     VForm,
     VTextField,
+    VRow,
+    VCol,
 };
 
 //test the UserProfile View renders correctly
@@ -31,6 +35,8 @@ describe('UserProfile View Test', () => {
                     'v-app-bar': VAppBar,
                     'v-form': VForm,
                     'v-text-field': VTextField,
+                    'v-row': VRow,
+                    'v-col': VCol,
                 },
             },
         });

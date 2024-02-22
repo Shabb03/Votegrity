@@ -81,6 +81,9 @@ export default {
             }
             return age;
         },
+        async callSuccess() {
+            this.$emit('callSuccessCard');
+        },
         async vote(candidateId) {
             try {
                 const authToken = localStorage.getItem("votegrityToken");
@@ -92,7 +95,13 @@ export default {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
-                console.log(response.data);
+                if (response.data.error) {
+                    alert(response.data.error);
+                }
+                else {
+                    this.callSuccess();
+                    console.log(response.data);
+                }
             } 
             catch (error) {
                 alert('Error voting:', error);

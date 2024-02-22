@@ -1,4 +1,5 @@
 <template>
+    <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
         <v-form ref="form">
             <v-card
@@ -52,19 +53,23 @@
 </template>
   
 <script>
-  import axios from 'axios';
-  import encryptPassword from '../../functions/EncryptPassword.vue';
-  import EmailInput from '../inputs/EmailInput.vue';
-  import SecurityAnswerInput from '../inputs/SecurityAnswerInput.vue';
-  import PasswordInput from '../inputs/PasswordInput.vue';
+import axios from 'axios';
+import SuccessCard from "../SuccessCard.vue";
+import encryptPassword from '../../functions/EncryptPassword.vue';
+import EmailInput from '../inputs/EmailInput.vue';
+import SecurityAnswerInput from '../inputs/SecurityAnswerInput.vue';
+import PasswordInput from '../inputs/PasswordInput.vue';
   
-  export default {
+export default {
     components: {
-      EmailInput,
-      SecurityAnswerInput,
-      PasswordInput,
+        SuccessCard,
+        EmailInput,
+        SecurityAnswerInput,
+        PasswordInput,
     },
     data: () => ({
+        successMessage: 'You have successfully changed your password',
+        successRoute: '/login',
         securityLabel1: "Security Question 1",
         securityLabel2: "Security Question 2",
         passwordLabel1: "Enter New Password",
@@ -83,6 +88,9 @@
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
     methods: {
+        async triggerSuccessCard() {
+            this.$refs.successCardRef.openDialog();
+        },
         async validate() {
             if (this.password1 !== this.password2) {
                 alert('Passwords do not match');
@@ -107,7 +115,8 @@
                     }
                     else {
                         console.log(response.data);
-                        this.$router.push('/login');
+                        await this.triggerSuccessCard();
+                        //this.$router.push('/login');
                     }
                 } 
                 catch (error) {

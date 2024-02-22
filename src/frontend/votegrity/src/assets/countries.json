@@ -1,0 +1,1002 @@
+[
+    {
+        "country": "Andorra",
+        "demonyms": "Andorran"
+    },
+    {
+        "country": "French Southern and Antarctic Lands",
+        "demonyms": "French"
+    },
+    {
+        "country": "Laos",
+        "demonyms": "Laotian"
+    },
+    {
+        "country": "Canada",
+        "demonyms": "Canadian"
+    },
+    {
+        "country": "Nigeria",
+        "demonyms": "Nigerian"
+    },
+    {
+        "country": "Vanuatu",
+        "demonyms": "Ni-Vanuatu"
+    },
+    {
+        "country": "Czechia",
+        "demonyms": "Czech"
+    },
+    {
+        "country": "Malawi",
+        "demonyms": "Malawian"
+    },
+    {
+        "country": "Mali",
+        "demonyms": "Malian"
+    },
+    {
+        "country": "Iceland",
+        "demonyms": "Icelander"
+    },
+    {
+        "country": "Norway",
+        "demonyms": "Norwegian"
+    },
+    {
+        "country": "Saint Vincent and the Grenadines",
+        "demonyms": "Saint Vincentian"
+    },
+    {
+        "country": "Guadeloupe",
+        "demonyms": "Guadeloupian"
+    },
+    {
+        "country": "Chile",
+        "demonyms": "Chilean"
+    },
+    {
+        "country": "Bermuda",
+        "demonyms": "Bermudian"
+    },
+    {
+        "country": "Kuwait",
+        "demonyms": "Kuwaiti"
+    },
+    {
+        "country": "Dominica",
+        "demonyms": "Dominican"
+    },
+    {
+        "country": "Montenegro",
+        "demonyms": "Montenegrin"
+    },
+    {
+        "country": "United States Virgin Islands",
+        "demonyms": "Virgin Islander"
+    },
+    {
+        "country": "Cameroon",
+        "demonyms": "Cameroonian"
+    },
+    {
+        "country": "Sri Lanka",
+        "demonyms": "Sri Lankan"
+    },
+    {
+        "country": "China",
+        "demonyms": "Chinese"
+    },
+    {
+        "country": "Bangladesh",
+        "demonyms": "Bangladeshi"
+    },
+    {
+        "country": "Sweden",
+        "demonyms": "Swedish"
+    },
+    {
+        "country": "Grenada",
+        "demonyms": "Grenadian"
+    },
+    {
+        "country": "Turkey",
+        "demonyms": "Turkish"
+    },
+    {
+        "country": "Guinea",
+        "demonyms": "Guinean"
+    },
+    {
+        "country": "Tanzania",
+        "demonyms": "Tanzanian"
+    },
+    {
+        "country": "Rwanda",
+        "demonyms": "Rwandan"
+    },
+    {
+        "country": "Singapore",
+        "demonyms": "Singaporean"
+    },
+    {
+        "country": "Morocco",
+        "demonyms": "Moroccan"
+    },
+    {
+        "country": "Saint Barthélemy",
+        "demonyms": "Saint Barthélemy Islander"
+    },
+    {
+        "country": "Iraq",
+        "demonyms": "Iraqi"
+    },
+    {
+        "country": "Brunei",
+        "demonyms": "Bruneian"
+    },
+    {
+        "country": "Isle of Man",
+        "demonyms": "Manx"
+    },
+    {
+        "country": "North Korea",
+        "demonyms": "North Korean"
+    },
+    {
+        "country": "Iran",
+        "demonyms": "Iranian"
+    },
+    {
+        "country": "Curaçao",
+        "demonyms": "Curaçaoan"
+    },
+    {
+        "country": "Paraguay",
+        "demonyms": "Paraguayan"
+    },
+    {
+        "country": "Albania",
+        "demonyms": "Albanian"
+    },
+    {
+        "country": "Tajikistan",
+        "demonyms": "Tadzhik"
+    },
+    {
+        "country": "Bolivia",
+        "demonyms": "Bolivian"
+    },
+    {
+        "country": "Austria",
+        "demonyms": "Austrian"
+    },
+    {
+        "country": "Saint Kitts and Nevis",
+        "demonyms": "Kittitian or Nevisian"
+    },
+    {
+        "country": "United States Minor Outlying Islands",
+        "demonyms": "American Islander"
+    },
+    {
+        "country": "Colombia",
+        "demonyms": "Colombian"
+    },
+    {
+        "country": "Kosovo",
+        "demonyms": "Kosovar"
+    },
+    {
+        "country": "Belize",
+        "demonyms": "Belizean"
+    },
+    {
+        "country": "Guinea-Bissau",
+        "demonyms": "Guinea-Bissauan"
+    },
+    {
+        "country": "Marshall Islands",
+        "demonyms": "Marshallese"
+    },
+    {
+        "country": "Myanmar",
+        "demonyms": "Burmese"
+    },
+    {
+        "country": "French Polynesia",
+        "demonyms": "French Polynesian"
+    },
+    {
+        "country": "Brazil",
+        "demonyms": "Brazilian"
+    },
+    {
+        "country": "Croatia",
+        "demonyms": "Croatian"
+    },
+    {
+        "country": "Somalia",
+        "demonyms": "Somali"
+    },
+    {
+        "country": "Afghanistan",
+        "demonyms": "Afghan"
+    },
+    {
+        "country": "Anguilla",
+        "demonyms": "Anguillian"
+    },
+    {
+        "country": "Cook Islands",
+        "demonyms": "Cook Islander"
+    },
+    {
+        "country": "Western Sahara",
+        "demonyms": "Sahrawi"
+    },
+    {
+        "country": "New Zealand",
+        "demonyms": "New Zealander"
+    },
+    {
+        "country": "Eritrea",
+        "demonyms": "Eritrean"
+    },
+    {
+        "country": "Cambodia",
+        "demonyms": "Cambodian"
+    },
+    {
+        "country": "Bahamas",
+        "demonyms": "Bahamian"
+    },
+    {
+        "country": "Belarus",
+        "demonyms": "Belarusian"
+    },
+    {
+        "country": "Norfolk Island",
+        "demonyms": "Norfolk Islander"
+    },
+    {
+        "country": "Tuvalu",
+        "demonyms": "Tuvaluan"
+    },
+    {
+        "country": "South Georgia",
+        "demonyms": "South Georgian South Sandwich Islander"
+    },
+    {
+        "country": "Mauritania",
+        "demonyms": "Mauritanian"
+    },
+    {
+        "country": "New Caledonia",
+        "demonyms": "New Caledonian"
+    },
+    {
+        "country": "Bulgaria",
+        "demonyms": "Bulgarian"
+    },
+    {
+        "country": "Mozambique",
+        "demonyms": "Mozambican"
+    },
+    {
+        "country": "Niue",
+        "demonyms": "Niuean"
+    },
+    {
+        "country": "Estonia",
+        "demonyms": "Estonian"
+    },
+    {
+        "country": "Italy",
+        "demonyms": "Italian"
+    },
+    {
+        "country": "Malta",
+        "demonyms": "Maltese"
+    },
+    {
+        "country": "Slovenia",
+        "demonyms": "Slovene"
+    },
+    {
+        "country": "India",
+        "demonyms": "Indian"
+    },
+    {
+        "country": "Peru",
+        "demonyms": "Peruvian"
+    },
+    {
+        "country": "Burundi",
+        "demonyms": "Burundian"
+    },
+    {
+        "country": "Lithuania",
+        "demonyms": "Lithuanian"
+    },
+    {
+        "country": "United States",
+        "demonyms": "American"
+    },
+    {
+        "country": "Honduras",
+        "demonyms": "Honduran"
+    },
+    {
+        "country": "Tonga",
+        "demonyms": "Tongan"
+    },
+    {
+        "country": "Saudi Arabia",
+        "demonyms": "Saudi Arabian"
+    },
+    {
+        "country": "Suriname",
+        "demonyms": "Surinamer"
+    },
+    {
+        "country": "Qatar",
+        "demonyms": "Qatari"
+    },
+    {
+        "country": "Saint Helena, Ascension and Tristan da Cunha",
+        "demonyms": "Saint Helenian"
+    },
+    {
+        "country": "Gibraltar",
+        "demonyms": "Gibraltar"
+    },
+    {
+        "country": "Northern Mariana Islands",
+        "demonyms": "American"
+    },
+    {
+        "country": "Mauritius",
+        "demonyms": "Mauritian"
+    },
+    {
+        "country": "Barbados",
+        "demonyms": "Barbadian"
+    },
+    {
+        "country": "Réunion",
+        "demonyms": "Réunionese"
+    },
+    {
+        "country": "British Indian Ocean Territory",
+        "demonyms": "Indian"
+    },
+    {
+        "country": "Syria",
+        "demonyms": "Syrian"
+    },
+    {
+        "country": "Egypt",
+        "demonyms": "Egyptian"
+    },
+    {
+        "country": "São Tomé and Príncipe",
+        "demonyms": "Sao Tomean"
+    },
+    {
+        "country": "Kiribati",
+        "demonyms": "I-Kiribati"
+    },
+    {
+        "country": "Timor-Leste",
+        "demonyms": "East Timorese"
+    },
+    {
+        "country": "Lesotho",
+        "demonyms": "Mosotho"
+    },
+    {
+        "country": "Solomon Islands",
+        "demonyms": "Solomon Islander"
+    },
+    {
+        "country": "Libya",
+        "demonyms": "Libyan"
+    },
+    {
+        "country": "South Korea",
+        "demonyms": "South Korean"
+    },
+    {
+        "country": "Liechtenstein",
+        "demonyms": "Liechtensteiner"
+    },
+    {
+        "country": "Nicaragua",
+        "demonyms": "Nicaraguan"
+    },
+    {
+        "country": "Ecuador",
+        "demonyms": "Ecuadorean"
+    },
+    {
+        "country": "Maldives",
+        "demonyms": "Maldivan"
+    },
+    {
+        "country": "Algeria",
+        "demonyms": "Algerian"
+    },
+    {
+        "country": "Kyrgyzstan",
+        "demonyms": "Kirghiz"
+    },
+    {
+        "country": "Finland",
+        "demonyms": "Finnish"
+    },
+    {
+        "country": "Antarctica",
+        "demonyms": "Antarctican"
+    },
+    {
+        "country": "Kenya",
+        "demonyms": "Kenyan"
+    },
+    {
+        "country": "Cuba",
+        "demonyms": "Cuban"
+    },
+    {
+        "country": "Montserrat",
+        "demonyms": "Montserratian"
+    },
+    {
+        "country": "Poland",
+        "demonyms": "Polish"
+    },
+    {
+        "country": "Åland Islands",
+        "demonyms": "Ålandish"
+    },
+    {
+        "country": "Ethiopia",
+        "demonyms": "Ethiopian"
+    },
+    {
+        "country": "Togo",
+        "demonyms": "Togolese"
+    },
+    {
+        "country": "Bosnia and Herzegovina",
+        "demonyms": "Bosnian, Herzegovinian"
+    },
+    {
+        "country": "Uruguay",
+        "demonyms": "Uruguayan"
+    },
+    {
+        "country": "Guam",
+        "demonyms": "Guamanian"
+    },
+    {
+        "country": "Cape Verde",
+        "demonyms": "Cape Verdian"
+    },
+    {
+        "country": "Chad",
+        "demonyms": "Chadian"
+    },
+    {
+        "country": "Vatican City",
+        "demonyms": "Vatican"
+    },
+    {
+        "country": "Palau",
+        "demonyms": "Palauan"
+    },
+    {
+        "country": "Haiti",
+        "demonyms": "Haitian"
+    },
+    {
+        "country": "Yemen",
+        "demonyms": "Yemeni"
+    },
+    {
+        "country": "Eswatini",
+        "demonyms": "Swazi"
+    },
+    {
+        "country": "Zimbabwe",
+        "demonyms": "Zimbabwean"
+    },
+    {
+        "country": "Greece",
+        "demonyms": "Greek"
+    },
+    {
+        "country": "Israel",
+        "demonyms": "Israeli"
+    },
+    {
+        "country": "Saint Martin",
+        "demonyms": "Saint Martin Islander"
+    },
+    {
+        "country": "Antigua and Barbuda",
+        "demonyms": "Antiguan, Barbudan"
+    },
+    {
+        "country": "Cyprus",
+        "demonyms": "Cypriot"
+    },
+    {
+        "country": "Sint Maarten",
+        "demonyms": "St. Maartener"
+    },
+    {
+        "country": "Monaco",
+        "demonyms": "Monegasque"
+    },
+    {
+        "country": "Fiji",
+        "demonyms": "Fijian"
+    },
+    {
+        "country": "Ukraine",
+        "demonyms": "Ukrainian"
+    },
+    {
+        "country": "Martinique",
+        "demonyms": "Martinican"
+    },
+    {
+        "country": "Hong Kong",
+        "demonyms": "Hong Konger"
+    },
+    {
+        "country": "Portugal",
+        "demonyms": "Portuguese"
+    },
+    {
+        "country": "Bhutan",
+        "demonyms": "Bhutanese"
+    },
+    {
+        "country": "Nepal",
+        "demonyms": "Nepalese"
+    },
+    {
+        "country": "France",
+        "demonyms": "French"
+    },
+    {
+        "country": "Ireland",
+        "demonyms": "Irish"
+    },
+    {
+        "country": "United Arab Emirates",
+        "demonyms": "Emirati"
+    },
+    {
+        "country": "Guernsey",
+        "demonyms": "Channel Islander"
+    },
+    {
+        "country": "Saint Lucia",
+        "demonyms": "Saint Lucian"
+    },
+    {
+        "country": "Dominican Republic",
+        "demonyms": "Dominican"
+    },
+    {
+        "country": "Serbia",
+        "demonyms": "Serbian"
+    },
+    {
+        "country": "Botswana",
+        "demonyms": "Motswana"
+    },
+    {
+        "country": "Ivory Coast",
+        "demonyms": "Ivorian"
+    },
+    {
+        "country": "Ghana",
+        "demonyms": "Ghanaian"
+    },
+    {
+        "country": "Comoros",
+        "demonyms": "Comoran"
+    },
+    {
+        "country": "Azerbaijan",
+        "demonyms": "Azerbaijani"
+    },
+    {
+        "country": "United Kingdom",
+        "demonyms": "British"
+    },
+    {
+        "country": "Central African Republic",
+        "demonyms": "Central African"
+    },
+    {
+        "country": "Palestine",
+        "demonyms": "Palestinian"
+    },
+    {
+        "country": "Caribbean Netherlands",
+        "demonyms": "Dutch"
+    },
+    {
+        "country": "Taiwan",
+        "demonyms": "Taiwanese"
+    },
+    {
+        "country": "Pitcairn Islands",
+        "demonyms": "Pitcairn Islander"
+    },
+    {
+        "country": "San Marino",
+        "demonyms": "Sammarinese"
+    },
+    {
+        "country": "Svalbard and Jan Mayen",
+        "demonyms": "Norwegian"
+    },
+    {
+        "country": "Djibouti",
+        "demonyms": "Djibouti"
+    },
+    {
+        "country": "Wallis and Futuna",
+        "demonyms": "Wallis and Futuna Islander"
+    },
+    {
+        "country": "Denmark",
+        "demonyms": "Danish"
+    },
+    {
+        "country": "Papua New Guinea",
+        "demonyms": "Papua New Guinean"
+    },
+    {
+        "country": "Madagascar",
+        "demonyms": "Malagasy"
+    },
+    {
+        "country": "Bouvet Island",
+        "demonyms": "N/A"
+    },
+    {
+        "country": "Hungary",
+        "demonyms": "Hungarian"
+    },
+    {
+        "country": "Tokelau",
+        "demonyms": "Tokelauan"
+    },
+    {
+        "country": "Trinidad and Tobago",
+        "demonyms": "Trinidadian"
+    },
+    {
+        "country": "Gambia",
+        "demonyms": "Gambian"
+    },
+    {
+        "country": "Luxembourg",
+        "demonyms": "Luxembourger"
+    },
+    {
+        "country": "Cocos (Keeling) Islands",
+        "demonyms": "Cocos Islander"
+    },
+    {
+        "country": "Republic of the Congo",
+        "demonyms": "Congolese"
+    },
+    {
+        "country": "Argentina",
+        "demonyms": "Argentine"
+    },
+    {
+        "country": "DR Congo",
+        "demonyms": "Congolese"
+    },
+    {
+        "country": "Greenland",
+        "demonyms": "Greenlandic"
+    },
+    {
+        "country": "Jordan",
+        "demonyms": "Jordanian"
+    },
+    {
+        "country": "Belgium",
+        "demonyms": "Belgian"
+    },
+    {
+        "country": "Switzerland",
+        "demonyms": "Swiss"
+    },
+    {
+        "country": "Indonesia",
+        "demonyms": "Indonesian"
+    },
+    {
+        "country": "Lebanon",
+        "demonyms": "Lebanese"
+    },
+    {
+        "country": "Malaysia",
+        "demonyms": "Malaysian"
+    },
+    {
+        "country": "Cayman Islands",
+        "demonyms": "Caymanian"
+    },
+    {
+        "country": "Slovakia",
+        "demonyms": "Slovak"
+    },
+    {
+        "country": "Armenia",
+        "demonyms": "Armenian"
+    },
+    {
+        "country": "Christmas Island",
+        "demonyms": "Christmas Islander"
+    },
+    {
+        "country": "Mongolia",
+        "demonyms": "Mongolian"
+    },
+    {
+        "country": "Saint Pierre and Miquelon",
+        "demonyms": "Saint-Pierrais, Miquelonnais"
+    },
+    {
+        "country": "Japan",
+        "demonyms": "Japanese"
+    },
+    {
+        "country": "South Africa",
+        "demonyms": "South African"
+    },
+    {
+        "country": "Philippines",
+        "demonyms": "Filipino"
+    },
+    {
+        "country": "Micronesia",
+        "demonyms": "Micronesian"
+    },
+    {
+        "country": "Germany",
+        "demonyms": "German"
+    },
+    {
+        "country": "Latvia",
+        "demonyms": "Latvian"
+    },
+    {
+        "country": "Jamaica",
+        "demonyms": "Jamaican"
+    },
+    {
+        "country": "Macau",
+        "demonyms": "Macanese"
+    },
+    {
+        "country": "Nauru",
+        "demonyms": "Nauruan"
+    },
+    {
+        "country": "Faroe Islands",
+        "demonyms": "Faroese"
+    },
+    {
+        "country": "Guyana",
+        "demonyms": "Guyanese"
+    },
+    {
+        "country": "Burkina Faso",
+        "demonyms": "Burkinabe"
+    },
+    {
+        "country": "Sudan",
+        "demonyms": "Sudanese"
+    },
+    {
+        "country": "Russia",
+        "demonyms": "Russian"
+    },
+    {
+        "country": "Mayotte",
+        "demonyms": "Mahoran"
+    },
+    {
+        "country": "Australia",
+        "demonyms": "Australian"
+    },
+    {
+        "country": "Liberia",
+        "demonyms": "Liberian"
+    },
+    {
+        "country": "Mexico",
+        "demonyms": "Mexican"
+    },
+    {
+        "country": "Tunisia",
+        "demonyms": "Tunisian"
+    },
+    {
+        "country": "Aruba",
+        "demonyms": "Aruban"
+    },
+    {
+        "country": "Kazakhstan",
+        "demonyms": "Kazakhstani"
+    },
+    {
+        "country": "Oman",
+        "demonyms": "Omani"
+    },
+    {
+        "country": "French Guiana",
+        "demonyms": "Guianan"
+    },
+    {
+        "country": "Niger",
+        "demonyms": "Nigerien"
+    },
+    {
+        "country": "Turkmenistan",
+        "demonyms": "Turkmen"
+    },
+    {
+        "country": "Sierra Leone",
+        "demonyms": "Sierra Leonean"
+    },
+    {
+        "country": "Samoa",
+        "demonyms": "Samoan"
+    },
+    {
+        "country": "Senegal",
+        "demonyms": "Senegalese"
+    },
+    {
+        "country": "Georgia",
+        "demonyms": "Georgian"
+    },
+    {
+        "country": "Namibia",
+        "demonyms": "Namibian"
+    },
+    {
+        "country": "South Sudan",
+        "demonyms": "South Sudanese"
+    },
+    {
+        "country": "Thailand",
+        "demonyms": "Thai"
+    },
+    {
+        "country": "Bahrain",
+        "demonyms": "Bahraini"
+    },
+    {
+        "country": "Heard Island and McDonald Islands",
+        "demonyms": "Heard and McDonald Islander"
+    },
+    {
+        "country": "Falkland Islands",
+        "demonyms": "Falkland Islander"
+    },
+    {
+        "country": "Jersey",
+        "demonyms": "Channel Islander"
+    },
+    {
+        "country": "Vietnam",
+        "demonyms": "Vietnamese"
+    },
+    {
+        "country": "Guatemala",
+        "demonyms": "Guatemalan"
+    },
+    {
+        "country": "Moldova",
+        "demonyms": "Moldovan"
+    },
+    {
+        "country": "North Macedonia",
+        "demonyms": "Macedonian"
+    },
+    {
+        "country": "Uzbekistan",
+        "demonyms": "Uzbekistani"
+    },
+    {
+        "country": "Romania",
+        "demonyms": "Romanian"
+    },
+    {
+        "country": "Uganda",
+        "demonyms": "Ugandan"
+    },
+    {
+        "country": "El Salvador",
+        "demonyms": "Salvadoran"
+    },
+    {
+        "country": "Zambia",
+        "demonyms": "Zambian"
+    },
+    {
+        "country": "Gabon",
+        "demonyms": "Gabonese"
+    },
+    {
+        "country": "Equatorial Guinea",
+        "demonyms": "Equatorial Guinean"
+    },
+    {
+        "country": "Spain",
+        "demonyms": "Spanish"
+    },
+    {
+        "country": "Netherlands",
+        "demonyms": "Dutch"
+    },
+    {
+        "country": "British Virgin Islands",
+        "demonyms": "Virgin Islander"
+    },
+    {
+        "country": "Benin",
+        "demonyms": "Beninese"
+    },
+    {
+        "country": "Pakistan",
+        "demonyms": "Pakistani"
+    },
+    {
+        "country": "Panama",
+        "demonyms": "Panamanian"
+    },
+    {
+        "country": "Turks and Caicos Islands",
+        "demonyms": "Turks and Caicos Islander"
+    },
+    {
+        "country": "Angola",
+        "demonyms": "Angolan"
+    },
+    {
+        "country": "American Samoa",
+        "demonyms": "American Samoan"
+    },
+    {
+        "country": "Venezuela",
+        "demonyms": "Venezuelan"
+    },
+    {
+        "country": "Costa Rica",
+        "demonyms": "Costa Rican"
+    },
+    {
+        "country": "Puerto Rico",
+        "demonyms": "Puerto Rican"
+    },
+    {
+        "country": "Seychelles",
+        "demonyms": "Seychellois"
+    }
+]

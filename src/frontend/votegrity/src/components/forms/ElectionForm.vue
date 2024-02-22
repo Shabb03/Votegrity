@@ -1,4 +1,5 @@
 <template>
+    <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
         <v-form ref="form">
             <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
@@ -22,7 +23,7 @@
             <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
             <NumberInput :label="ageLabel" @update:number="ageValue"/>
             <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
-            <!--Add CitizenAuthenticationInput-->
+            <CitizenshipInput @update:citizenship="citizenshipValue"/>
 
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
@@ -41,21 +42,27 @@
 
 <script>
 import axios from 'axios';
+import SuccessCard from "../SuccessCard.vue";
 import TextInput from '../inputs/TextInput.vue';
 import DescriptionInput from '../inputs/DescriptionInput.vue';
 import DateInput from '../inputs/DateInput.vue';
 import NumberInput from '../inputs/NumberInput.vue';
 import EmailAuthenticationInput from '../inputs/EmailAuthenticationInput.vue';
+import CitizenshipInput from '../inputs/CitizenshipInput.vue';
 
 export default {
     components: {
+        SuccessCard,
         TextInput,
         DescriptionInput,
         DateInput,
         NumberInput,
         EmailAuthenticationInput,
+        CitizenshipInput,
     },
     data: () => ({
+        successMessage: 'You have successfully created the election',
+        successRoute: '/admin/addcandidate',
         titleLabel: "Election Title",
         startDateLabel: "Election Start Date: ",
         endDateLabel: "Election End Date: ",
@@ -70,11 +77,15 @@ export default {
         number: 0,
         age: 0,
         emailDomain: null,
+        citizenship: null,
     }),
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
     methods: {
+        async triggerSuccessCard() {
+            this.$refs.successCardRef.openDialog();
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -87,6 +98,8 @@ export default {
                     candidateNumber: this.number,
                     ageRestriction: this.age,
                     authenticationMethod: false,
+                    //add email auth
+                    //add citizen auth
                 };
                 try {
                     const token = localStorage.getItem("votegrityToken");
@@ -100,7 +113,8 @@ export default {
                     }
                     else {
                         console.log(response.data);
-                        this.$router.push('/admin/addcandidate');
+                        await this.triggerSuccessCard();
+                        //this.$router.push('/admin/addcandidate');
                     }
                 } 
                 catch (error) {
@@ -146,6 +160,9 @@ export default {
         },
         emailDomainValue(params) {
             this.emailDomain = params;
+        },
+        citizenshipValue(params) {
+            this.citizenship = params;
         },
     },
 };

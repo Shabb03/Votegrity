@@ -1,4 +1,5 @@
 <template>
+    <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
         <v-form ref="form">
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue"/>
@@ -35,6 +36,7 @@
 
 <script>
 import axios from 'axios';
+import SuccessCard from "../SuccessCard.vue";
 import encryptPassword from '../../functions/EncryptPassword.vue';
 import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
@@ -46,6 +48,7 @@ import SecurityInput from '../inputs/SecurityInput.vue';
 
 export default {
     components: {
+        SuccessCard,
         TextInput,
         EmailInput,
         PasswordInput,
@@ -55,13 +58,15 @@ export default {
         SecurityInput,
     },
     data: () => ({
+        successMessage: 'You have successfully registered your account',
+        successRoute: '/login',
         nameLabel: 'Full Name',
         specialNumberLabel: 'Special Number',
         birthDateLabel: 'Birth Date: ',
         name: '',
         email: '',
         password: '',
-        citizenship: '',
+        citizenship: null,
         specialNumber: '',
         phoneNumber: '',
         date: null,
@@ -74,6 +79,9 @@ export default {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
     methods: {
+        async triggerSuccessCard() {
+            this.$refs.successCardRef.openDialog();
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -98,11 +106,15 @@ export default {
                         alert(response.data.error);
                     }
                     else {
-                        this.$router.push('/login');
+                        await this.triggerSuccessCard();
+                        //this.$router.push('/login');
                     }
+
                 } 
                 catch (error) {
                     alert('Error during registration:', error);
+                    await this.triggerSuccessCard();
+                    this.$router.push('/login');
                 }
             }
         },
@@ -114,18 +126,20 @@ export default {
         reset() {
             this.$refs.form.reset()
         },
-        test() {
-            console.log(this.name);
-            console.log(this.email);
-            console.log(this.password);
-            console.log(this.citizenship);
-            console.log(this.specialNumber);
-            console.log(this.phoneNumber);
-            console.log(this.date);
-            console.log(this.sq1);
-            console.log(this.sa1);
-            console.log(this.sq2);
-            console.log(this.sa2);
+        async test() {
+            console.log("name", this.name);
+            console.log("email", this.email);
+            console.log("password", this.password);
+            console.log("citizenship", this.citizenship);
+            console.log("special number", this.specialNumber);
+            console.log("phone number", this.phoneNumber);
+            console.log("date", this.date);
+            console.log("sq1", this.sq1);
+            console.log("sa1", this.sa1);
+            console.log("sq2", this.sq2);
+            console.log("sa2", this.sa2);
+
+            await this.triggerSuccessCard();
         },
         nameValue(params) {
             this.name = params;

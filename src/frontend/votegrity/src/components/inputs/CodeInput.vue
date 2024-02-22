@@ -1,4 +1,5 @@
 <template>
+    <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="code-container">
     <v-card
         class="py-8 px-6 text-center mx-auto mb-4"
@@ -33,8 +34,12 @@
   
 <script>
 import axios from 'axios';
+import SuccessCard from "../SuccessCard.vue";
 
 export default {
+    components: {
+        SuccessCard,
+    },
     props: {
         title: {
             type: String,
@@ -58,6 +63,8 @@ export default {
         }
     },
     data: () => ({
+        successMessage: 'You have successfully registered your account',
+        successRoute: '/',
         code: '',
         codeRules: [
             v => !!v || 'code is required',
@@ -67,6 +74,9 @@ export default {
         this.getAuthCode();
     },
     methods: {
+        async triggerSuccessCard() {
+            this.$refs.successCardRef.openDialog();
+        },
         async getAuthCode() {
             try {
                 const url = 'http://localhost:3000/api' + this.getApiUrl;
@@ -76,13 +86,18 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                if (response.data.authenticated) {
-                    this.$router.push('/vote');
+                if (response.data.error) {
+                    alert("error: ", response.data.error);
                 }
-                if (response.data.reset) {
-                    this.$router.push('/admin/createelection');
+                else {
+                    if (response.data.authenticated) {
+                        this.$router.push('/vote');
+                    }
+                    if (response.data.reset) {
+                        this.$router.push('/admin/createelection');
+                    }
+                    console.log(response.data);
                 }
-                console.log(response.data);
             } 
             catch (error) {
                 await alert('Error retrieving code:', error);
@@ -106,7 +121,9 @@ export default {
                     alert('Invalid Code');
                 }
                 else {
-                    this.$router.push(this.routeUrl);
+                    this.successRoute = this.routeUrl;
+                    await this.triggerSuccessCard();
+                    //this.$router.push(this.routeUrl);
                 }  
             } 
             catch (error) {

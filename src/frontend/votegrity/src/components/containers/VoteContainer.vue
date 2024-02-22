@@ -1,10 +1,12 @@
 <template>
+    <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="card-container">
         <div v-if="candidateData.length > 0">
         <v-container v-for="(group, index) in candidateData" :key="index">
             <v-row>
                 <div v-for="(candidate, cardIndex) in group" :key="cardIndex">
                     <VoteCard
+                        @callSuccessCard="triggerSuccessCard"
                         :key="index"
                         :candidateId="candidate.id"
                         :name="candidate.name"
@@ -22,19 +24,26 @@
   
 <script>
 import axios from 'axios';
+import SuccessCard from "../SuccessCard.vue";
 import VoteCard from '../cards/VoteCard.vue';
 
 export default {
     components: {
+        SuccessCard,
         VoteCard,
     },
     data: () => ({
+        successMessage: 'You have successfully registered your account',
+        successRoute: '/thankyou',
         candidateData: [],
     }),
     created() {
         this.fetchCandidates();
     },
     methods: {
+        async triggerSuccessCard() {
+            this.$refs.successCardRef.openDialog();
+        },
         parseDate(dateString) {
             const [year, month, day] = dateString.split('-');
             return new Date(year, month - 1, day);
