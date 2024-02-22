@@ -98,8 +98,8 @@ export default {
                     candidateNumber: this.number,
                     ageRestriction: this.age,
                     authenticationMethod: false,
-                    //add email auth
-                    //add citizen auth
+                    //add email auth: this.emailDomain,
+                    //add citizen auth: this.citizenship,
                 };
                 try {
                     const token = localStorage.getItem("votegrityToken");
@@ -108,11 +108,12 @@ export default {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    if (response.data.error) {
-                        alert(response.data.error);
+                    const electionData = response.data;
+                    if (electionData.error) {
+                        alert(electionData.error);
                     }
                     else {
-                        console.log(response.data);
+                        //console.log(electionData);
                         await this.triggerSuccessCard();
                         //this.$router.push('/admin/addcandidate');
                     }

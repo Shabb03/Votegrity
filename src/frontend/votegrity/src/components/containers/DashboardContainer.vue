@@ -41,6 +41,13 @@ export default {
                 day: 'numeric',
             });
         },
+        getDaysDifference(startDate, endDate) {
+            const oneDay = 24 * 60 * 60 * 1000;
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const daysDifference = Math.round(Math.abs((start - end) / oneDay));
+            return daysDifference;
+        },
         async fetchInformation() {
             try {
                 const authToken = localStorage.getItem("votegrityToken");
@@ -52,7 +59,7 @@ export default {
                 const electionData = response.data;
                 if (electionData.error) {
                     await alert(electionData.error);
-                    window.history.back();
+                    //window.history.back();
                 }
                 else {
                     this.title = electionData.title;
@@ -62,22 +69,15 @@ export default {
                     this.description = electionData.description + "<br><br>Result Date: " + resultDate + "<br><br>Age Restriction: " + electionData.ageRestriction;
                     const daysDifference = this.getDaysDifference(electionData.startDate, electionData.endDate);
                     this.daysLeft = daysDifference.toString() + " Days Left";
-                    console.log(response.data);
+                    //console.log(response.data);
                 }
             } 
             catch (error) {
                 await alert('Error retrieving details:', error);
-                window.history.back();
+                //window.history.back();
             }
         },
-        getDaysDifference(startDate, endDate) {
-            const oneDay = 24 * 60 * 60 * 1000;
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            const daysDifference = Math.round(Math.abs((start - end) / oneDay));
-            return daysDifference;
-        },
-  }
+    }
 }
 </script>
   

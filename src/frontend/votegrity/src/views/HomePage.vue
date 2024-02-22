@@ -14,7 +14,7 @@ export default {
         PageLoader,
     },
     created() {
-      this.getStatus();
+        this.getStatus();
     },
     methods: {
         async getStatus() {
@@ -25,9 +25,8 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(response.data);
+                //console.log(response.data);
                 const status = response.data;
-              
                 if (status.admin) {
                     if (status.election) {
                         this.$router.push('/admin/dashboard');
@@ -47,15 +46,12 @@ export default {
                 else {
                     this.$router.push('/login');
                 }
-
-                console.log(response.data);
             } 
             catch (error) {
-                //window.alert('Server Error: ', error);
-                //console.log(error);
                 if (process.env.NODE_ENV === 'test') {
                     console.log(error);
-                } else {
+                } 
+                else {
                     alert('Server Error: ', error);
                 }
             }

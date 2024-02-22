@@ -63,10 +63,8 @@ export default {
                     this.name = winnerData.name;
                     this.voice = winnerData.voice;
                     this.party = winnerData.party;
-                    //this.image = winnerData.image;
                     this.biography = winnerData.biography;
                     this.voteCount = winnerData.voteCount;
-
                     const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+candidateId, {
                         headers: {
                             Authorization: `Bearer ${authToken}`,
@@ -82,7 +80,7 @@ export default {
             catch (error) {
                 alert('Error: No winner for election');
                 //await alert('Error retrieving details:', error);
-                window.history.back();
+                //window.history.back();
             }
         }
     }

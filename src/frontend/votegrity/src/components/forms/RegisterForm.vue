@@ -101,7 +101,7 @@ export default {
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/register', postData);
-                    console.log(response.data);
+                    //console.log(response.data);
                     if (response.data.error) {
                         alert(response.data.error);
                     }
@@ -113,8 +113,6 @@ export default {
                 } 
                 catch (error) {
                     alert('Error during registration:', error);
-                    await this.triggerSuccessCard();
-                    this.$router.push('/login');
                 }
             }
         },

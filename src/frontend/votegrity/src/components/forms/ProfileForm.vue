@@ -93,7 +93,11 @@ export default {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    console.log(response.data);
+                    const profileData = response.data;
+                    if (profileData.error) {
+                        alert("error: ", profileData.error);
+                    }
+                    //console.log(profileData);
                     window.location.reload();
                 } 
                 catch (error) {

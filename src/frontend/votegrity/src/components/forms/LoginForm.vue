@@ -57,14 +57,15 @@ export default {
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);
-                    if (response.data.error) {
-                        alert(response.data.error);
+                    const loginData = response.data;
+                    if (loginData.error) {
+                        alert(loginData.error);
                     }
                     else {
-                        const token = response.data.token;
+                        const token = loginData.token;
                         localStorage.setItem("votegrityToken",token);
-                        console.log(response.data);
-                        if (!response.data.authenticated) {
+                        //console.log(loginData.data);
+                        if (!loginData.authenticated) {
                             this.successRoute = '/authentication';
                         }
                         this.$router.push(this.successRoute);

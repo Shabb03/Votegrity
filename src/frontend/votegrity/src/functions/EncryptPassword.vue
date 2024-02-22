@@ -10,7 +10,8 @@ export default async function encryptPassword(password) {
         const secretKey = 'yeJ9bz3LGO';
         const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
         return encryptedPassword;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log('Error hashing password:', error);
         return password;
     }

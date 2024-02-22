@@ -1,6 +1,6 @@
 <template>
     <v-col>
-        <v-card max-width="350" min-width="350" elevation="16" style="max-width: 350px !important; width: 100% !important; margin: auto !important;">
+        <v-card max-width="350" min-width="350" elevation="16">
             <v-img
                 class="align-end text-white"
                 height="350"
@@ -51,7 +51,6 @@ export default {
         },
         async fetchImageData() {
             try {
-                console.log(this.candidateId);
                 const authToken = localStorage.getItem("votegrityToken");
                 const response = await axios.get('http://localhost:3000/api/election/image/'+this.candidateId, {
                     headers: {
@@ -59,12 +58,10 @@ export default {
                     },
                     responseType: 'arraybuffer',
                 });
-                
                 const binaryData = new Uint8Array(response.data);
                 const dataUrl = this.arrayBufferToBase64(binaryData);
                 this.imageSrc = `data:image/jpeg;base64,${dataUrl}`;
-                
-                console.log(response.data);
+                //console.log(response.data);
             } 
             catch (error) {
                 console.log(error);
@@ -112,6 +109,11 @@ export default {
 </script>
 
 <style scoped>
+.v-card {
+    max-width: 350px !important; 
+    width: 100% !important; 
+    margin: auto !important;
+}
 .v-btn {
     font-size: 1em;
     font-weight: bold;

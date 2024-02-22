@@ -33,7 +33,7 @@ export default {
         VoteCard,
     },
     data: () => ({
-        successMessage: 'You have successfully registered your account',
+        successMessage: 'You have successfully voted',
         successRoute: '/thankyou',
         candidateData: [],
     }),
@@ -58,15 +58,15 @@ export default {
                 });
                 const dataArray = response.data.candidates;
                 const groupSize = 3;
-
                 if (dataArray.length === 0) {
                     window.alert('Error: No Candidates added to election')
                 }
-                
-                for (let i = 0; i < dataArray.length; i += groupSize) {
-                    if (i % 3 === 0) {
-                        const group = dataArray.slice(i, i + groupSize);
-                        this.candidateData.push(group);
+                else {
+                    for (let i = 0; i < dataArray.length; i += groupSize) {
+                        if (i % 3 === 0) {
+                            const group = dataArray.slice(i, i + groupSize);
+                            this.candidateData.push(group);
+                        }
                     }
                 }
                 //this.candidateData = dataArray;
@@ -74,7 +74,8 @@ export default {
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
                     console.log(error);
-                } else {
+                } 
+                else {
                     alert('Error retrieving details:', error);
                 }
                 //window.history.back();

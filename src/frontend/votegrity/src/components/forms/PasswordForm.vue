@@ -109,12 +109,12 @@ export default {
                 console.log(postData);
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/changepassword', postData);
-                    console.log(response.data);
-                    if (response.data.error) {
-                       alert(response.data.error);
+                    const passwordData = response.data;
+                    //console.log(passwordData);
+                    if (passwordData.error) {
+                       alert(passwordData.error);
                     }
                     else {
-                        console.log(response.data);
                         await this.triggerSuccessCard();
                         //this.$router.push('/login');
                     }

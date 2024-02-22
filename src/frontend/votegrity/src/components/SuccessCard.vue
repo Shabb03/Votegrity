@@ -1,17 +1,16 @@
 <template>
-    <!--<v-btn @click="openDialog">Open Dialog</v-btn>-->
     <v-dialog v-model="isActive" persistent transition="dialog-top-transition" width="auto">
         <template v-slot:default>
-          <v-card>
-            <v-toolbar></v-toolbar>
-            <v-card-text class="text-center">
-              <div class="text-h2 pa-8">{{ title }}</div>
-              <div class="pa-4">{{ message }}</div>
-            </v-card-text>
-            <v-card-actions class="justify-center">
-              <v-btn block variant="text" @click="goToRoute">Continue</v-btn>
-            </v-card-actions>
-          </v-card>
+            <v-card>
+                <v-toolbar></v-toolbar>
+                <v-card-text class="text-center">
+                    <div class="text-h2 pa-8">{{ title }}</div>
+                    <div class="pa-4">{{ message }}</div>
+                </v-card-text>
+                <v-card-actions class="justify-center">
+                    <v-btn block variant="text" @click="goToRoute">Continue</v-btn>
+                </v-card-actions>
+            </v-card>
         </template>
     </v-dialog>
 </template>
@@ -54,11 +53,11 @@ export default {
 }
 
 .text-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .v-card-actions {

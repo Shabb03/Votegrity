@@ -69,7 +69,7 @@ export default {
                 formData.append('biography', this.bio);
                 formData.append('voice', this.voice);
                 formData.append('party', this.party);
-                console.log("formData", formData);
+                //console.log("formData", formData);
                 try {
                     const token = localStorage.getItem("votegrityToken");
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
@@ -77,11 +77,11 @@ export default {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    if (response.data.error) {
-                        alert(response.data.error);
+                    const candidateData = response.data;
+                    if (candidateData.error) {
+                        alert(candidateData.error);
                     }
                     else {
-                      console.log(response.data);
                         if ((this.addedCandidates + 1) >= this.candidateCount) {
                             this.$router.push('/admin/dashboard');
                         } 

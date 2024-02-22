@@ -48,13 +48,14 @@ export default {
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/admin/login', postData);
-                    if (response.data.error) {
-                        alert(response.data.error);
+                    const loginData = response.data;
+                    if (loginData.error) {
+                        alert(loginData.error);
                     }
                     else {
-                        const token = response.data.token;
+                        const token = loginData.token;
                         localStorage.setItem("votegrityToken",token);
-                        console.log(response.data);
+                        //console.log(loginData);
                         this.$router.push('/admin/dashboard');
                     }
                 } 
