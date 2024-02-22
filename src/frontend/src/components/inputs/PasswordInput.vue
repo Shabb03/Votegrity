@@ -17,10 +17,6 @@ export default {
             type: String,
             default: 'Password',
         },
-        requiredRule: {
-            type: Boolean,
-            default: false,
-        },
     },
     data: () => ({
         password: '',
