@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
 const { isSecurePassword, hashPassword, decryptPassword } = require('../controllers/functions/password');
-const secretKey = process.env.DECRYPT_PASSWORD_KEY;
+const secretKey = 'testSecretKey';
 
 //check if the function tests the security level of the password
 describe('isSecurePassword', () => {
@@ -33,7 +33,7 @@ describe('hashPassword', () => {
 
 describe('decryptPassword', () => {
     test('should decrypt the password', async () => {
-        const encryptedPassword = 'U2FsdGVkX1+H5bb1oxOM3SEM62EF3kBt0P/mhRAi4K8=';
+        const encryptedPassword = 'U2FsdGVkX1/tdvfaPjYYHbf1d11k3T/XWN9hkBoaa68=';
         const plainPassword = 'loveCookies30!';
         const bytes = await CryptoJS.AES.decrypt(encryptedPassword, secretKey);
         const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
