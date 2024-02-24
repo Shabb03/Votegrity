@@ -38,6 +38,10 @@ describe('decryptPassword', () => {
         const bytes = await CryptoJS.AES.decrypt(encryptedPassword, secretKey);
         const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
         const match = (plainPassword === decryptedPassword);
+        console.log("\nBYTES: ", bytes);
+        console.log("\nDECRYPTED: ", decryptedPassword);
+        console.log("\nMATCH: ", match);
+        console.log("\n\n");
         expect(match).toBe(true);
     });
 });
