@@ -54,6 +54,7 @@
 
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 
@@ -87,7 +88,7 @@ export default {
                     newNumber: this.phoneNumber,
                 };
                 try {
-                    const token = localStorage.getItem("votegrityToken");
+                    const token = getToken();
                     const response = await axios.post('http://localhost:3000/api/user/userdetails', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -107,7 +108,7 @@ export default {
         },
         async fetchUserData() {
             try {
-                const token = localStorage.getItem("votegrityToken");
+                const token = getToken();
                 const response = await axios.get('http://localhost:3000/api/user/userinfo', {
                     headers: {
                         Authorization: `Bearer ${token}`,

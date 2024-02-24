@@ -34,6 +34,7 @@
   
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
 
 export default {
@@ -80,7 +81,7 @@ export default {
         async getAuthCode() {
             try {
                 const url = 'http://localhost:3000/api' + this.getApiUrl;
-                const token = localStorage.getItem("votegrityToken");
+                const token = getToken();
                 const response = await axios.get(url, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -110,7 +111,7 @@ export default {
                     authToken: this.code,
                 };
                 const url = 'http://localhost:3000/api' + this.postApiUrl;
-                const token = localStorage.getItem("votegrityToken");
+                const token = getToken();
                 const response = await axios.post(url, postData, {
                     headers: {
                         Authorization: `Bearer ${token}`,

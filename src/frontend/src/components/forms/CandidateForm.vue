@@ -26,6 +26,7 @@
   
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import TextInput from '../inputs/TextInput.vue';
 import ImageInput from '../inputs/ImageInput.vue';
 import DateInput from '../inputs/DateInput.vue';
@@ -71,7 +72,7 @@ export default {
                 formData.append('party', this.party);
                 //console.log("formData", formData);
                 try {
-                    const token = localStorage.getItem("votegrityToken");
+                    const token = getToken();
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -97,7 +98,7 @@ export default {
         },
         async getCandidateCount() {
             try {
-                const authToken = localStorage.getItem("votegrityToken");
+                const authToken = getToken();
                 const response = await axios.get('http://localhost:3000/api/admin/candidatecount', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,

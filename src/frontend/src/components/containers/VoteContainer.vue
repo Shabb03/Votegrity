@@ -24,6 +24,7 @@
   
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
 import VoteCard from '../cards/VoteCard.vue';
 
@@ -41,7 +42,8 @@ export default {
         this.fetchCandidates();
     },
     methods: {
-        async triggerSuccessCard() {
+        async triggerSuccessCard(name) {
+            this.successMessage = 'You have successfully voted for ' + name;
             this.$refs.successCardRef.openDialog();
         },
         parseDate(dateString) {
@@ -50,7 +52,7 @@ export default {
         },
         async fetchCandidates() {
             try {
-                const authToken = localStorage.getItem("votegrityToken");
+                const authToken = getToken();
                 const response = await axios.get('http://localhost:3000/api/election/candidates', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,

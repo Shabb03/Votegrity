@@ -137,7 +137,10 @@ export default {
             console.log("sq2", this.sq2);
             console.log("sa2", this.sa2);
 
-            await this.triggerSuccessCard();
+            const encryptedPassword = await encryptPassword(this.password);
+            console.log(encryptedPassword);
+
+            //await this.triggerSuccessCard();
         },
         nameValue(params) {
             this.name = params;

@@ -24,6 +24,7 @@
 
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 
 export default {
     data: () => ({
@@ -51,7 +52,7 @@ export default {
         },
         async fetchImageData() {
             try {
-                const authToken = localStorage.getItem("votegrityToken");
+                const authToken = getToken();
                 const response = await axios.get('http://localhost:3000/api/election/image/'+this.candidateId, {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
@@ -83,7 +84,7 @@ export default {
         },
         async vote(candidateId) {
             try {
-                const authToken = localStorage.getItem("votegrityToken");
+                const authToken = getToken();
                 const postData = {
                     candidateId: candidateId,
                 };

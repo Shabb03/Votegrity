@@ -42,6 +42,7 @@
 
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
 import TextInput from '../inputs/TextInput.vue';
 import DescriptionInput from '../inputs/DescriptionInput.vue';
@@ -102,7 +103,7 @@ export default {
                     //add citizen auth: this.citizenship,
                 };
                 try {
-                    const token = localStorage.getItem("votegrityToken");
+                    const token = getToken();
                     const response = await axios.post('http://localhost:3000/api/admin/addelection', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,

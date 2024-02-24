@@ -21,6 +21,7 @@
   
 <script>
 import axios from 'axios';
+import setToken from '../../functions/SetToken.vue';
 import encryptPassword from '../../functions/EncryptPassword.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
@@ -54,7 +55,7 @@ export default {
                     }
                     else {
                         const token = loginData.token;
-                        localStorage.setItem("votegrityToken",token);
+                        setToken(token);
                         //console.log(loginData);
                         this.$router.push('/admin/dashboard');
                     }

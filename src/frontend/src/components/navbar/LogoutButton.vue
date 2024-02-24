@@ -3,11 +3,13 @@
 </template>
 
 <script>
+import setToken from '../../functions/SetToken.vue';
+
 export default {
     name: 'LogoutButton',
     methods: {
         logout() {
-            localStorage.setItem("votegrityToken", null);
+            setToken(null);
             this.$router.push('/login');
         },
     },

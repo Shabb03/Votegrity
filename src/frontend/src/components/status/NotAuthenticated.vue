@@ -5,6 +5,7 @@
   
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
   
 export default {
     data() {
@@ -14,7 +15,7 @@ export default {
     },
     async created() {
         try {
-            const token = localStorage.getItem("votegrityToken");
+            const token = getToken();
             const response = await axios.get('http://localhost:3000/api/status/', {
                 headers: {
                     Authorization: `Bearer ${token}`,

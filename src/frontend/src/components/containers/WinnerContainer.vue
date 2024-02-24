@@ -18,6 +18,7 @@
   
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import ImageBox from '../cards/ImageBox.vue';
 import WinnerBox from '../cards/WinnerBox.vue';
 
@@ -48,7 +49,7 @@ export default {
         },
         async fetchWinner() {
             try {
-                const authToken = localStorage.getItem("votegrityToken");
+                const authToken = getToken();
                 const response = await axios.get('http://localhost:3000/api/election/results', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,

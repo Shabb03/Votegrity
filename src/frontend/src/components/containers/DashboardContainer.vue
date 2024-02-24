@@ -14,6 +14,7 @@
 
 <script>
 import axios from 'axios';
+import getToken from '../../functions/GetToken.vue';
 import DashboardCard from '../cards/DashboardCard.vue';
 import ResetButton from '../buttons/ResetButton.vue';
 
@@ -50,7 +51,7 @@ export default {
         },
         async fetchInformation() {
             try {
-                const authToken = localStorage.getItem("votegrityToken");
+                const authToken = getToken();
                 const response = await axios.get('http://localhost:3000/api/admin/election', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
