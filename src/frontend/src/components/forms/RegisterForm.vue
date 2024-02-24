@@ -4,7 +4,7 @@
         <v-form ref="form">
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue"/>
             <EmailInput @update:email="emailValue"/>
-            <PasswordInput @update:password="passwordValue"/>
+            <PasswordInput :displayPasswordRules="true" @update:password="passwordValue"/>
             <CitizenshipInput @update:citizenship="citizenshipValue"/>
             <TextInput :label="specialNumberLabel" :required="true" @update:text="specialNumberValue"/>
             <PhoneNumberInput @update:phoneNumber="phoneNumberValue"/>

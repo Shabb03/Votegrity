@@ -30,7 +30,7 @@
             <SecurityAnswerInput :label1 = "securityLabel1" :label2="securityLabel2" @update:securityAnswer1="sa1Value" @update:securityAnswer2="sa2Value"/>
             <v-row>
                 <v-col>
-                    <PasswordInput :label="passwordLabel1" @update:password="password1Value"/>
+                    <PasswordInput :label="passwordLabel1" :displayPasswordRules="true" @update:password="password1Value"/>
                 </v-col>
                 <v-col>
                     <PasswordInput :label="passwordLabel2" @update:password="password2Value"/>

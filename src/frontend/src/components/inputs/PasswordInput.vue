@@ -3,7 +3,7 @@
         v-model="password"
         :label="label || 'Password'"
         :type="showPassword ? 'text' : 'password'"
-        :rules="passwordRules"
+        :rules="displayPasswordRules ? passwordRules : []"
         @input="updatePassword"
         required
     ></v-text-field>
@@ -16,6 +16,10 @@ export default {
         label: {
             type: String,
             default: 'Password',
+        },
+        displayPasswordRules: {
+            type: Boolean,
+            default: false,
         },
     },
     data: () => ({
