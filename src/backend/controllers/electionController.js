@@ -12,7 +12,7 @@ exports.addElection = async (req, res) => {
             return res.json({error: "An election is currently active, you must reset the election"});
         }
 
-        const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authenticationMethod } = req.body;
+        const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship } = req.body;
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
             return res.json({ error: 'All required inputs not provided' });
         }        
@@ -24,10 +24,11 @@ exports.addElection = async (req, res) => {
             resultDate: resultDate,
             candidateNumber: candidateNumber,
             ageRestriction: ageRestriction,
-            authenticationMethod: authenticationMethod,
             privateKey: null,
             publicKey: null,
-            results: null
+            results: null,
+            authEmail: authEmail,
+            authCitizenship: authCitizenship,
         });
 
         /*
@@ -43,9 +44,11 @@ exports.addElection = async (req, res) => {
             endDate: newElection.endDate,
             resultDate: newElection.resultDate,
             candidateNumber: newElection.candidateNumber,
-            ageRestriction: newElection.ageRestriction
+            ageRestriction: newElection.ageRestriction,
+            authEmail: authEmail,
+            authCitizenship: authCitizenship,
         }
-        res.status(201).json({election: electionResponse, message: 'Election created successfully'});
+        res.json({election: electionResponse, message: 'Election created successfully'});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
@@ -93,7 +96,7 @@ exports.addCandidate = async (req, res) => {
             dateOfBirth: dateOfBirth,
             biography: biography
         });
-        res.status(201).json({candidate: newCandidate, message: 'Candidate created successfully'});
+        res.json({candidate: newCandidate, message: 'Candidate created successfully'});
         //res.json({imagePath: image.filename});
     }
     catch (error) {
@@ -133,7 +136,7 @@ exports.addCandidate = async (req, res) => {
         election.isActive = false;
         await election.save();
         await Candidate.destroy({ where: { isWinner: false } });
-        return res.status(200).json({ message: 'Election reset successfully.', reset: true });
+        return res.json({ message: 'Election reset successfully.', reset: true });
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });

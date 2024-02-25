@@ -8,16 +8,13 @@ exports.deleteCode = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-
         const token = generatetoken();
         user.resetToken = token;
         await user.save();
-
         sendEmail("Account Deletion Code", user.email, "Here is your delete code: " + token);
         res.json({message: "Email sent"});
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
@@ -39,7 +36,6 @@ exports.deleteAccount = async (req, res) => {
         }
     } 
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

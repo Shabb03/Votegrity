@@ -56,9 +56,11 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import setToken from '../../functions/SetToken.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 import DeleteButton from '../buttons/DeleteButton.vue';
+import setToken from '../../functions/SetToken.vue';
 
 export default {
     components: {
@@ -102,6 +104,9 @@ export default {
                     const profileData = response.data;
                     if (profileData.error) {
                         alert("error: ", profileData.error);
+                    }
+                    else if (profileData.token) {
+                        setToken(profileData.token);
                     }
                     //console.log(profileData);
                     window.location.reload();

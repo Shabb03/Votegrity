@@ -5,7 +5,6 @@
         :type="showPassword ? 'text' : 'password'"
         :rules="displayPasswordRules ? passwordRules : []"
         @input="updatePassword"
-        required
     ></v-text-field>
     <v-checkbox v-model="showPassword" label="Show Password"></v-checkbox>
 </template>

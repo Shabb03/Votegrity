@@ -7,6 +7,7 @@ exports.electionDetails = async (req, res) => {
         if (activeElection) {
             const totalVoteCount = await Vote.count();
             res.json({
+                id: activeElection.id,
                 title: activeElection.title, 
                 description: activeElection.description, 
                 startDate: activeElection.startDate, 
@@ -14,10 +15,12 @@ exports.electionDetails = async (req, res) => {
                 resultDate: activeElection.resultDate, 
                 candidateNumber: activeElection.candidateNumber,
                 ageRestriction: activeElection.ageRestriction, 
-                authenticationMethod: activeElection.authenticationMethod,
-                voteCount: totalVoteCount
+                email: activeElection.authEmail,
+                citizenship: activeElection.authCitizenship,
+                voteCount: totalVoteCount,
             });
-        } else {
+        } 
+        else {
             res.json({ error: 'No active election found', election: false });
         }
     }

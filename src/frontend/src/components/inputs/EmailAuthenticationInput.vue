@@ -1,7 +1,7 @@
 <template>
     <v-text-field
         v-model="emailDomain"
-        label="Email Domain"
+        label="Email Domain e.g: @gmail.com"
         @input="updateEmailDomain"
     ></v-text-field>
 </template>
@@ -9,7 +9,7 @@
 <script>
 export default {
     data: () => ({
-        emailDomain: '',
+        emailDomain: null,
         /*emailDomainRules: [
             v => !!v || 'Email Domain is required',
         ],*/

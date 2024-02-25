@@ -23,7 +23,7 @@
             <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
             <NumberInput :label="ageLabel" @update:number="ageValue"/>
             <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
-            <CitizenshipInput @update:citizenship="citizenshipValue"/>
+            <CitizenshipInput :displayCitizenshipRules="false" @update:citizenship="citizenshipValue"/>
 
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
@@ -100,9 +100,8 @@ export default {
                     resultDate: this.resultDate,
                     candidateNumber: this.number,
                     ageRestriction: this.age,
-                    authenticationMethod: false,
-                    //add email auth: this.emailDomain,
-                    //add citizen auth: this.citizenship,
+                    authEmail: this.emailDomain,
+                    authCitizenship: this.citizenship,
                 };
                 try {
                     const token = await getToken();
