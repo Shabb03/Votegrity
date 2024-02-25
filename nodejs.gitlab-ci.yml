@@ -22,7 +22,7 @@ unit-test-frontend-job:
   stage: test
   script:
     - echo "Running unit tests for frontend... This will take about 60 seconds."
-    - cd ./src/frontend/votegrity
+    - cd ./src/frontend
     - npm install
     - npm test
     - sleep 60

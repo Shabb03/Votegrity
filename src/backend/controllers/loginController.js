@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-//const passport = require('passport');
+const { decryptPassword } = require('./functions/password');
 const { Admin, Voter } = require('../sequelize');
 
 //Generate a login authentication token for the user with the correct login credentials
@@ -8,20 +8,23 @@ exports.login = async (req, res) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const user = await Voter.findOne({where: {email: email}});
         if (!user) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Account with this email not found'});
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        const decryptedPassword = await decryptPassword(password);
+        const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
         if (!isPasswordValid) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Password is incorrect'});
         }
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         return res.send({
             email: user.email,
-            token: token
+            token: token,
+            authenticated: user.authenticated
         })
     } 
     catch (error) {
@@ -34,15 +37,17 @@ exports.adminLogin = async (req, res) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const user = await Admin.findOne({where: {email: email}});
         if (!user) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Admin with this email not found'});
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        const decryptedPassword = await decryptPassword(password);
+        const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
         if (!isPasswordValid) {
-            return res.status(403).send({error: 'The login information was incorrect'})
+            return res.json({error: 'Password is incorrect'});
         }
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.ADMIN_SECRET_KEY);
         return res.send({

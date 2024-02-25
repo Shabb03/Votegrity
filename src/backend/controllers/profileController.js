@@ -41,7 +41,7 @@ exports.changeUserDetails = async (req, res) => {
         if (newEmail && newNumber && newEmail !== null && newNumber !== null) {
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail && existingNumber) {
-                return res.status(400).json({ message: 'Number and email already in use' });   
+                return res.json({ error: 'Number and email already in use' });   
             }
             user.email = newEmail;
             user.phoneNumber = newNumber;
@@ -52,7 +52,7 @@ exports.changeUserDetails = async (req, res) => {
         else if (newEmail && newEmail !== null) {
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail) {
-                return res.status(400).json({ message: 'Email already in use' });
+                return res.json({ error: 'Email already in use' });
             }
             user.email = newEmail;
             await user.save();
@@ -62,14 +62,14 @@ exports.changeUserDetails = async (req, res) => {
         else if (newNumber && newNumber !== null) {
             const existingNumber = await Voter.findOne({ where: { phoneNumber: newNumber } });
             if (existingNumber) {
-                return res.status(400).json({ message: 'Number already in use' });
+                return res.json({ error: 'Number already in use' });
             }
             user.phoneNumber = newNumber;
             await user.save();
             message = "Number updated successfully";
         }
         else {
-            return res.status(400).json({ error: 'Either email or phone must be provided.' });
+            return res.json({ error: 'Either email or phone must be provided.' });
         }        
         return res.json({ 
             email: user.email, 
@@ -111,15 +111,15 @@ exports.authAccount = async (req, res) => {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
 
-        const authToken = req.body.authToken;
-        if (authToken === user.authToken) {
+        const { token } = req.body;
+        if (token === user.authToken) {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
-            return res.status(200).json({ message: 'New user successfully authenticated' });
+            return res.json({ message: 'New user successfully authenticated' });
         } 
         else {
-            return res.status(401).json({ message: 'Invalid authToken', invalid: true });
+            return res.json({ error: 'Invalid token', invalid: true });
         }
     }
     catch (error) {

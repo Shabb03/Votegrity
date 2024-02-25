@@ -1,7 +1,6 @@
-//const crypto = require('crypto');
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
-const { isSecurePassword, hashPassword } = require('./functions/password');
+const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const { Voter, SecurityQuestions } = require('../sequelize');
 
 //Send a six digit code via email if the user has forgotten their password
@@ -9,11 +8,11 @@ exports.authCode = async (req, res) => {
     try {
         const { email } = req.body;
         if (!email) {
-            return res.status(400).json({ error: 'Email is required in the request body' });
+            return res.json({ error: 'Email is required' });
         }
         const user = await Voter.findOne({ where: { email } });
         if (!user) {
-            return res.status(404).json({ error: 'User not found for the provided email' });
+            return res.json({ error: 'User not found for the provided email' });
         }
 
         const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
@@ -37,26 +36,28 @@ exports.changePassword = async (req, res) => {
     try {
         const { email, resetToken, securityAnswer1, securityAnswer2, password } = req.body;
         if (!email || !resetToken || !securityAnswer1 || !securityAnswer2 || !password) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const user = await Voter.findOne({ where: { email } });
         if (!user) {
-            return res.status(404).json({ error: 'User not found for the provided email' });
+            return res.json({ error: 'User not found for the provided email' });
         }
 
         if (resetToken === user.resetToken && securityAnswer1 === user.securityAnswer1 && securityAnswer2 === user.securityAnswer2) {
             const isSecure = isSecurePassword(password);
             if (!isSecure) {
-                return res.send({error: 'Password is not strong enough'});
+                return res.json({error: 'Password is not strong enough'});
             }
-            const hashedPassword = await hashPassword(password);
+            
+            const decryptedPassword = await decryptPassword(password);
+            const hashedPassword = await hashPassword(decryptedPassword);
             user.password = hashedPassword;
             user.resetToken = null;
             await user.save();
-            res.send({message: 'User password updated successfully'});
+            res.json({message: 'User password updated successfully'});
         } 
         else {
-            return res.status(401).json({ message: 'Invalid resetToken', invalid: true });
+            return res.json({ error: 'Invalid resetToken', invalid: true });
         }
     }
     catch (error) {

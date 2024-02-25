@@ -1,16 +1,20 @@
 const bcrypt = require('bcrypt');
-const { isSecurePassword, hashPassword } = require('../controllers/functions/password');
+const CryptoJS = require('crypto-js');
+const { isSecurePassword, hashPassword, decryptPassword } = require('../controllers/functions/password');
+const secretKey = 'testSecretKey';
 
 //check if the function tests the security level of the password
 describe('isSecurePassword', () => {
-    test('should return true for a secure password', () => {
+    test('should return true for a secure password', async () => {
         const securePassword = 'SecurePassword1!';
-        expect(isSecurePassword(securePassword)).toBe(true);
+        const secure = await isSecurePassword(securePassword);
+        expect(secure).toBe(true);
     });
 
-    test('should return false for an insecure password', () => {
+    test('should return false for an insecure password', async () => {
         const insecurePassword = 'insecure123';
-        expect(isSecurePassword(insecurePassword)).toBe(false);
+        const secure = await isSecurePassword(insecurePassword);
+        expect(secure).toBe(false);
     });
 });
 
@@ -23,6 +27,21 @@ describe('hashPassword', () => {
 
         bcrypt.compare = jest.fn().mockResolvedValue(true);
         const match = await bcrypt.compare(plainPassword, hashedPassword);
+        expect(match).toBe(true);
+    });
+});
+
+describe('decryptPassword', () => {
+    test('should decrypt the password', async () => {
+        const encryptedPassword = 'U2FsdGVkX1/tdvfaPjYYHbf1d11k3T/XWN9hkBoaa68=';
+        const plainPassword = 'loveCookies30!';
+        const bytes = await CryptoJS.AES.decrypt(encryptedPassword, secretKey);
+        const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
+        const match = (plainPassword === decryptedPassword);
+        console.log("\nBYTES: ", bytes);
+        console.log("\nDECRYPTED: ", decryptedPassword);
+        console.log("\nMATCH: ", match);
+        console.log("\n\n");
         expect(match).toBe(true);
     });
 });

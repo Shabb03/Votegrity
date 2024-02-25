@@ -18,7 +18,7 @@ exports.getStatus = async (req, res) => {
     try {
         const tokenString = req.header('Authorization');
         if (!tokenString || tokenString === "") {
-            return res.send({ status: 'Not Logged in', loggedOut: true});
+            return res.json({ status: 'Not Logged in', loggedOut: true});
         }
         const token = tokenString.replace("Bearer ", "");
 
@@ -30,7 +30,7 @@ exports.getStatus = async (req, res) => {
                 electionValue = true;
             }
             console.log(electionValue);
-            return res.send({status: 'Admin', admin: true, election: electionValue});
+            return res.json({status: 'Admin', admin: true, election: electionValue});
         }
 
         const accessUser = verifyToken(token, secretKey);
@@ -39,13 +39,13 @@ exports.getStatus = async (req, res) => {
             const user = await Voter.findOne({ where: { email: req.user.email } });
             if (user) {
                 const authenticated = user.authenticated
-                return res.send({status: 'Not Authenticated', loggedIn: true, authenticated: authenticated});
+                return res.json({status: 'Not Authenticated', loggedIn: true, authenticated: authenticated});
             }
         }
-        return res.send({status: 'Not Logged in', loggedOut: true, wrongToken: true });
+        return res.json({status: 'Not Logged in', loggedOut: true, wrongToken: true });
     } 
     catch (error) {
         console.log(error);
-        res.status(500).send({error: 'An error has occured getting the status of the user'})
+        res.status(500).json({error: 'An error has occured getting the status of the user'})
     }
 }

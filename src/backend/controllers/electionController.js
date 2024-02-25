@@ -1,6 +1,7 @@
 //const sendEmail = require('./thirdParty/email');
 //const generateSixDigitCode = require('./functions/generateCode');
 const { Candidate, Election, Admin } = require('../sequelize');
+const countryData = require('../assets/citizenship.json');
 
 
 //Create a new election
@@ -11,9 +12,9 @@ exports.addElection = async (req, res) => {
             return res.json({error: "An election is currently active, you must reset the election"});
         }
 
-        const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authenticationMethod } = req.body;
+        const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship } = req.body;
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }        
         const newElection = await Election.create({
             title: title,
@@ -23,11 +24,18 @@ exports.addElection = async (req, res) => {
             resultDate: resultDate,
             candidateNumber: candidateNumber,
             ageRestriction: ageRestriction,
-            authenticationMethod: authenticationMethod,
             privateKey: null,
             publicKey: null,
-            results: null
+            results: null,
+            authEmail: authEmail,
+            authCitizenship: authCitizenship,
         });
+
+        /*
+        if (!countryData.includes(citizenship)) {
+            return res.json({error: 'Incorrect citizenship provided'});
+        }
+        */
 
         const electionResponse = {
             title: newElection.title,
@@ -36,9 +44,11 @@ exports.addElection = async (req, res) => {
             endDate: newElection.endDate,
             resultDate: newElection.resultDate,
             candidateNumber: newElection.candidateNumber,
-            ageRestriction: newElection.ageRestriction
+            ageRestriction: newElection.ageRestriction,
+            authEmail: authEmail,
+            authCitizenship: authCitizenship,
         }
-        res.status(201).json({election: electionResponse, message: 'Election created successfully'});
+        res.json({election: electionResponse, message: 'Election created successfully'});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
@@ -74,7 +84,7 @@ exports.addCandidate = async (req, res) => {
 
         const { name, voice, party, dateOfBirth, biography } = req.body;
         if (!name || !voice || !party || !dateOfBirth || !biography) {
-            return res.status(400).json({ error: 'All required inputs not provided' });
+            return res.json({ error: 'All required inputs not provided' });
         }
         const image = req.file;
         const imagePath = image.filename;
@@ -86,7 +96,7 @@ exports.addCandidate = async (req, res) => {
             dateOfBirth: dateOfBirth,
             biography: biography
         });
-        res.status(201).json({candidate: newCandidate, message: 'Candidate created successfully'});
+        res.json({candidate: newCandidate, message: 'Candidate created successfully'});
         //res.json({imagePath: image.filename});
     }
     catch (error) {
@@ -115,18 +125,18 @@ exports.addCandidate = async (req, res) => {
 
 /*exports.resetElection = async (req, res) => {
     try {
-        const resetCode = req.body.resetCode;
+        const { token } = req.body;
         const election = await Election.findOne({where: {isActive: true}});
         if (!election) {
-            return res.status(404).json({ error: 'No active election found.' });
+            return res.json({ error: 'No active election found.' });
         }
-        if (resetCode !== election.) {
-            return res.status(401).json({ error: 'Invalid reset code.' });
+        if (token !== election.) {
+            return res.json({ error: 'Invalid reset code.' });
         }
         election.isActive = false;
         await election.save();
         await Candidate.destroy({ where: { isWinner: false } });
-        return res.status(200).json({ message: 'Election reset successfully.', reset: true });
+        return res.json({ message: 'Election reset successfully.', reset: true });
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });

@@ -366,10 +366,6 @@ const Election = sequelize.define('Election', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    authenticationMethod: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-    },
     privateKey: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -382,6 +378,14 @@ const Election = sequelize.define('Election', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
+    },
+    authEmail: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    authCitizenship: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     results: {
         type: DataTypes.INTEGER,

@@ -6,6 +6,7 @@ const registerController = require('../controllers/registerController');
 const loginController = require('../controllers/loginController');
 const profileController = require('../controllers/profileController');
 const passwordController = require('../controllers/passwordController');
+const deleteController = require('../controllers/deleteController');
 
 router.get('/securityquestions', registerController.securityQuestions)
 router.post('/register', registerController.signup);
@@ -19,5 +20,8 @@ router.post('/authenticateaccount', authenticateToken, profileController.authAcc
 
 router.post('/authenticationcode', passwordController.authCode);
 router.post('/changepassword', passwordController.changePassword);
+
+router.get('/deletecode', authenticateToken, deleteController.deleteCode);
+router.post('/deleteaccount', authenticateToken, deleteController.deleteAccount);
 
 module.exports = router;

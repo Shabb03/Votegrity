@@ -5,15 +5,15 @@ exports.getResults = async (req, res) => {
     try {
         const activeElection = await Election.findOne({where: { isActive: true }});
         if (!activeElection) {
-            return res.status(404).json({ message: 'Active election not found' });
+            return res.json({ message: 'Active election not found' });
         }
         const resultsId = activeElection.results;
         if (!resultsId) {
-            return res.status(404).json({ message: 'Results not found' });
+            return res.json({ message: 'Results not found' });
         }
         const results = await Result.findByPk(resultsId);
         if (!results) {
-            return res.status(404).json({ message: 'Results not found' });
+            return res.json({ message: 'Results not found' });
         }
         const candidate = await Candidate.findByPk(results.winner);
         res.json({
