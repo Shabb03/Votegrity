@@ -1,4 +1,19 @@
-# NOTES
+# **Votegrity**
+
+### Authors:
+
+Thomas Kelly
+Rishabdev Sidhu - 20309616
+
+### Supervisor:
+
+Geoffrey Hamilton
+
+### Abstract
+
+### Images
+
+### NOTES
 
 Backend:
 
