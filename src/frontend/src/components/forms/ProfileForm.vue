@@ -50,6 +50,7 @@
             </div>
         </v-form>
     </div>
+    <DeleteButton/>
 </template>
 
 <script>
@@ -57,11 +58,13 @@ import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
+import DeleteButton from '../buttons/DeleteButton.vue';
 
 export default {
     components: {
         EmailInput,
         PhoneNumberInput,
+        DeleteButton,
     },
     data: () => ({
         name: '',
@@ -76,9 +79,11 @@ export default {
     created() {
         this.fetchUserData();
     },
+    /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
+    */
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -88,7 +93,7 @@ export default {
                     newNumber: this.phoneNumber,
                 };
                 try {
-                    const token = getToken();
+                    const token = await getToken();
                     const response = await axios.post('http://localhost:3000/api/user/userdetails', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -113,7 +118,7 @@ export default {
         },
         async fetchUserData() {
             try {
-                const token = getToken();
+                const token = await getToken();
                 const response = await axios.get('http://localhost:3000/api/user/userinfo', {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -134,15 +139,17 @@ export default {
                 } 
                 else {
                     await alert('Error retrieving details:', error);
-                    window.history.back();
+                    //window.history.back();
                 }
             }
         },
+        /*
         handleKeyUp(event) {
             if (event.keyCode === 13) { 
                 this.validate();
             }
         },
+        */
         reset() {
             this.$refs.form.reset()
         },

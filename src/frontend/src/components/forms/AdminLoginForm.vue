@@ -35,9 +35,11 @@ export default {
         email: '',
         password: '',
     }),
+    /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
+    */
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -55,7 +57,7 @@ export default {
                     }
                     else {
                         const token = loginData.token;
-                        setToken(token);
+                        await setToken(token);
                         //console.log(loginData);
                         this.$router.push('/admin/dashboard');
                     }
@@ -70,11 +72,13 @@ export default {
                 }
             }
         },
+        /*
         handleKeyUp(event) {
             if (event.keyCode === 13) { 
                 this.validate();
             }
         },
+        */
         reset() {
             this.$refs.form.reset()
         },

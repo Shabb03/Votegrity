@@ -1,5 +1,6 @@
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const { SecurityQuestions, Voter } = require('../sequelize');  
+const countryData = require('../assets/citizenship.json');
 
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
@@ -35,6 +36,10 @@ exports.signup = async (req, res) => {
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
             return res.json({error: 'Password is not strong enough' });
+        }
+
+        if (!countryData.includes(citizenship)) {
+            return res.json({error: 'Incorrect citizenship provided'});
         }
 
         const sq1 = await SecurityQuestions.findOne({

@@ -44,9 +44,11 @@ export default {
         email: '',
         password: '',
     }),
+    /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
+    */
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -64,7 +66,7 @@ export default {
                     }
                     else {
                         const token = loginData.token;
-                        setToken(token);
+                        await setToken(token);
                         //localStorage.setItem("votegrityToken",token);
                         //console.log(loginData.data);
                         if (!loginData.authenticated) {
@@ -83,11 +85,13 @@ export default {
                 }
             }
         },
+        /*
         handleKeyUp(event) {
             if (event.keyCode === 13) { 
                 this.validate();
             }
         },
+        */
         reset() {
             this.$refs.form.reset()
         },

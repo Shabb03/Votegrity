@@ -84,9 +84,11 @@ export default {
             v => !!v || 'code is required',
         ],
     }),
+    /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
+    */
     methods: {
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
@@ -152,11 +154,13 @@ export default {
                 }
             }
         },
+        /*
         handleKeyUp(event) {
             if (event.keyCode === 13) { 
                 this.validate();
             }
         },
+        */
         reset() {
             this.$refs.form.reset()
         },

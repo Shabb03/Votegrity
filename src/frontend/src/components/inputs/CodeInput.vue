@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import setToken from '../../functions/SetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
 
 export default {
@@ -61,10 +62,18 @@ export default {
         routeUrl: {
             type: String,
             required: true,
+        },
+        successCardMessage: {
+            type: String,
+            required: true,
+        },
+        resetToken: {
+            type: Boolean,
+            default: false,
         }
     },
     data: () => ({
-        successMessage: 'You have successfully registered your account',
+        successMessage: 'Successful!',
         successRoute: '/',
         code: '',
         codeRules: [
@@ -72,6 +81,8 @@ export default {
         ],
     }),
     created() {
+        this.successMessage = this.successCardMessage;
+        this.successRoute = this.routeUrl;
         this.getAuthCode();
     },
     methods: {
@@ -97,7 +108,6 @@ export default {
                     if (response.data.reset) {
                         this.$router.push('/admin/createelection');
                     }
-                    console.log(response.data);
                 }
             } 
             catch (error) {
@@ -113,7 +123,7 @@ export default {
         async postAuthCode() {
             try {
                 const postData = {
-                    authToken: this.code,
+                    token: this.code,
                 };
                 const url = 'http://localhost:3000/api' + this.postApiUrl;
                 const token = await getToken();
@@ -122,12 +132,17 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(response.data);
                 if (response.data.invalid) {
                     alert('Invalid Code');
                 }
+                else if (response.data.error) {
+                    alert('Error: ', response.data.error);
+                }
                 else {
                     this.successRoute = this.routeUrl;
+                    if (this.resetToken) {
+                        await setToken(null);
+                    }
                     await this.triggerSuccessCard();
                     //this.$router.push(this.routeUrl);
                 }  

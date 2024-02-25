@@ -23,11 +23,11 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         return res.send({
             email: user.email,
-            token: token
+            token: token,
+            authenticated: user.authenticated
         })
     } 
     catch (error) {
-        console.log(error);
         res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }
@@ -56,7 +56,6 @@ exports.adminLogin = async (req, res) => {
         })
     } 
     catch (error) {
-        console.log(error);
         res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }

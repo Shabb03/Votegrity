@@ -49,7 +49,7 @@ export default {
         },
         async fetchWinner() {
             try {
-                const authToken = getToken();
+                const authToken = await getToken();
                 const response = await axios.get('http://localhost:3000/api/election/results', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,

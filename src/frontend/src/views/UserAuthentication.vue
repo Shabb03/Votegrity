@@ -4,7 +4,7 @@
         <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
-    <CodeInput :title="title" :button="button" :getApiUrl="getApiUrl" :postApiUrl="postApiUrl" :routeUrl="routeUrl"/>
+    <CodeInput :title="title" :button="button" :getApiUrl="getApiUrl" :postApiUrl="postApiUrl" :routeUrl="routeUrl" :successCardMessage="successMessage"/>
 </template>
   
 <script>
@@ -31,6 +31,7 @@ export default {
             getApiUrl: '/user/registertoken',
             postApiUrl: '/user/authenticateaccount',
             routeUrl: '/vote',
+            successMessage: 'You have successfully authenticated your account',
         };
     },
 }

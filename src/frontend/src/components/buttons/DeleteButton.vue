@@ -1,22 +1,22 @@
 <template>
-    <div class="resetbutton">
-        <v-btn variant="tonal" size="large" rounded="lg" elevation="8" @click="goToReset">Reset&nbsp;&nbsp;&nbsp;Election</v-btn>
+    <div class="deletebutton">
+        <v-btn variant="tonal" size="large" rounded="lg" elevation="8" @click="goToDelete">Delete&nbsp;&nbsp;&nbsp;Account</v-btn>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'ResetButton',
+    name: 'DeleteButton',
     methods: {
-        goToReset() {
-            this.$router.push('/admin/reset');
+        goToDelete() {
+            this.$router.push('/deleteaccount');
         },
     },
 };
 </script>
 
 <style scoped>
-.resetbutton {
+.deletebutton {
     margin-top: 5em !important;
     margin-right: 3em !important;
     text-align: right;

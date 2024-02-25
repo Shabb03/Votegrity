@@ -1,6 +1,7 @@
 //const sendEmail = require('./thirdParty/email');
 //const generateSixDigitCode = require('./functions/generateCode');
 const { Candidate, Election, Admin } = require('../sequelize');
+const countryData = require('../assets/citizenship.json');
 
 
 //Create a new election
@@ -28,6 +29,12 @@ exports.addElection = async (req, res) => {
             publicKey: null,
             results: null
         });
+
+        /*
+        if (!countryData.includes(citizenship)) {
+            return res.json({error: 'Incorrect citizenship provided'});
+        }
+        */
 
         const electionResponse = {
             title: newElection.title,
@@ -115,12 +122,12 @@ exports.addCandidate = async (req, res) => {
 
 /*exports.resetElection = async (req, res) => {
     try {
-        const resetCode = req.body.resetCode;
+        const { token } = req.body;
         const election = await Election.findOne({where: {isActive: true}});
         if (!election) {
             return res.json({ error: 'No active election found.' });
         }
-        if (resetCode !== election.) {
+        if (token !== election.) {
             return res.json({ error: 'Invalid reset code.' });
         }
         election.isActive = false;

@@ -80,9 +80,11 @@ export default {
         emailDomain: null,
         citizenship: null,
     }),
+    /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
+    */
     methods: {
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
@@ -103,7 +105,7 @@ export default {
                     //add citizen auth: this.citizenship,
                 };
                 try {
-                    const token = getToken();
+                    const token = await getToken();
                     const response = await axios.post('http://localhost:3000/api/admin/addelection', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -129,11 +131,13 @@ export default {
                 }
             }
         },
+        /*
         handleKeyUp(event) {
             if (event.keyCode === 13) { 
                 this.validate();
             }
         },
+        */
         reset() {
             this.$refs.form.reset()
         },

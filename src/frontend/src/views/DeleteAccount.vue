@@ -1,40 +1,41 @@
 <template>
-    <IsAdmin/>
+    <LoggedIn/>
     <NavigationBar>
+        <component :is="voteButton"></component>
         <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
-    <!--<ResetForm/>-->
-    <CodeInput :title="title" :button="button" :getApiUrl="getApiUrl" :postApiUrl="postApiUrl" :routeUrl="routeUrl" :successCardMessage="successMessage"/>
+    <CodeInput :title="title" :button="button" :getApiUrl="getApiUrl" :postApiUrl="postApiUrl" :routeUrl="routeUrl" :successCardMessage="successMessage" :resetToken="true"/>
 </template>
   
 <script>
-import IsAdmin from "../components/status/IsAdmin.vue";
+import LoggedIn from "../components/status/LoggedIn.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
+import VoteButton from "../components/navbar/VoteButton.vue";
 import LogoutButton from '../components/navbar/LogoutButton.vue';
 import PageTitle from '../components/titles/PageTitle.vue';
-//import ResetForm from '../components/forms/ResetForm.vue';
 import CodeInput from "../components/inputs/CodeInput.vue";
 
 export default {
     components: {
-        IsAdmin,
+        LoggedIn,
         NavigationBar,
         LogoutButton,
+        VoteButton,
         PageTitle,
-        //ResetForm,
         CodeInput,
     },
     data() {
         return {
             logoutButton: markRaw(LogoutButton),
-            title: 'Confirmation Code',
-            button: 'Reset',
-            getApiUrl: '/admin/resettoken',
-            postApiUrl: '/admin/reset',
-            routeUrl: '/createelection',
-            successMessage: 'You have successfully reset the election',
+            voteButton: markRaw(VoteButton),
+            title: 'Delete Account',
+            button: 'Delete',
+            getApiUrl: '/user/deletecode',
+            postApiUrl: '/user/deleteaccount',
+            routeUrl: '/login',
+            successMessage: 'You have successfully deleted your account',
         };
     },
 }

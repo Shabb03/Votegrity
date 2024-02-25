@@ -52,7 +52,7 @@ export default {
         },
         async fetchImageData() {
             try {
-                const authToken = getToken();
+                const authToken = await getToken();
                 const response = await axios.get('http://localhost:3000/api/election/image/'+this.candidateId, {
                     headers: {
                         Authorization: `Bearer ${authToken}`,

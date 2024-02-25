@@ -56,9 +56,11 @@ export default {
     created() {
         this.getCandidateCount();
     },
+    /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
+    */
     methods: {
         async validate() {
             const { valid } = await this.$refs.form.validate()
@@ -72,7 +74,7 @@ export default {
                 formData.append('party', this.party);
                 //console.log("formData", formData);
                 try {
-                    const token = getToken();
+                    const token = await getToken();
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -103,7 +105,7 @@ export default {
         },
         async getCandidateCount() {
             try {
-                const authToken = getToken();
+                const authToken = await getToken();
                 const response = await axios.get('http://localhost:3000/api/admin/candidatecount', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
@@ -126,11 +128,13 @@ export default {
                 }
             }
         },
+        /*
         handleKeyUp(event) {
             if (event.keyCode === 13) { 
                 this.validate();
             }
         },
+        */
         reset() {
             this.$refs.form.reset()
         },

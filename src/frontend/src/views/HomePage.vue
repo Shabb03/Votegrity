@@ -20,7 +20,7 @@ export default {
     methods: {
         async getStatus() {
             try {
-                const token = getToken();
+                const token = await getToken();
                 const response = await axios.get('http://localhost:3000/api/status/', {
                     headers: {
                         Authorization: `Bearer ${token}`,
