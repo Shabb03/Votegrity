@@ -60,7 +60,6 @@ import setToken from '../../functions/SetToken.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 import DeleteButton from '../buttons/DeleteButton.vue';
-import setToken from '../../functions/SetToken.vue';
 
 export default {
     components: {
