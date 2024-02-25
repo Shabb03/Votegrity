@@ -120,8 +120,12 @@ export default {
                     }
                 } 
                 catch (error) {
-                    console.log(error);
-                    alert('Error changing password:', error);
+                    if (process.env.NODE_ENV === 'test') {
+                        console.log(error);
+                    } 
+                    else {
+                        alert('Error changing password:', error);
+                    }
                 }
             }
         },
@@ -140,7 +144,12 @@ export default {
                 console.log(response.data);
             } 
             catch (error) {
-                alert('Error retrieving code:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error retrieving code:', error);
+                }
             }
         },
         handleKeyUp(event) {

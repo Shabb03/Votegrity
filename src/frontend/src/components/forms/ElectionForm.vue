@@ -120,8 +120,12 @@ export default {
                     }
                 } 
                 catch (error) {
-                    console.log(error);
-                    alert('Error creating election:', error);
+                    if (process.env.NODE_ENV === 'test') {
+                        console.log(error);
+                    } 
+                    else {
+                        alert('Error creating election:', error);
+                    }
                 }
             }
         },

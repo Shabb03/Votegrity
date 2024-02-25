@@ -8,8 +8,8 @@ import setToken from '../../functions/SetToken.vue';
 export default {
     name: 'LogoutButton',
     methods: {
-        logout() {
-            setToken(null);
+        async logout() {
+            await setToken(null);
             this.$router.push('/login');
         },
     },

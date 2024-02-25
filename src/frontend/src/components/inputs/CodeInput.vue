@@ -81,7 +81,7 @@ export default {
         async getAuthCode() {
             try {
                 const url = 'http://localhost:3000/api' + this.getApiUrl;
-                const token = getToken();
+                const token = await getToken();
                 const response = await axios.get(url, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -101,7 +101,12 @@ export default {
                 }
             } 
             catch (error) {
-                await alert('Error retrieving code:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error retrieving code:', error);
+                }
                 //window.history.back();
             }
         },
@@ -111,7 +116,7 @@ export default {
                     authToken: this.code,
                 };
                 const url = 'http://localhost:3000/api' + this.postApiUrl;
-                const token = getToken();
+                const token = await getToken();
                 const response = await axios.post(url, postData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -128,7 +133,12 @@ export default {
                 }  
             } 
             catch (error) {
-                alert('Error submitting authentication code:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error submitting authentication code:', error);
+                }
             }
         },
     },

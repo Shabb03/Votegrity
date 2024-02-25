@@ -15,7 +15,7 @@ export default {
     },
     async created() {
         try {
-            const token = getToken();
+            const token = await getToken();
             const response = await axios.get('http://localhost:3000/api/status/', {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -30,7 +30,8 @@ export default {
         catch (error) {
             if (process.env.NODE_ENV === 'test') {
                 console.log(error);
-            } else {
+            } 
+            else {
                 alert('Error fetching status: ', error);
             }
             this.loading = false;

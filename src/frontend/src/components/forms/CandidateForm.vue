@@ -92,7 +92,12 @@ export default {
                     }
                 } 
                 catch (error) {
-                    alert('Error adding candidate:', error);
+                    if (process.env.NODE_ENV === 'test') {
+                        console.log(error);
+                    } 
+                    else {
+                        alert('Error adding candidate:', error);
+                    }
                 }
             }
         },
@@ -113,7 +118,12 @@ export default {
                 console.log(response.data);
             } 
             catch (error) {
-                alert('Error retrieving details:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error retrieving details:', error);
+                }
             }
         },
         handleKeyUp(event) {

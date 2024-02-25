@@ -102,7 +102,12 @@ export default {
                     window.location.reload();
                 } 
                 catch (error) {
-                    alert('Error changing details:', error);
+                    if (process.env.NODE_ENV === 'test') {
+                        console.log(error);
+                    } 
+                    else {
+                        alert('Error changing details:', error);
+                    }
                 }
             }
         },
@@ -124,8 +129,13 @@ export default {
                 console.log(response.data);
             } 
             catch (error) {
-                await alert('Error retrieving details:', error);
-                window.history.back();
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    await alert('Error retrieving details:', error);
+                    window.history.back();
+                }
             }
         },
         handleKeyUp(event) {

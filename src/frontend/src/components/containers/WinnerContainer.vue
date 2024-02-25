@@ -79,7 +79,12 @@ export default {
                 }
             } 
             catch (error) {
-                alert('Error: No winner for election');
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error: No winner for election');
+                }
                 //await alert('Error retrieving details:', error);
                 //window.history.back();
             }

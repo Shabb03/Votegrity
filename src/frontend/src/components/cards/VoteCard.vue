@@ -65,8 +65,12 @@ export default {
                 //console.log(response.data);
             } 
             catch (error) {
-                console.log(error);
-                alert('Error retrieving images:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error retrieving images:', error);
+                }
             }
         },
         calculateAge(dateOfBirth) {
@@ -102,7 +106,12 @@ export default {
                 }
             } 
             catch (error) {
-                alert('Error voting:', error);
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error voting:', error);
+                }
             }
         },
     },

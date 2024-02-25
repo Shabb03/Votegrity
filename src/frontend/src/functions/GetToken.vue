@@ -4,6 +4,7 @@
 
 <script>
 export default async function getToken() {
-    return localStorage.getItem("votegrityToken");
+    const token = await localStorage.getItem("votegrityToken");
+    return token;
 }
 </script>

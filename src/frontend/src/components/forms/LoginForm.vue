@@ -74,8 +74,12 @@ export default {
                     }
                 } 
                 catch (error) {
-                    console.log(error);
-                    alert('Error during login:', error);
+                    if (process.env.NODE_ENV === 'test') {
+                        console.log(error);
+                    } 
+                    else {
+                        alert('Error during login:', error);
+                    }
                 }
             }
         },

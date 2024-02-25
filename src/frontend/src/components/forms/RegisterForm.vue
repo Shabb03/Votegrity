@@ -112,7 +112,12 @@ export default {
 
                 } 
                 catch (error) {
-                    alert('Error during registration:', error);
+                    if (process.env.NODE_ENV === 'test') {
+                        console.log(error);
+                    } 
+                    else {
+                        alert('Error during registration:', error);
+                    }
                 }
             }
         },
