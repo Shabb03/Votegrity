@@ -1,15 +1,17 @@
 <template>
-    <div class="winner-container d-flex justify-space-around align-center bg-grey-lighten-4">
+    <div class="winner-container d-flex justify-space-around align-center" v-for="(candidate, index) in winnerData" :key="index">
         <v-container>
             <v-row>
                 <WinnerBox
-                    :name="name"
-                    :voice="voice"
-                    :party="party"
-                    :biography="biography"
+                    :title="candidate.title"
+                    :name="candidate.name"
+                    :voice="candidate.voice"
+                    :party="candidate.party"
+                    :biography="candidate.biography"
+                    :votes="candidate.voteCount"
                 />
                 <ImageBox
-                    :image="image"
+                    :image="candidate.image"
                 />
             </v-row>
         </v-container>
@@ -28,12 +30,7 @@ export default {
         WinnerBox,
     },
     data: () => ({
-        name: '',
-        voice: '',
-        party: '',
-        image: '',
-        biography: '',
-        voteCount: 0,
+        winnerData: [],
     }),
     created() {
         this.fetchWinner();
@@ -55,18 +52,13 @@ export default {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
-                const winnerData = response.data;
-                if (winnerData.error) {
-                    alert(winnerData.error);
+                if (response.data.error) {
+                    alert(response.data.error);
                 }
-                else {
-                    const candidateId = winnerData.id
-                    this.name = winnerData.name;
-                    this.voice = winnerData.voice;
-                    this.party = winnerData.party;
-                    this.biography = winnerData.biography;
-                    this.voteCount = winnerData.voteCount;
-                    const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+candidateId, {
+                this.winnerData = response.data.electionResults;
+                for (const index in this.winnerData) {
+                    const item = this.winnerData[index];
+                    const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+item.id, {
                         headers: {
                             Authorization: `Bearer ${authToken}`,
                         },
@@ -74,8 +66,7 @@ export default {
                     });
                     const binaryData = new Uint8Array(imageResponse.data);
                     const dataUrl = this.arrayBufferToBase64(binaryData);
-                    this.image = `data:image/jpeg;base64,${dataUrl}`;
-                    console.log(response.data);
+                    item.image = `data:image/jpeg;base64,${dataUrl}`;
                 }
             } 
             catch (error) {
@@ -84,9 +75,8 @@ export default {
                 } 
                 else {
                     alert('Error: No winner for election');
+                    //window.history.back();
                 }
-                //await alert('Error retrieving details:', error);
-                //window.history.back();
             }
         }
     }

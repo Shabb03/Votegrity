@@ -15,8 +15,11 @@ exports.login = async (req, res) => {
             return res.json({error: 'Account with this email not found'});
         }
 
+        /*
         const decryptedPassword = await decryptPassword(password);
         const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
+        */
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.json({error: 'Password is incorrect'});
         }
@@ -44,8 +47,11 @@ exports.adminLogin = async (req, res) => {
             return res.json({error: 'Admin with this email not found'});
         }
 
+        /*
         const decryptedPassword = await decryptPassword(password);
         const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
+        */
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.json({error: 'Password is incorrect'});
         }

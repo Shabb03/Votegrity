@@ -16,6 +16,9 @@ exports.addElection = async (req, res) => {
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
             return res.json({ error: 'All required inputs not provided' });
         }        
+        if (countryData !== null && !countryData.includes(citizenship)) {
+            return res.json({error: 'Incorrect citizenship provided'});
+        }
         const newElection = await Election.create({
             title: title,
             description: description,
@@ -31,12 +34,6 @@ exports.addElection = async (req, res) => {
             authCitizenship: authCitizenship,
         });
 
-        /*
-        if (!countryData.includes(citizenship)) {
-            return res.json({error: 'Incorrect citizenship provided'});
-        }
-        */
-
         const electionResponse = {
             title: newElection.title,
             description: newElection.description,
@@ -51,6 +48,41 @@ exports.addElection = async (req, res) => {
         res.json({election: electionResponse, message: 'Election created successfully'});
     }
     catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+exports.getElections = async (req, res) => {
+    try {
+        const activeElections = await Election.findAll({
+            attributes: ['id', 'title', 'candidateNumber'],
+            where: {
+                isActive: true,
+            },
+        });
+
+        const result = await Promise.all(activeElections.map(async (election) => {
+            const addedCandidates = await Candidate.count({
+                where: {
+                    electionId: election.id,
+                },
+            });
+            if (election.candidateNumber > addedCandidates) {
+                return {
+                    id: election.id,
+                    title: election.title,
+                    candidateNumber: election.candidateNumber,
+                    candidateCount: addedCandidates,
+                };
+            } 
+            else {return null;}
+        }));
+        const filteredResult = result.filter(election => election !== null);
+        res.json({ activeElections: filteredResult });
+        //res.json({ activeElections: result });
+    }
+    catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -103,6 +135,20 @@ exports.addCandidate = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+exports.publishResults = async (req, res) => {
+    try {
+        const { electionId, privateKey } = req.body; 
+        const election = await Election.findByPk(electionId);
+        if (!election) {
+            res.json({error: 'Active Election not found'});
+        }
+        res.json({message: 'Election results successfully published'});
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
 
 /*exports.resetToken = async (req, res) => {
     try {

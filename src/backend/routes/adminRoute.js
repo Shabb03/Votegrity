@@ -26,14 +26,15 @@ const dashboardController = require('../controllers/dashboardController');
 router.post('/login', loginController.adminLogin);
 
 router.post('/addelection', isAdmin, electionController.addElection);
+router.get('/newelections', isAdmin, electionController.getElections)
 router.get('/candidatecount', isAdmin, electionController.getCandidateCount);
 router.post('/addcandidate', isAdmin, upload.single('image'), electionController.addCandidate);
 
+router.post('/publishresults', isAdmin, electionController.publishResults);
 //subject to change
 //router.get('/resettoken', isAdmin, electionController.resetToken);  //yet to test
 //router.post('/reset', isAdmin, electionController.resetElection);  //yet to test
 
 router.get('/election', isAdmin, dashboardController.electionDetails);
-//router.get('/votes', isAdmin, dashboardController.getTotalVotes);  //delete
 
 module.exports = router;
