@@ -104,6 +104,20 @@ exports.addCandidate = async (req, res) => {
     }
 };
 
+exports.publishResults = async (req, res) => {
+    try {
+        const { electionId, privateKey } = req.body; 
+        const election = await Election.findByPk(electionId);
+        if (!election) {
+            res.json({error: 'Active Election not found'});
+        }
+        res.json({message: 'Election results successfully published'});
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
 /*exports.resetToken = async (req, res) => {
     try {
         const adminId = req.user.id;
