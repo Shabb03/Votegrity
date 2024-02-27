@@ -87,8 +87,14 @@ export default {
     methods: {
         async updateCandidateCounts() {
             if (this.selectedElection) {
-                this.addedCandidates = this.electionData[0].addedCandidates;
-                this.candidateCount = this.electionData[0].candidateNumber;
+                const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
+                if (selectedElectionIndex !== -1) {
+                    this.addedCandidates = this.electionData[selectedElectionIndex].addedCandidates;
+                    this.candidateCount = this.electionData[selectedElectionIndex].candidateNumber;
+                } 
+                else {
+                    alert('Selected election not found in electionData');
+                }
             }
         },
         async validate() {
@@ -139,20 +145,11 @@ export default {
                 const response = await axios.get('http://localhost:3000/api/admin/newelections', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
-                  },
+                    },
                 });
                 const data = response.data.activeElections;
                 this.electionData = data;
                 console.log("ELECTION DATA: ", this.electionData);
-
-
-                /*
-                this.addedCandidates = data.addedCandidates;
-                this.candidateCount = data.candidateNumber;
-                if (this.addedCandidates >= this.candidateCount) {
-                    this.$router.push('/admin/dashboard');
-                }
-                */
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {

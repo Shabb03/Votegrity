@@ -17,8 +17,8 @@ export default {
 
 <style scoped>
 .resetbutton {
-    margin-top: 5em !important;
     margin-right: 3em !important;
+    margin-bottom: 3em !important;
     text-align: right;
 }
 .v-btn {

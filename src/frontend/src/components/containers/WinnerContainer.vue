@@ -55,18 +55,20 @@ export default {
                 if (response.data.error) {
                     alert(response.data.error);
                 }
-                this.winnerData = response.data.electionResults;
-                for (const index in this.winnerData) {
-                    const item = this.winnerData[index];
-                    const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+item.id, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                        },
-                        responseType: 'arraybuffer',
-                    });
-                    const binaryData = new Uint8Array(imageResponse.data);
-                    const dataUrl = this.arrayBufferToBase64(binaryData);
-                    item.image = `data:image/jpeg;base64,${dataUrl}`;
+                else {
+                    this.winnerData = response.data.electionResults;
+                    for (const index in this.winnerData) {
+                        const item = this.winnerData[index];
+                        const imageResponse = await axios.get('http://localhost:3000/api/election/image/'+item.id, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            },
+                            responseType: 'arraybuffer',
+                        });
+                        const binaryData = new Uint8Array(imageResponse.data);
+                        const dataUrl = this.arrayBufferToBase64(binaryData);
+                        item.image = `data:image/jpeg;base64,${dataUrl}`;
+                    }
                 }
             } 
             catch (error) {
