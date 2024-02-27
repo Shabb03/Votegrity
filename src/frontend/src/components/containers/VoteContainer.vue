@@ -19,6 +19,7 @@
                         <VoteCard
                             @callSuccessCard="triggerSuccessCard"
                             :key="index"
+                            :electionId="selectedElection"
                             :candidateId="candidate.id"
                             :name="candidate.name"
                             :dateOfBirth="parseDate(candidate.dateOfBirth)"
@@ -90,11 +91,9 @@ export default {
             this.successMessage = 'You have successfully voted for ' + name;
             this.$refs.successCardRef.openDialog();
         },
-        parseDate() {
-        //parseDate(dateString) {
-            //const [year, month, day] = dateString.split('-');
-            //return new Date(year, month - 1, day);
-            return new Date();
+        parseDate(dateString) {
+            const [year, month, day] = dateString.split('-');
+            return new Date(year, month - 1, day);
         },
         async fetchCandidates() {
             try {
@@ -106,6 +105,7 @@ export default {
                 });
                 const dataArray = response.data.candidates;
                 this.electionData = response.data.candidates;
+                console.log(this.electionData);
                 if (dataArray.length === 0) {
                     window.alert('Error: No Candidates added to election')
                 }

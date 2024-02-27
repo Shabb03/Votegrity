@@ -1,4 +1,5 @@
 <template>
+    <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div v-if="electionData && electionData.length > 0" class="form-container">
         <v-form ref="form">
             <v-autocomplete
@@ -10,17 +11,17 @@
                 :rules="[]"
             ></v-autocomplete>
 
-            <h3>Number of Candidates: {{ addedCandidates }}/{{ candidateCount }}</h3>
-            <TextInput :label="nameLabel" :required="true" @update:text="nameValue" />
-            <ImageInput :label="imageLabel" @update:image="imageValue"/>
-            <DateInput :label="birthDateLabel" @update:date="dateOfBirthValue"/>
-            <TextInput :label="bioLabel" :required="true" @update:text="bioValue"/>
-            <TextInput :label="voiceLabel" @update:text="voiceValue"/>
-            <TextInput :label="partyLabel" @update:text="partyValue"/>
-  
+            <v-text-field class="disabled"
+                disabled
+                v-model="resultDate"
+                label="Result Date"
+            ></v-text-field>
+
+            <TextInput :label="titleLabel" :required="true" @update:text="keyValue"/>
+
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="validate">
-                    Add Candidate
+                    Publish Results
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
@@ -35,98 +36,88 @@
         <PageSubTitle :pageSubTitle="pageSubTitle" />
     </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import SuccessCard from "../SuccessCard.vue";
 import TextInput from '../inputs/TextInput.vue';
-import ImageInput from '../inputs/ImageInput.vue';
-import DateInput from '../inputs/DateInput.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
-  
+
 export default {
     components: {
+        SuccessCard,
         TextInput,
-        ImageInput,
-        DateInput,
         PageSubTitle,
     },
     data: () => ({
-        nameLabel: 'Candidate Full Name',
-        birthDateLabel: 'Birth Date: ',
-        imageLabel: 'Candidate Photo',
-        bioLabel: 'Biography',
-        voiceLabel: 'Voice',
-        partyLabel: 'Party',
+        successMessage: 'You have successfully published election results',
+        successRoute: '/admin/dashboard',
+        titleLabel: "Private Key",
+        key: '',
+        resultDate: null,
         electionData: [],
         selectedElection: null,
-        addedCandidates: 0,
-        candidateCount: 0,
-        name: '',
-        dateOfBirth: null,
-        bio: '',
-        voice: null,
-        party: null,
-        image: null,
-        pageSubTitle: 'No Candidates required',
+        pageSubTitle: 'No Active Elections currently',
     }),
     created() {
         this.getElections();
+    },
+    watch: {
+        selectedElection: {
+            handler: 'updateResultDate',
+            immediate: true,
+        },
     },
     /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
     */
-    watch: {
-        selectedElection: {
-            handler: 'updateCandidateCounts',
-            immediate: true,
-        },
-    },
     methods: {
-        async updateCandidateCounts() {
+        async readableDate(resultDate) {
+            const date = new Date(resultDate);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            return formattedDate;
+        },
+        async updateResultDate() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
-                    this.addedCandidates = this.electionData[selectedElectionIndex].addedCandidates;
-                    this.candidateCount = this.electionData[selectedElectionIndex].candidateNumber;
+                    const resultDate = this.electionData[selectedElectionIndex].resultDate;
+                    this.resultDate = await this.readableDate(resultDate);
                 } 
                 else {
                     alert('Selected election not found in electionData');
                 }
             }
         },
+        async triggerSuccessCard() {
+            this.$refs.successCardRef.openDialog();
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                const formData = new FormData();
-                formData.append('name', this.name);
-                formData.append('image', this.image);
-                formData.append('dateOfBirth', this.dateOfBirth);
-                formData.append('biography', this.bio);
-                formData.append('voice', this.voice);
-                formData.append('party', this.party);
-                formData.append('electionId', this.selectedElection);
-                //console.log("formData", formData);
+                const postData = {
+                    electionId: this.selectedElection,
+                    privateKey: this.key,
+                };
                 try {
                     const token = await getToken();
-                    const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
+                    const response = await axios.post('http://localhost:3000/api/admin/publishresults', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    const candidateData = response.data;
-                    if (candidateData.error) {
-                        alert(candidateData.error);
+                    const electionData = response.data;
+                    if (electionData.error) {
+                        alert(electionData.error);
                     }
                     else {
-                        if ((this.addedCandidates + 1) >= this.candidateCount) {
-                            this.$router.push('/admin/dashboard');
-                        } 
-                        else {
-                            window.location.reload();
-                        }
+                        await this.triggerSuccessCard();
                     }
                 } 
                 catch (error) {
@@ -134,7 +125,7 @@ export default {
                         console.log(error);
                     } 
                     else {
-                        alert('Error adding candidate:', error);
+                        alert('Error publishing results:', error);
                     }
                 }
             }
@@ -142,13 +133,12 @@ export default {
         async getElections() {
             try {
                 const authToken = await getToken();
-                const response = await axios.get('http://localhost:3000/api/admin/newelections', {
+                const response = await axios.get('http://localhost:3000/api/admin/activeelections', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
-                const data = response.data.activeElections;
-                this.electionData = data;
+                this.electionData = response.data.activeElections;
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
@@ -170,35 +160,16 @@ export default {
             this.$refs.form.reset()
         },
         test() {
-            /*
-            console.log(this.name);
-            console.log(this.image);
-            console.log(this.voice);
-            */
-            console.log(this.selectedElection);
+            console.log(this.email);
+            console.log(this.password);
         },
-        nameValue(params) {
-          this.name = params;
-        },
-        dateOfBirthValue(params) {
-            this.dateOfBirth = params;
-        },
-        bioValue(params) {
-            this.bio = params;
-        },
-        voiceValue(params) {
-            this.voice = params;
-        },
-        partyValue(params) {
-            this.party = params;
-        },
-        imageValue(params) {
-            this.image = params;
+        keyValue(params) {
+            this.key = params;
         },
     },
 };
 </script>
-  
+
 <style scoped>
 .form-container {
     background-color: white;
@@ -209,7 +180,7 @@ export default {
     padding: 20px;
     border-radius: 25px;
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-  
+
     @media (max-width: 600px) {
         width: 100%;
     }
@@ -229,6 +200,8 @@ export default {
 .primary:active {
     cursor: wait;
 }
+
+
 
 .secondary {
     background-color: #2616bb;

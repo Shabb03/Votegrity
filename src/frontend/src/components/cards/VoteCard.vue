@@ -31,6 +31,7 @@ export default {
         imageSrc: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
     }),
     props: {
+        electionId: Number,
         candidateId: Number,
         name: String,
         dateOfBirth: Date,
@@ -91,6 +92,7 @@ export default {
                 const authToken = getToken();
                 const postData = {
                     candidateId: candidateId,
+                    electionId: this.electionId,
                 };
                 const response = await axios.post('http://localhost:3000/api/election/vote', postData, {
                     headers: {
