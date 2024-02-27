@@ -72,7 +72,7 @@ exports.getElections = async (req, res) => {
                     id: election.id,
                     title: election.title,
                     candidateNumber: election.candidateNumber,
-                    candidateCount: addedCandidates,
+                    addedCandidates: addedCandidates,
                 };
             } 
             else {return null;}
@@ -83,22 +83,6 @@ exports.getElections = async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-};
-
-//Get the total number of candidates the newly created election must have
-exports.getCandidateCount = async (req, res) => {
-    try {
-        const addedCandidates = await Candidate.count({where: {isWinner: false}});
-        const activeElection = await Election.findOne({where: {isActive: true}});
-        const candidateCount = activeElection.candidateNumber;
-        res.json({
-            addedCandidates: addedCandidates,
-            candidateCount: candidateCount 
-        });
-    }
-    catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -114,8 +98,8 @@ exports.addCandidate = async (req, res) => {
             return res.json({error: "Total number of candidates exceeded"});
         }
 
-        const { name, voice, party, dateOfBirth, biography } = req.body;
-        if (!name || !voice || !party || !dateOfBirth || !biography) {
+        const { name, voice, party, dateOfBirth, biography, electionId } = req.body;
+        if (!name || !voice || !party || !dateOfBirth || !biography || !electionId) {
             return res.json({ error: 'All required inputs not provided' });
         }
         const image = req.file;
@@ -126,7 +110,8 @@ exports.addCandidate = async (req, res) => {
             party: party,
             image: imagePath,
             dateOfBirth: dateOfBirth,
-            biography: biography
+            biography: biography,
+            electionId: electionId,
         });
         res.json({candidate: newCandidate, message: 'Candidate created successfully'});
         //res.json({imagePath: image.filename});

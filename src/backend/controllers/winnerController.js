@@ -8,6 +8,7 @@ exports.getResults = async (req, res) => {
             where: {
                 isActive: false,
             },
+            order: [['resultDate', 'DESC']],
         });
 
         const result = await Promise.all(activeElections.map(async (election) => {

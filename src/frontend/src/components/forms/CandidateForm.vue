@@ -1,7 +1,16 @@
 <template>
-    <div class="form-container">
+    <div v-if="electionData && electionData.length > 0" class="form-container">
         <v-form ref="form">
-            <h3>Number of Candidates: {{addedCandidates}}/{{ candidateCount }}</h3>
+            <v-autocomplete
+                v-model="selectedElection"
+                label="Select Election"
+                :items="electionData"
+                item-text="title" 
+                item-value="id"
+                :rules="[]"
+            ></v-autocomplete>
+
+            <h3>Number of Candidates: {{ addedCandidates }}/{{ candidateCount }}</h3>
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue" />
             <ImageInput :label="imageLabel" @update:image="imageValue"/>
             <DateInput :label="birthDateLabel" @update:date="dateOfBirthValue"/>
@@ -22,6 +31,9 @@
             </div>
         </v-form>
     </div>
+    <div v-else>
+        <PageSubTitle :pageSubTitle="pageSubTitle" />
+    </div>
 </template>
   
 <script>
@@ -30,12 +42,14 @@ import getToken from '../../functions/GetToken.vue';
 import TextInput from '../inputs/TextInput.vue';
 import ImageInput from '../inputs/ImageInput.vue';
 import DateInput from '../inputs/DateInput.vue';
+import PageSubTitle from '..//titles/PageSubTitle.vue';
   
 export default {
     components: {
         TextInput,
         ImageInput,
         DateInput,
+        PageSubTitle,
     },
     data: () => ({
         nameLabel: 'Candidate Full Name',
@@ -44,6 +58,8 @@ export default {
         bioLabel: 'Biography',
         voiceLabel: 'Voice',
         partyLabel: 'Party',
+        electionData: [],
+        selectedElection: null,
         addedCandidates: 0,
         candidateCount: 0,
         name: '',
@@ -52,16 +68,29 @@ export default {
         voice: null,
         party: null,
         image: null,
+        pageSubTitle: 'No Candidates required',
     }),
     created() {
-        this.getCandidateCount();
+        this.getElections();
     },
     /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
     */
+    watch: {
+        selectedElection: {
+            handler: 'updateCandidateCounts',
+            immediate: true,
+        },
+    },
     methods: {
+        async updateCandidateCounts() {
+            if (this.selectedElection) {
+                this.addedCandidates = this.electionData[0].addedCandidates;
+                this.candidateCount = this.electionData[0].candidateNumber;
+            }
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -72,6 +101,7 @@ export default {
                 formData.append('biography', this.bio);
                 formData.append('voice', this.voice);
                 formData.append('party', this.party);
+                formData.append('electionId', this.selectedElection);
                 //console.log("formData", formData);
                 try {
                     const token = await getToken();
@@ -103,21 +133,26 @@ export default {
                 }
             }
         },
-        async getCandidateCount() {
+        async getElections() {
             try {
                 const authToken = await getToken();
-                const response = await axios.get('http://localhost:3000/api/admin/candidatecount', {
+                const response = await axios.get('http://localhost:3000/api/admin/newelections', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                   },
                 });
-                const data = response.data;
+                const data = response.data.activeElections;
+                this.electionData = data;
+                console.log("ELECTION DATA: ", this.electionData);
+
+
+                /*
                 this.addedCandidates = data.addedCandidates;
-                this.candidateCount = data.candidateCount;
+                this.candidateCount = data.candidateNumber;
                 if (this.addedCandidates >= this.candidateCount) {
                     this.$router.push('/admin/dashboard');
                 }
-                console.log(response.data);
+                */
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
@@ -139,9 +174,12 @@ export default {
             this.$refs.form.reset()
         },
         test() {
+            /*
             console.log(this.name);
             console.log(this.image);
             console.log(this.voice);
+            */
+            console.log(this.selectedElection);
         },
         nameValue(params) {
           this.name = params;

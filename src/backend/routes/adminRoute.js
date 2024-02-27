@@ -26,8 +26,7 @@ const dashboardController = require('../controllers/dashboardController');
 router.post('/login', loginController.adminLogin);
 
 router.post('/addelection', isAdmin, electionController.addElection);
-router.get('/newelections', isAdmin, electionController.getElections)
-router.get('/candidatecount', isAdmin, electionController.getCandidateCount);
+router.get('/newelections', isAdmin, electionController.getElections);
 router.post('/addcandidate', isAdmin, upload.single('image'), electionController.addCandidate);
 
 router.post('/publishresults', isAdmin, electionController.publishResults);
