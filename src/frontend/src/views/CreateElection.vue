@@ -1,5 +1,5 @@
 <template>
-    <NoElection/>
+    <IsAdmin/>
     <NavigationBar>
         <component :is="dashBoardButton"></component>
         <component :is="logoutButton"></component>
@@ -9,7 +9,7 @@
 </template>
     
 <script>
-import NoElection from "../components/status/NoElection.vue";
+import IsAdmin from "../components/status/IsAdmin.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
 import DashboardButton from "../components/navbar/DashboardButton.vue";
@@ -19,7 +19,7 @@ import ElectionForm from '../components/forms/ElectionForm.vue';
   
 export default {
     components: {
-        NoElection,
+        IsAdmin,
         NavigationBar,
         DashboardButton,
         LogoutButton,

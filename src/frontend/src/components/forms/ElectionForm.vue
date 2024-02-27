@@ -14,11 +14,6 @@
                 <v-col>
                     <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
                 </v-col>
-            <!--
-            <DateInput :label="startDateLabel" @update:date="startDateValue"/>
-            <DateInput :label="endDateLabel" @update:date="endDateValue"/>
-            <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
-            -->
             </v-row>
             <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
             <NumberInput :label="ageLabel" @update:number="ageValue"/>
@@ -115,9 +110,7 @@ export default {
                         alert(electionData.error);
                     }
                     else {
-                        //console.log(electionData);
                         await this.triggerSuccessCard();
-                        //this.$router.push('/admin/addcandidate');
                     }
                 } 
                 catch (error) {
