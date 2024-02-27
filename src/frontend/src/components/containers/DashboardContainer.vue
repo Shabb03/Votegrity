@@ -10,7 +10,7 @@
             :rules="[]"
         ></v-autocomplete>
         </v-sheet>
-        <!--<ResetButton/>-->
+        <!--<PublishButton/>-->
         <v-container>
             <v-row>
                 <DashboardCard :imageSrc="require('@/assets/election.png')" :informationTitle="title" :informationText="description"/>
@@ -19,7 +19,7 @@
                 <DashboardCard :imageSrc="require('@/assets/candidate.png')" :informationTitle="'Candidates: ' + candidateNumber"/>
             </v-row>
         </v-container>
-    <ResetButton/>
+        <PublishButton/>
     </div>
     <div v-else>
         <PageSubTitle :pageSubTitle="pageSubTitle" />
@@ -30,13 +30,13 @@
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import DashboardCard from '../cards/DashboardCard.vue';
-import ResetButton from '../buttons/ResetButton.vue';
+import PublishButton from '../buttons/PublishButton.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {
         DashboardCard,
-        ResetButton,
+        PublishButton,
         PageSubTitle,
     },
     data: () => ({

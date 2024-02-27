@@ -7,11 +7,6 @@ const countryData = require('../assets/citizenship.json');
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
-        const activeElection = await Election.findOne({where: {isActive: true}});
-        if (activeElection) {
-            return res.json({error: "An election is currently active, you must reset the election"});
-        }
-
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship } = req.body;
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction) {
             return res.json({ error: 'All required inputs not provided' });

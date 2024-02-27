@@ -1,6 +1,7 @@
 <template>
     <IsAdmin/>
     <NavigationBar>
+        <component :is="addElectionButton"></component>
         <component :is="dashBoardButton"></component>
         <component :is="logoutButton"></component>
     </NavigationBar>
@@ -12,6 +13,7 @@
 import IsAdmin from "../components/status/IsAdmin.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
+import AddElectionButton from "../components/navbar/AddElectionButton.vue";
 import DashboardButton from "../components/navbar/DashboardButton.vue";
 import LogoutButton from '../components/navbar/LogoutButton.vue';
 import PageTitle from '../components/titles/PageTitle.vue';
@@ -21,6 +23,7 @@ export default {
     components: {
         IsAdmin,
         NavigationBar,
+        AddElectionButton,
         DashboardButton,
         LogoutButton,
         PageTitle,
@@ -28,6 +31,7 @@ export default {
     },
     data() {
         return {
+            addElectionButton: markRaw(AddElectionButton),
             dashBoardButton: markRaw(DashboardButton),
             logoutButton: markRaw(LogoutButton),
         };
