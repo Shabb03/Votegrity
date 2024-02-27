@@ -1,6 +1,6 @@
 //const sendEmail = require('./thirdParty/email');
 //const generateSixDigitCode = require('./functions/generateCode');
-const { Candidate, Election, Admin } = require('../sequelize');
+const { Candidate, Election } = require('../sequelize');
 const countryData = require('../assets/citizenship.json');
 
 
@@ -52,7 +52,7 @@ exports.addElection = async (req, res) => {
     }
 };
 
-exports.getElections = async (req, res) => {
+exports.getNewElections = async (req, res) => {
     try {
         const activeElections = await Election.findAll({
             attributes: ['id', 'title', 'candidateNumber'],
@@ -82,7 +82,6 @@ exports.getElections = async (req, res) => {
         //res.json({ activeElections: result });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -120,20 +119,6 @@ exports.addCandidate = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
-
-exports.publishResults = async (req, res) => {
-    try {
-        const { electionId, privateKey } = req.body; 
-        const election = await Election.findByPk(electionId);
-        if (!election) {
-            res.json({error: 'Active Election not found'});
-        }
-        res.json({message: 'Election results successfully published'});
-    }
-    catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-}
 
 /*exports.resetToken = async (req, res) => {
     try {
