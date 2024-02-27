@@ -11,15 +11,6 @@
         ></v-autocomplete>
         </v-sheet>
         <!--<ResetButton/>-->
-
-        <!--<v-container v-for="(election, index) in electionData" :key="index">
-            <v-row>
-                <DashboardCard :imageSrc="require('@/assets/election.png')" :informationTitle="election.title" :informationText="election.description"/>
-                <DashboardCard :imageSrc="require('@/assets/date.png')" :informationTitle="election.resultDate"/>
-                <DashboardCard :imageSrc="require('@/assets/votes.png')" :informationTitle="election.voteCount + ' Total Votes'"/>
-                <DashboardCard :imageSrc="require('@/assets/candidate.png')" :informationTitle="'Candidates: ' + election.candidateNumber"/>
-            </v-row>
-        </v-container>-->
         <v-container>
             <v-row>
                 <DashboardCard :imageSrc="require('@/assets/election.png')" :informationTitle="title" :informationText="description"/>
@@ -40,7 +31,7 @@ import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import DashboardCard from '../cards/DashboardCard.vue';
 import ResetButton from '../buttons/ResetButton.vue';
-import PageSubTitle from '..//titles/PageSubTitle.vue';
+import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {

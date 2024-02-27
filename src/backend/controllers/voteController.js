@@ -1,4 +1,6 @@
-const { Candidate, Vote } = require('../sequelize');
+const calculateAge = require('./functions/calculateAge');
+const { Voter, Candidate, Vote, Election } = require('../sequelize');
+const Sequelize = require('sequelize');
 
 const fs = require('fs');
 const path = require('path');
@@ -8,10 +10,46 @@ const readFileAsync = promisify(fs.readFile);
 //Get the details of all candidates in the current election
 exports.getAllCandidates = async (req, res) => {
     try {
-        const candidates = await Candidate.findAll({where: { isWinner: false }, attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography']});
-        res.json({ candidates });
+        const userId = req.user.id;
+        const user = await Voter.findByPk(userId);
+
+        const age = calculateAge(user.dateOfBirth);
+        const email = user.email;
+        const emailAtIndex = email.indexOf('@');
+        const emailDomain = email.substring(emailAtIndex);
+
+        const activeElections = await Election.findAll({
+            where: {
+                isActive: true,
+                ageRestriction: { [Sequelize.Op.lte]: age },
+                [Sequelize.Op.or]: [
+                    { authEmail: { [Sequelize.Op.is]: null } },
+                    { authEmail: emailDomain },
+                ],
+                [Sequelize.Op.or]: [
+                    { authCitizenship: { [Sequelize.Op.is]: null } },
+                    { authCitizenship: user.citizenship },
+                ],
+            },
+            attributes: ['id', 'title'],
+        });
+
+        const candidatesByElection = await Promise.all(activeElections.map(async (election) => {
+            const candidates = await Candidate.findAll({
+                where: { electionId: election.id },
+                attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
+            });
+
+            return {
+                id: election.id,
+                title: election.title,
+                candidates,
+            };
+        }));
+        return res.json({candidates: candidatesByElection});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -30,7 +68,6 @@ exports.getImage = async (req, res) => {
         res.send(imageData);
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
@@ -44,13 +81,23 @@ exports.submitVote = async (req, res) => {
         if (!authenticatedUser) {
             return res.json({error: 'User is not authenticated', authenticated: false});
         }
-        const candidateId = req.body.candidateId;
-        if (!candidateId) {
-            return res.json({error: 'No candidate selected'})
+        const { candidateId, electionId } = req.body;
+        if (!candidateId || electionId) {
+            return res.json({error: 'No candidate or election selected'});
         }
+        const election = Election.findByPk(electionId);
+        const age = calculateAge(user.dateOfBirth);
+        const email = user.email;
+        const emailAtIndex = email.indexOf('@');
+        const emailDomain = email.substring(emailAtIndex);
+        if (age < election.ageRestriction || (election.authEmail && emailDomain !== election.authEmail) || (election.authCitizenship && user.citizenship !== election.authCitizenship)) {
+            return res.json({error: 'You do not meet the voting requirements'});
+        }
+        
         const vote = await Vote.create({
             voterId: userId,
             candidateId: candidateId,
+            electionId: electionId,
         });
         res.json({ message: 'Vote submitted successfully'});
         //Work on this later to synchronize with the blockchain network

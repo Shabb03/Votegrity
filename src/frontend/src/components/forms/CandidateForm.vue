@@ -42,7 +42,7 @@ import getToken from '../../functions/GetToken.vue';
 import TextInput from '../inputs/TextInput.vue';
 import ImageInput from '../inputs/ImageInput.vue';
 import DateInput from '../inputs/DateInput.vue';
-import PageSubTitle from '..//titles/PageSubTitle.vue';
+import PageSubTitle from '../titles/PageSubTitle.vue';
   
 export default {
     components: {

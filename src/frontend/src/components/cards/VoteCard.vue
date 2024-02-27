@@ -62,7 +62,6 @@ export default {
                 const binaryData = new Uint8Array(response.data);
                 const dataUrl = this.arrayBufferToBase64(binaryData);
                 this.imageSrc = `data:image/jpeg;base64,${dataUrl}`;
-                console.log(this.imageSrc);
                 //console.log(response.data);
             } 
             catch (error) {
@@ -103,7 +102,7 @@ export default {
                 }
                 else {
                     this.callSuccess();
-                    console.log(response.data);
+                    //console.log(response.data);
                 }
             } 
             catch (error) {
