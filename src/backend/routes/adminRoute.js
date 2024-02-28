@@ -18,13 +18,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
-const loginController = require('../controllers/loginController');
 const electionController = require('../controllers/electionController');
 const dashboardController = require('../controllers/dashboardController');
 const resultController = require('../controllers/resultController');
-
-router.post('/login', loginController.adminLogin);
 
 router.post('/addelection', isAdmin, electionController.addElection);
 router.get('/newelections', isAdmin, electionController.getNewElections);
@@ -34,9 +30,5 @@ router.get('/election', isAdmin, dashboardController.electionDetails);
 
 router.get('/activeelections', isAdmin, resultController.getActiveElections);
 router.post('/publishresults', isAdmin, resultController.publishResults);
-
-//subject to change
-//router.get('/resettoken', isAdmin, electionController.resetToken);  //yet to test
-//router.post('/reset', isAdmin, electionController.resetElection);  //yet to test
 
 module.exports = router;

@@ -1,19 +1,15 @@
 import { mount } from '@vue/test-utils';
-import VoteCandidate from '../views/VoteCandidate.vue';
+import DeleteAccount from '../views/DeleteAccount.vue';
 
 const mockRoute = {name: 'mockedRouteName',};
 
 const VBtn = {template: '<div></div>',};
 const VAppBar = {template: '<div></div>',};
-const VRow = {template: '<div></div>',};
-const VCol = {template: '<div></div>',};
+const VOtpInput = {template: '<div></div>',};
 const VCard = {template: '<div></div>',};
-const VCardText = {template: '<div></div>',};
-const VCardTitle = {template: '<div></div>',};
-const VImg = {template: '<div></div>',};
-const VContainer = {template: '<div></div>',};
 const VDialog = {template: '<div></div>',};
 const VCardActions = {template: '<div></div>',};
+const VCardText = {template: '<div></div>',};
 const VToolbar = {template: '<div></div>',};
 const VSheet = {template: '<div></div>',};
 
@@ -23,23 +19,19 @@ global.mocks = {
     },
     VBtn,
     VAppBar,
-    VRow,
-    VCol,
+    VOtpInput,
     VCard,
-    VCardText,
-    VCardTitle,
-    VImg,
-    VContainer,
     VDialog,
     VCardActions,
+    VCardText,
     VToolbar,
     VSheet,
 };
 
-//test the VoteCandidate View renders correctly
-describe('VoteCandidate View Test', () => {
+//test the DeleteAccount View renders correctly
+describe('DeleteAccount View Test', () => {
     it('renders correctly', () => {
-        const wrapper = mount(VoteCandidate, {
+        const wrapper = mount(DeleteAccount, {
             global: {
                 mocks: {
                     $route: mockRoute,
@@ -47,15 +39,11 @@ describe('VoteCandidate View Test', () => {
                 components: {
                     'v-btn': VBtn,
                     'v-app-bar': VAppBar,
-                    'v-row': VRow,
-                    'v-col': VCol,
+                    'v-otp-input': VOtpInput,
                     'v-card': VCard,
-                    'v-card-text': VCardText,
-                    'v-card-title': VCardTitle,
-                    'v-img': VImg,
-                    'v-container': VContainer,
                     'v-dialog': VDialog,
                     'v-card-actions': VCardActions,
+                    'v-card-text': VCardText,
                     'v-toolbar': VToolbar,
                     'v-sheet': VSheet,
                 },

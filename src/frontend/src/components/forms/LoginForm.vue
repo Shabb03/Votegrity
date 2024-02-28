@@ -68,7 +68,10 @@ export default {
                     else {
                         const token = loginData.token;
                         await setToken(token);
-                        if (!loginData.authenticated) {
+                        if (loginData.admin) {
+                            this.successRoute = '/admin/dashboard';
+                        }
+                        else if (!loginData.authenticated) {
                             this.successRoute = '/authentication';
                         }
                         this.$router.push(this.successRoute);
@@ -79,6 +82,7 @@ export default {
                         console.log(error);
                     } 
                     else {
+                        console.log(error);
                         alert('Error during login:', error);
                     }
                 }

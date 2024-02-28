@@ -8,7 +8,8 @@ const adminSecretKey = process.env.ADMIN_SECRET_KEY
 const verifyToken = (token, key) => {
     try {
         return jwt.verify(token, key);
-    } catch (error) {
+    } 
+    catch (error) {
         return null;
     }
 };
