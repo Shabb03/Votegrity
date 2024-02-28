@@ -93,7 +93,6 @@ export default {
                 });
                 const dataArray = response.data.candidates;
                 this.electionData = response.data.candidates;
-                console.log(this.electionData);
                 if (dataArray.length === 0) {
                     window.alert('Error: No Candidates added to election')
                 }
@@ -105,7 +104,6 @@ export default {
                 else {
                     alert('Error retrieving details:', error);
                 }
-                //window.history.back();
             }
         },
         async electionValue(params) {

@@ -9,7 +9,7 @@ const passwordController = require('../controllers/passwordController');
 const deleteController = require('../controllers/deleteController');
 
 router.get('/securityquestions', registerController.securityQuestions)
-router.post('/register', registerController.signup);
+router.post('/register', registerController.signup);  //update with public/private kets and wallet 
 
 router.post('/login', loginController.login);
 

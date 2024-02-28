@@ -77,7 +77,6 @@ export default {
                 } 
                 else {
                     alert('Error: No winner for election');
-                    //window.history.back();
                 }
             }
         }

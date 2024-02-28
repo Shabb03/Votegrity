@@ -117,7 +117,6 @@ export default {
                 else {
                     alert('Error retrieving code:', error);
                 }
-                //window.history.back();
             }
         },
         async postAuthCode() {
@@ -144,7 +143,6 @@ export default {
                         await setToken(null);
                     }
                     await this.triggerSuccessCard();
-                    //this.$router.push(this.routeUrl);
                 }  
             } 
             catch (error) {

@@ -14,7 +14,6 @@ exports.login = async (req, res) => {
 
         const admin = await Admin.findOne({where: {email: email}});
         if (admin) {
-            console.log("\n\nADMIN");
             //const isPasswordValid = await bcrypt.compare(decryptedPassword, admin.password);
             const isPasswordValid = await bcrypt.compare(password, admin.password);
             if (!isPasswordValid) {
@@ -29,7 +28,6 @@ exports.login = async (req, res) => {
         }
         const user = await Voter.findOne({where: {email: email}});
         if (user) {
-            console.log("\n\nUSER");
             //const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
@@ -43,11 +41,9 @@ exports.login = async (req, res) => {
                 admin: false,
             })
         }
-        console.log("\n\nNONE");
         return res.json({error: 'Account with this email not found'});
     } 
     catch (error) {
-        console.log(error);
         res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }

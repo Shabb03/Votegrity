@@ -117,17 +117,14 @@ export default {
                     securityAnswer2: this.sa2,
                     password: encryptedPassword,
                 };
-                console.log(postData);
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/changepassword', postData);
                     const passwordData = response.data;
-                    //console.log(passwordData);
                     if (passwordData.error) {
                        alert(passwordData.error);
                     }
                     else {
                         await this.triggerSuccessCard();
-                        //this.$router.push('/login');
                     }
                 } 
                 catch (error) {
@@ -152,7 +149,6 @@ export default {
                 }
                 this.securityLabel1 = userData.securityQuestion1;
                 this.securityLabel2 = userData.securityQuestion2;
-                console.log(response.data);
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {

@@ -32,25 +32,16 @@ exports.signup = async (req, res) => {
         if (existingUser) {
             return res.json({ error: 'User with email already exists' });
         }
-
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
             return res.json({error: 'Password is not strong enough' });
         }
-
         if (!countryData.includes(citizenship)) {
             return res.json({error: 'Incorrect citizenship provided'});
         }
 
-        const sq1 = await SecurityQuestions.findOne({
-            where: { questions: securityQuestion1 },
-            attributes: ['id'],
-        });
-        const sq2 = await SecurityQuestions.findOne({
-            where: { questions: securityQuestion2 },
-            attributes: ['id'],
-        });
-
+        const sq1 = await SecurityQuestions.findOne({where: { questions: securityQuestion1 }, attributes: ['id'],});
+        const sq2 = await SecurityQuestions.findOne({where: { questions: securityQuestion2 }, attributes: ['id'],});
         if (!sq1 || !sq2) {
             res.json({ message: 'Security question not found' });
         }

@@ -32,6 +32,7 @@ exports.getAllCandidates = async (req, res) => {
                 ],
             },
             attributes: ['id', 'title'],
+            order: [['resultDate', 'DESC']],
         });
 
         const candidatesByElection = await Promise.all(activeElections.map(async (election) => {
@@ -39,7 +40,6 @@ exports.getAllCandidates = async (req, res) => {
                 where: { electionId: election.id },
                 attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
             });
-
             return {
                 id: election.id,
                 title: election.title,
@@ -49,7 +49,6 @@ exports.getAllCandidates = async (req, res) => {
         return res.json({candidates: candidatesByElection});
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -93,14 +92,17 @@ exports.submitVote = async (req, res) => {
         if (age < election.ageRestriction || (election.authEmail && emailDomain !== election.authEmail) || (election.authCitizenship && user.citizenship !== election.authCitizenship)) {
             return res.json({error: 'You do not meet the voting requirements'});
         }
-        
+
+        //Work on this later to synchronize with the blockchain network
+
+        /*
         const vote = await Vote.create({
             voterId: userId,
             candidateId: candidateId,
             electionId: electionId,
         });
+        */
         res.json({ message: 'Vote submitted successfully'});
-        //Work on this later to synchronize with the blockchain network
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });

@@ -51,11 +51,12 @@ export default {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
-                    this.title = this.electionData[selectedElectionIndex].title;
-                    this.description = this.electionData[selectedElectionIndex].description;
-                    this.daysLeft = this.electionData[selectedElectionIndex].resultDate;
-                    this.candidateNumber = this.electionData[selectedElectionIndex].candidateNumber;
-                    this.voteCount = this.electionData[selectedElectionIndex].voteCount;
+                    const electionD = this.electionData[selectedElectionIndex]
+                    this.title = electionD.title;
+                    this.description = electionD.description;
+                    this.daysLeft = electionD.resultDate;
+                    this.candidateNumber = electionD.candidateNumber;
+                    this.voteCount = electionD.voteCount;
                 } 
                 else {
                     alert('Selected election not found in electionData');
@@ -86,15 +87,12 @@ export default {
                     },
                 });
                 if (response.data.error) {
-                    await alert(response.data.error);
-                    //window.history.back();
+                    alert(response.data.error);
                 }
                 else {
                     this.electionData = response.data.activeElections;
                     for (const index in this.electionData) {
                         const item = this.electionData[index];
-                        console.log(item);
-                        
                         const resultDate = this.formatResultDate(item.resultDate);
                         item.description = item.description + "<br><br>Result Date: " + resultDate;
                         const today = new Date();
@@ -110,7 +108,6 @@ export default {
                 else {
                     alert('Error retrieving details:', error);
                 }
-                //window.history.back();
             }
         },
         async electionValue(params) {

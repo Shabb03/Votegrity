@@ -103,13 +103,11 @@ export default {
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/register', postData);
-                    //console.log(response.data);
                     if (response.data.error) {
                         alert(response.data.error);
                     }
                     else {
                         await this.triggerSuccessCard();
-                        //this.$router.push('/login');
                     }
 
                 } 
@@ -148,8 +146,6 @@ export default {
 
             const encryptedPassword = await encryptPassword(this.password);
             console.log(encryptedPassword);
-
-            //await this.triggerSuccessCard();
         },
         nameValue(params) {
             this.name = params;

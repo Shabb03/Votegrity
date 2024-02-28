@@ -8,6 +8,7 @@ exports.electionDetails = async (req, res) => {
             where: {
                 isActive: true,
             },
+            order: [['resultDate', 'DESC']],
         });
         if (activeElections) {
             const result = await Promise.all(activeElections.map(async (election) => {
@@ -32,7 +33,6 @@ exports.electionDetails = async (req, res) => {
                     voteCount: totalVoteCount,
                 };
             }));
-    
             res.json({ activeElections: result });
         } 
         else {
@@ -40,7 +40,6 @@ exports.electionDetails = async (req, res) => {
         }
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const sendEmail = require('./thirdParty/email');
 const generatetoken = require('./functions/generateCode');
 const { Voter } = require('../sequelize');

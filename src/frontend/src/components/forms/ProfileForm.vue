@@ -116,7 +116,6 @@ export default {
                     else if (profileData.token) {
                         setToken(profileData.token);
                     }
-                    //console.log(profileData);
                     window.location.reload();
                 } 
                 catch (error) {
@@ -144,7 +143,6 @@ export default {
                 this.citizenship = userData.citizenship;
                 this.currentEmail = userData.email;
                 this.currentPhoneNumber = userData.phoneNumber;
-                console.log(response.data);
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
@@ -152,7 +150,6 @@ export default {
                 } 
                 else {
                     await alert('Error retrieving details:', error);
-                    //window.history.back();
                 }
             }
         },

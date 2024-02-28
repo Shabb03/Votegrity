@@ -86,8 +86,9 @@ export default {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
-                    this.addedCandidates = this.electionData[selectedElectionIndex].addedCandidates;
-                    this.candidateCount = this.electionData[selectedElectionIndex].candidateNumber;
+                    const electionD = this.electionData[selectedElectionIndex]
+                    this.addedCandidates = electionD.addedCandidates;
+                    this.candidateCount = electionD.candidateNumber;
                 } 
                 else {
                     alert('Selected election not found in electionData');
@@ -105,7 +106,6 @@ export default {
                 formData.append('voice', this.voice);
                 formData.append('party', this.party);
                 formData.append('electionId', this.selectedElection);
-                //console.log("formData", formData);
                 try {
                     const token = await getToken();
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {

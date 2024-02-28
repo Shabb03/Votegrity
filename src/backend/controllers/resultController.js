@@ -8,6 +8,7 @@ exports.getActiveElections = async (req, res) => {
             where: {
                 isActive: true,
             },
+            order: [['resultDate', 'DESC']],
         });
         res.json({ activeElections: activeElections });
     }
@@ -26,6 +27,7 @@ exports.publishResults = async (req, res) => {
         }
 
         //do something to publish results using privateKey and get total voteCount
+        
         /*
         const newResult = await Result.create({
             winner: 2,
