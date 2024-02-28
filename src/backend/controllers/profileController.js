@@ -8,10 +8,8 @@ exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-
         const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
         const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
-
         res.json({
             name: user.name,
             email: user.email,
@@ -33,12 +31,11 @@ exports.changeUserDetails = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-
         const { newEmail, newNumber } = req.body;
         var message = "";
         var newToken = null;
 
-        if (newEmail && newNumber && newEmail !== null && newNumber !== null) {
+        if (newEmail && newEmail !== null && newNumber && newNumber !== null) {
             const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail && existingNumber) {
                 return res.json({ error: 'Number and email already in use' });   
@@ -69,7 +66,7 @@ exports.changeUserDetails = async (req, res) => {
             message = "Number updated successfully";
         }
         else {
-            return res.json({ error: 'Either email or phone must be provided.' });
+            return res.json({ error: 'Either email or phone number must be provided.' });
         }        
         return res.json({ 
             email: user.email, 
@@ -88,7 +85,6 @@ exports.getAuthToken = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
             return res.json({error: 'User is already authenticated', authenticated: true});
@@ -96,7 +92,6 @@ exports.getAuthToken = async (req, res) => {
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
         await user.save();
-
         sendEmail("Authentication Code", user.email, "Here is your authentication code: " + sixDigitCode);
         res.json({message: "Email sent"});
     }
@@ -110,7 +105,6 @@ exports.authAccount = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await Voter.findByPk(userId);
-
         const { token } = req.body;
         if (token === user.authToken) {
             user.authenticated = true;

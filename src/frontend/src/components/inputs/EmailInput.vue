@@ -22,15 +22,10 @@ export default {
     },
     data: () => ({
         email: '',
-        /*emailRules: [
-            v => !!v || 'Email is required',
-            v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Not a valid email',
-        ],*/
     }),
     computed: {
         emailRules() {
             const validationRules = [];
-            //console.log("required: ", this.required);
             if (this.required) {
                 validationRules.push((v) => !!v || this.label + ' is required');
                 validationRules.push((v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Not a valid email'));

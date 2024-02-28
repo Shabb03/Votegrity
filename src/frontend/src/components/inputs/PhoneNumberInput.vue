@@ -21,10 +21,6 @@ export default {
     },
     data: () => ({
         phoneNumber: '',
-        /*phoneNumberRules: [
-            v => !!v || 'Phone Number is required',
-            v => /^\d+$/.test(v) || 'Only numbers are allowed',
-        ],*/
     }),
     computed: {
         phoneNumberRules() {

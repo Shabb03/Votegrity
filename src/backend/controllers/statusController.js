@@ -8,7 +8,8 @@ const adminSecretKey = process.env.ADMIN_SECRET_KEY
 const verifyToken = (token, key) => {
     try {
         return jwt.verify(token, key);
-    } catch (error) {
+    } 
+    catch (error) {
         return null;
     }
 };
@@ -24,13 +25,7 @@ exports.getStatus = async (req, res) => {
 
         const admin = verifyToken(token, adminSecretKey);
         if (admin) {
-            let electionValue = false;
-            const activeElection = await Election.findOne({where: {isActive: true}});
-            if (activeElection); {
-                electionValue = true;
-            }
-            console.log(electionValue);
-            return res.json({status: 'Admin', admin: true, election: electionValue});
+            return res.json({status: 'Admin', admin: true});
         }
 
         const accessUser = verifyToken(token, secretKey);
@@ -45,7 +40,6 @@ exports.getStatus = async (req, res) => {
         return res.json({status: 'Not Logged in', loggedOut: true, wrongToken: true });
     } 
     catch (error) {
-        console.log(error);
         res.status(500).json({error: 'An error has occured getting the status of the user'})
     }
 }

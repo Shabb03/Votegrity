@@ -1,5 +1,6 @@
 <template>
     <div class="form-container">
+        <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
             <v-text-field class="disabled"
                 disabled
@@ -41,7 +42,7 @@
             </v-row>
 
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                   Submit
                 </v-btn>
                 <v-btn class="mt-4 ml-10" @click="test">
@@ -57,12 +58,14 @@
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import setToken from '../../functions/SetToken.vue';
+import ConfirmationCard from '../ConfirmationCard.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 import DeleteButton from '../buttons/DeleteButton.vue';
 
 export default {
     components: {
+        ConfirmationCard,
         EmailInput,
         PhoneNumberInput,
         DeleteButton,
@@ -86,6 +89,12 @@ export default {
     },
     */
     methods: {
+        async triggerConfirmationCard() {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.$refs.confirmationCardRef.openDialog();
+            }
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -107,7 +116,6 @@ export default {
                     else if (profileData.token) {
                         setToken(profileData.token);
                     }
-                    //console.log(profileData);
                     window.location.reload();
                 } 
                 catch (error) {
@@ -135,7 +143,6 @@ export default {
                 this.citizenship = userData.citizenship;
                 this.currentEmail = userData.email;
                 this.currentPhoneNumber = userData.phoneNumber;
-                console.log(response.data);
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
@@ -143,9 +150,11 @@ export default {
                 } 
                 else {
                     await alert('Error retrieving details:', error);
-                    //window.history.back();
                 }
             }
+        },
+        async handleContinue() {
+            this.validate();
         },
         /*
         handleKeyUp(event) {

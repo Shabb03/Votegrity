@@ -31,6 +31,7 @@ export default {
         imageSrc: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
     }),
     props: {
+        electionId: Number,
         candidateId: Number,
         name: String,
         dateOfBirth: Date,
@@ -62,7 +63,6 @@ export default {
                 const binaryData = new Uint8Array(response.data);
                 const dataUrl = this.arrayBufferToBase64(binaryData);
                 this.imageSrc = `data:image/jpeg;base64,${dataUrl}`;
-                //console.log(response.data);
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
@@ -91,6 +91,7 @@ export default {
                 const authToken = getToken();
                 const postData = {
                     candidateId: candidateId,
+                    electionId: this.electionId,
                 };
                 const response = await axios.post('http://localhost:3000/api/election/vote', postData, {
                     headers: {
@@ -102,7 +103,6 @@ export default {
                 }
                 else {
                     this.callSuccess();
-                    console.log(response.data);
                 }
             } 
             catch (error) {

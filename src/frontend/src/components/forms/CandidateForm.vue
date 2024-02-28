@@ -1,7 +1,9 @@
 <template>
-    <div class="form-container">
+    <div v-if="electionData && electionData.length > 0" class="form-container">
+        <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
-            <h3>Number of Candidates: {{addedCandidates}}/{{ candidateCount }}</h3>
+            <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
+            <h3>Number of Candidates: {{ addedCandidates }}/{{ candidateCount }}</h3>
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue" />
             <ImageInput :label="imageLabel" @update:image="imageValue"/>
             <DateInput :label="birthDateLabel" @update:date="dateOfBirthValue"/>
@@ -10,7 +12,7 @@
             <TextInput :label="partyLabel" @update:text="partyValue"/>
   
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                     Add Candidate
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
@@ -22,20 +24,29 @@
             </div>
         </v-form>
     </div>
+    <div v-else>
+        <PageSubTitle :pageSubTitle="pageSubTitle" />
+    </div>
 </template>
   
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ConfirmationCard from '../ConfirmationCard.vue';
+import ElectionChoice from '../inputs/ElectionChoice.vue';
 import TextInput from '../inputs/TextInput.vue';
 import ImageInput from '../inputs/ImageInput.vue';
 import DateInput from '../inputs/DateInput.vue';
+import PageSubTitle from '../titles/PageSubTitle.vue';
   
 export default {
     components: {
+        ConfirmationCard,
+        ElectionChoice,
         TextInput,
         ImageInput,
         DateInput,
+        PageSubTitle,
     },
     data: () => ({
         nameLabel: 'Candidate Full Name',
@@ -44,6 +55,8 @@ export default {
         bioLabel: 'Biography',
         voiceLabel: 'Voice',
         partyLabel: 'Party',
+        electionData: [],
+        selectedElection: null,
         addedCandidates: 0,
         candidateCount: 0,
         name: '',
@@ -52,9 +65,10 @@ export default {
         voice: null,
         party: null,
         image: null,
+        pageSubTitle: 'No Candidates required',
     }),
     created() {
-        this.getCandidateCount();
+        this.getElections();
     },
     /*
     mounted() {
@@ -62,6 +76,25 @@ export default {
     },
     */
     methods: {
+        async triggerConfirmationCard() {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.$refs.confirmationCardRef.openDialog();
+            }
+        },
+        async updateCandidateCounts() {
+            if (this.selectedElection) {
+                const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
+                if (selectedElectionIndex !== -1) {
+                    const electionD = this.electionData[selectedElectionIndex]
+                    this.addedCandidates = electionD.addedCandidates;
+                    this.candidateCount = electionD.candidateNumber;
+                } 
+                else {
+                    alert('Selected election not found in electionData');
+                }
+            }
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -72,7 +105,7 @@ export default {
                 formData.append('biography', this.bio);
                 formData.append('voice', this.voice);
                 formData.append('party', this.party);
-                //console.log("formData", formData);
+                formData.append('electionId', this.selectedElection);
                 try {
                     const token = await getToken();
                     const response = await axios.post('http://localhost:3000/api/admin/addcandidate', formData, {
@@ -103,21 +136,16 @@ export default {
                 }
             }
         },
-        async getCandidateCount() {
+        async getElections() {
             try {
                 const authToken = await getToken();
-                const response = await axios.get('http://localhost:3000/api/admin/candidatecount', {
+                const response = await axios.get('http://localhost:3000/api/admin/newelections', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
-                  },
+                    },
                 });
-                const data = response.data;
-                this.addedCandidates = data.addedCandidates;
-                this.candidateCount = data.candidateCount;
-                if (this.addedCandidates >= this.candidateCount) {
-                    this.$router.push('/admin/dashboard');
-                }
-                console.log(response.data);
+                const data = response.data.activeElections;
+                this.electionData = data;
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {
@@ -127,6 +155,9 @@ export default {
                     alert('Error retrieving details:', error);
                 }
             }
+        },
+        async handleContinue() {
+            this.validate();
         },
         /*
         handleKeyUp(event) {
@@ -139,9 +170,12 @@ export default {
             this.$refs.form.reset()
         },
         test() {
+            /*
             console.log(this.name);
             console.log(this.image);
             console.log(this.voice);
+            */
+            console.log(this.selectedElection);
         },
         nameValue(params) {
           this.name = params;
@@ -160,6 +194,10 @@ export default {
         },
         imageValue(params) {
             this.image = params;
+        },
+        async electionValue(params) {
+            this.selectedElection = params;
+            await this.updateCandidateCounts();
         },
     },
 };

@@ -12,7 +12,6 @@ export default async function encryptPassword(password) {
         return encryptedPassword;
     } 
     catch (error) {
-        console.log('Error hashing password:', error);
         return password;
     }
 }

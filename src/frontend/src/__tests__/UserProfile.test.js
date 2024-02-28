@@ -9,6 +9,11 @@ const VForm = {template: '<div></div>',};
 const VTextField = {template: '<div></div>',};
 const VRow = {template: '<div></div>',};
 const VCol = {template: '<div></div>',};
+const VCard = {template: '<div></div>',};
+const VDialog = {template: '<div></div>',};
+const VCardActions = {template: '<div></div>',};
+const VCardText = {template: '<div></div>',};
+const VToolbar = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {
@@ -20,6 +25,11 @@ global.mocks = {
     VTextField,
     VRow,
     VCol,
+    VCard,
+    VDialog,
+    VCardActions,
+    VCardText,
+    VToolbar,
 };
 
 //test the UserProfile View renders correctly
@@ -37,6 +47,11 @@ describe('UserProfile View Test', () => {
                     'v-text-field': VTextField,
                     'v-row': VRow,
                     'v-col': VCol,
+                    'v-card': VCard,
+                    'v-dialog': VDialog,
+                    'v-card-actions': VCardActions,
+                    'v-card-text': VCardText,
+                    'v-toolbar': VToolbar,
                 },
             },
         });

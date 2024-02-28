@@ -1,29 +1,19 @@
 <template>
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
-    <div class="form-container">
+    <div v-if="electionData && electionData.length > 0" class="form-container">
         <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
-            <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
-            <DescriptionInput @update:description="descriptionValue"/>
-            <v-row>
-                <v-col>
-                    <DateInput :label="startDateLabel" @update:date="startDateValue"/>
-                </v-col>
-                <v-col>
-                    <DateInput :label="endDateLabel" @update:date="endDateValue"/>
-                </v-col>
-                <v-col>
-                    <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
-                </v-col>
-            </v-row>
-            <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
-            <NumberInput :label="ageLabel" @update:number="ageValue"/>
-            <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
-            <CitizenshipInput :displayCitizenshipRules="false" @update:citizenship="citizenshipValue"/>
+            <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
+            <v-text-field class="disabled"
+                disabled
+                v-model="resultDate"
+                label="Result Date"
+            ></v-text-field>
+            <TextInput :label="titleLabel" :required="true" @update:text="keyValue"/>
 
             <div class="d-flex flex-row">
                 <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
-                    Create Election
+                    Publish Results
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
@@ -34,6 +24,9 @@
             </div>
         </v-form>
     </div>
+    <div v-else>
+        <PageSubTitle :pageSubTitle="pageSubTitle" />
+    </div>
 </template>
 
 <script>
@@ -41,43 +34,31 @@ import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import ConfirmationCard from '../ConfirmationCard.vue';
 import SuccessCard from "../SuccessCard.vue";
+import ElectionChoice from '../inputs/ElectionChoice.vue';
 import TextInput from '../inputs/TextInput.vue';
-import DescriptionInput from '../inputs/DescriptionInput.vue';
-import DateInput from '../inputs/DateInput.vue';
-import NumberInput from '../inputs/NumberInput.vue';
-import EmailAuthenticationInput from '../inputs/EmailAuthenticationInput.vue';
-import CitizenshipInput from '../inputs/CitizenshipInput.vue';
+import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {
         ConfirmationCard,
         SuccessCard,
+        ElectionChoice,
         TextInput,
-        DescriptionInput,
-        DateInput,
-        NumberInput,
-        EmailAuthenticationInput,
-        CitizenshipInput,
+        PageSubTitle,
     },
     data: () => ({
-        successMessage: 'You have successfully created the election',
-        successRoute: '/admin/addcandidate',
-        titleLabel: "Election Title",
-        startDateLabel: "Election Start Date: ",
-        endDateLabel: "Election End Date: ",
-        resultDateLabel: "Election Results Date: ",
-        numberLabel: "Number of Total Candidates",
-        ageLabel: "Minimum Age Requirement (Optional)",
-        title: '',
-        description: '',
-        startDate: null,
-        endDate: null,
+        successMessage: 'You have successfully published election results',
+        successRoute: '/admin/dashboard',
+        titleLabel: "Private Key",
+        key: '',
         resultDate: null,
-        number: 0,
-        age: 0,
-        emailDomain: null,
-        citizenship: null,
+        electionData: [],
+        selectedElection: null,
+        pageSubTitle: 'No Active Elections currently',
     }),
+    created() {
+        this.getElections();
+    },
     /*
     mounted() {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
@@ -90,6 +71,26 @@ export default {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        async readableDate(resultDate) {
+            const date = new Date(resultDate);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            return formattedDate;
+        },
+        async updateResultDate() {
+            if (this.selectedElection) {
+                const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
+                if (selectedElectionIndex !== -1) {
+                    const resultDate = this.electionData[selectedElectionIndex].resultDate;
+                    this.resultDate = await this.readableDate(resultDate);
+                } 
+                else {
+                    alert('Selected election not found in electionData');
+                }
+            }
+        },
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
@@ -97,19 +98,12 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 const postData = {
-                    title: this.title,
-                    description: this.description,
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                    resultDate: this.resultDate,
-                    candidateNumber: this.number,
-                    ageRestriction: this.age,
-                    authEmail: this.emailDomain,
-                    authCitizenship: this.citizenship,
+                    electionId: this.selectedElection,
+                    privateKey: this.key,
                 };
                 try {
                     const token = await getToken();
-                    const response = await axios.post('http://localhost:3000/api/admin/addelection', postData, {
+                    const response = await axios.post('http://localhost:3000/api/admin/publishresults', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -127,8 +121,27 @@ export default {
                         console.log(error);
                     } 
                     else {
-                        alert('Error creating election:', error);
+                        alert('Error publishing results:', error);
                     }
+                }
+            }
+        },
+        async getElections() {
+            try {
+                const authToken = await getToken();
+                const response = await axios.get('http://localhost:3000/api/admin/activeelections', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+                this.electionData = response.data.activeElections;
+            } 
+            catch (error) {
+                if (process.env.NODE_ENV === 'test') {
+                    console.log(error);
+                } 
+                else {
+                    alert('Error retrieving details:', error);
                 }
             }
         },
@@ -146,37 +159,15 @@ export default {
             this.$refs.form.reset()
         },
         test() {
-            console.log(this.title);
-            console.log(this.startDate);
-            console.log(this.endDate);
-            console.log(this.resultDate);
+            console.log(this.email);
+            console.log(this.password);
         },
-        titleValue(params) {
-            this.title = params;
+        keyValue(params) {
+            this.key = params;
         },
-        descriptionValue(params) {
-            this.description = params;
-        },
-        numberValue(params) {
-            this.number = params;
-        },
-        startDateValue(params) {
-            this.startDate = params;
-        },
-        endDateValue(params) {
-            this.endDate = params;
-        },
-        resultDateValue(params) {
-            this.resultDate = params;
-        },
-        ageValue(params) {
-            this.age = params;
-        },
-        emailDomainValue(params) {
-            this.emailDomain = params;
-        },
-        citizenshipValue(params) {
-            this.citizenship = params;
+        async electionValue(params) {
+            this.selectedElection = params;
+            await this.updateResultDate();
         },
     },
 };
@@ -212,6 +203,8 @@ export default {
 .primary:active {
     cursor: wait;
 }
+
+
 
 .secondary {
     background-color: #2616bb;

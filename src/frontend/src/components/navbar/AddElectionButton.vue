@@ -1,17 +1,13 @@
 <template>
-    <v-btn variant="tonal" @click="goToRoute">{{ buttonText }}</v-btn>
+    <v-btn variant="tonal" @click="goToElectionForm">Add Election</v-btn>
 </template>
 
 <script>
 export default {
-    name: 'NavbarButton',
-    props: {
-        buttonText: String,
-        routeName: String,
-    },
+    name: 'AddElectionButton',
     methods: {
-        goToRoute() {
-            this.$router.push(this.routeName);
+        goToElectionForm() {
+            this.$router.push('/admin/createelection');
         },
     },
 };

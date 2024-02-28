@@ -1,24 +1,24 @@
 <template>
-    <div class="resetbutton">
-        <v-btn variant="tonal" size="large" rounded="lg" elevation="8" @click="goToReset">Reset&nbsp;&nbsp;&nbsp;Election</v-btn>
+    <div class="publishbutton">
+        <v-btn variant="tonal" size="large" rounded="lg" elevation="8" @click="goToPublish">Publish&nbsp;&nbsp;&nbsp;Election</v-btn>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'ResetButton',
+    name: 'PublishButton',
     methods: {
-        goToReset() {
-            this.$router.push('/admin/reset');
+        goToPublish() {
+            this.$router.push('/admin/publishresults');
         },
     },
 };
 </script>
 
 <style scoped>
-.resetbutton {
-    margin-top: 5em !important;
+.publishbutton {
     margin-right: 3em !important;
+    margin-bottom: 3em !important;
     text-align: right;
 }
 .v-btn {

@@ -159,6 +159,10 @@ const Candidate = sequelize.define('Candidate', {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         defaultValue: false,
+    },
+    electionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     }
 });
 
@@ -250,6 +254,10 @@ const Vote = sequelize.define('Vote', {
               key: 'id',
         },
     },
+    electionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    }
 });
 
 const Transaction = sequelize.define('Transaction', {

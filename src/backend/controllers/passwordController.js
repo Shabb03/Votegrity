@@ -24,7 +24,6 @@ exports.authCode = async (req, res) => {
 
         sendEmail("Reset Password Code", email, "Here is your password code: " + sixDigitCode);
         res.json({message: "Email sent", securityQuestion1: sq1.questions, securityQuestion2: sq2.questions});
-        //res.json({code: sixDigitCode});
     }
     catch (error) {
         res.status(500).json({ message: 'Internal Server Error' });
@@ -48,7 +47,6 @@ exports.changePassword = async (req, res) => {
             if (!isSecure) {
                 return res.json({error: 'Password is not strong enough'});
             }
-            
             const decryptedPassword = await decryptPassword(password);
             const hashedPassword = await hashPassword(decryptedPassword);
             user.password = hashedPassword;

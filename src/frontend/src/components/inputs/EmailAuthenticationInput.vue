@@ -10,9 +10,6 @@
 export default {
     data: () => ({
         emailDomain: null,
-        /*emailDomainRules: [
-            v => !!v || 'Email Domain is required',
-        ],*/
     }),
     methods: {
         updateEmailDomain() {

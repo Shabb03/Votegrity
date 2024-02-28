@@ -5,7 +5,7 @@ const secretKey = process.env.ADMIN_SECRET_KEY
 
 //Check if the user is an admin using jwt authentication token
 async function authenticateAdmin(req, res, next) {
-    const tokenString = req.header('Authorization');
+    const tokenString = req.header('authorization');
     if (!tokenString) {
         return res.status(401).json({ message: 'Access denied. Token not provided.' });
     }

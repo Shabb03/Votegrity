@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
 require('dotenv').config();
 
-const saltRounds = 10;
+const saltRounds = parseInt(process.env.SALTROUNDS);
 const secretKey = process.env.DECRYPT_PASSWORD_KEY;
 
 //Check if the password meets the security requirements

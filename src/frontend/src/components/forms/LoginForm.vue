@@ -30,7 +30,7 @@
 <script>
 import axios from 'axios';
 import setToken from '../../functions/SetToken.vue';
-import encryptPassword from '../../functions/EncryptPassword.vue';
+//import encryptPassword from '../../functions/EncryptPassword.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
 
@@ -53,10 +53,11 @@ export default {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                const encryptedPassword = await encryptPassword(this.password);
+                //const encryptedPassword = await encryptPassword(this.password);
                 const postData = {
                     email: this.email,
-                    password: encryptedPassword,
+                    //password: encryptedPassword,
+                    password: this.password,
                 };
                 try {
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);
@@ -67,9 +68,10 @@ export default {
                     else {
                         const token = loginData.token;
                         await setToken(token);
-                        //localStorage.setItem("votegrityToken",token);
-                        //console.log(loginData.data);
-                        if (!loginData.authenticated) {
+                        if (loginData.admin) {
+                            this.successRoute = '/admin/dashboard';
+                        }
+                        else if (!loginData.authenticated) {
                             this.successRoute = '/authentication';
                         }
                         this.$router.push(this.successRoute);
@@ -80,6 +82,7 @@ export default {
                         console.log(error);
                     } 
                     else {
+                        console.log(error);
                         alert('Error during login:', error);
                     }
                 }

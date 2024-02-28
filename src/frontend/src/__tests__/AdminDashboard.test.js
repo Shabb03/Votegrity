@@ -12,6 +12,7 @@ const VCardText = {template: '<div></div>',};
 const VCardTitle = {template: '<div></div>',};
 const VImg = {template: '<div></div>',};
 const VContainer = {template: '<div></div>',};
+const VSheet = {template: '<div></div>',};
 
 global.mocks = {
     $vuetify: {
@@ -26,6 +27,7 @@ global.mocks = {
     VCardTitle,
     VImg,
     VContainer,
+    VSheet,
 };
 
 //test the AdminDashboard View renders correctly
@@ -46,6 +48,7 @@ describe('AdminDashboard View Test', () => {
                     'v-card-title': VCardTitle,
                     'v-img': VImg,
                     'v-container': VContainer,
+                    'v-sheet': VSheet,
                 },
             },
         });

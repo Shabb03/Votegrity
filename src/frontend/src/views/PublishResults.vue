@@ -1,40 +1,39 @@
 <template>
     <IsAdmin/>
     <NavigationBar>
+        <component :is="dashBoardButton"></component>
+        <component :is="addElectionButton"></component>
         <component :is="logoutButton"></component>
     </NavigationBar>
     <PageTitle/>
-    <!--<ResetForm/>-->
-    <CodeInput :title="title" :button="button" :getApiUrl="getApiUrl" :postApiUrl="postApiUrl" :routeUrl="routeUrl" :successCardMessage="successMessage"/>
+    <PublishForm/>
 </template>
   
 <script>
 import IsAdmin from "../components/status/IsAdmin.vue";
 import { markRaw } from "vue";
 import NavigationBar from '../components/navbar/NavigationBar.vue';
+import DashboardButton from "../components/navbar/DashboardButton.vue";
+import AddElectionButton from "../components/navbar/AddElectionButton.vue";
 import LogoutButton from '../components/navbar/LogoutButton.vue';
 import PageTitle from '../components/titles/PageTitle.vue';
-//import ResetForm from '../components/forms/ResetForm.vue';
-import CodeInput from "../components/inputs/CodeInput.vue";
+import PublishForm from '../components/forms/PublishForm.vue';
 
 export default {
     components: {
         IsAdmin,
         NavigationBar,
+        DashboardButton,
+        AddElectionButton,
         LogoutButton,
         PageTitle,
-        //ResetForm,
-        CodeInput,
+        PublishForm,
     },
     data() {
         return {
+            dashBoardButton: markRaw(DashboardButton),
+            addElectionButton: markRaw(AddElectionButton),
             logoutButton: markRaw(LogoutButton),
-            title: 'Confirmation Code',
-            button: 'Reset',
-            getApiUrl: '/admin/resettoken',
-            postApiUrl: '/admin/reset',
-            routeUrl: '/createelection',
-            successMessage: 'You have successfully reset the election',
         };
     },
 }

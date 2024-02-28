@@ -6,7 +6,6 @@
         :rules="displayCitizenshipRules ? citizenshipRules : []"
         @update:modelValue="updateCitizenship"
     ></v-autocomplete>
-
 </template>
   
 <script>
@@ -28,7 +27,6 @@ export default {
     }),
     methods: {
         updateCitizenship() {
-            console.log("HERE!");
             this.$emit('update:citizenship', this.citizenship);
         },
     },

@@ -26,15 +26,9 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                //console.log(response.data);
                 const status = response.data;
                 if (status.admin) {
-                    if (status.election) {
-                        this.$router.push('/admin/dashboard');
-                    }
-                    else {
-                        this.$router.push('/admin/createelection');
-                    }
+                    this.$router.push('/admin/dashboard');
                 }
                 else if (status.loggedIn) {
                     if (status.authenticated) {
