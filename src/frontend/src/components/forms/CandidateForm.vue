@@ -1,15 +1,7 @@
 <template>
     <div v-if="electionData && electionData.length > 0" class="form-container">
         <v-form ref="form">
-            <v-autocomplete
-                v-model="selectedElection"
-                label="Select Election"
-                :items="electionData"
-                item-text="title" 
-                item-value="id"
-                :rules="[]"
-            ></v-autocomplete>
-
+            <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
             <h3>Number of Candidates: {{ addedCandidates }}/{{ candidateCount }}</h3>
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue" />
             <ImageInput :label="imageLabel" @update:image="imageValue"/>
@@ -39,6 +31,7 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ElectionChoice from '../inputs/ElectionChoice.vue';
 import TextInput from '../inputs/TextInput.vue';
 import ImageInput from '../inputs/ImageInput.vue';
 import DateInput from '../inputs/DateInput.vue';
@@ -46,6 +39,7 @@ import PageSubTitle from '../titles/PageSubTitle.vue';
   
 export default {
     components: {
+        ElectionChoice,
         TextInput,
         ImageInput,
         DateInput,
@@ -78,12 +72,6 @@ export default {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
     },
     */
-    watch: {
-        selectedElection: {
-            handler: 'updateCandidateCounts',
-            immediate: true,
-        },
-    },
     methods: {
         async updateCandidateCounts() {
             if (this.selectedElection) {
@@ -194,6 +182,10 @@ export default {
         },
         imageValue(params) {
             this.image = params;
+        },
+        async electionValue(params) {
+            this.selectedElection = params;
+            await this.updateCandidateCounts();
         },
     },
 };

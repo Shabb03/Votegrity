@@ -1,16 +1,8 @@
 <template>
     <div v-if="electionData && electionData.length > 0" class="card-container">
         <v-sheet width="300" class="mx-auto mb-12">
-        <v-autocomplete
-            v-model="selectedElection"
-            label="Select Election"
-            :items="electionData"
-            item-text="title" 
-            item-value="id"
-            :rules="[]"
-        ></v-autocomplete>
+            <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
         </v-sheet>
-        <!--<PublishButton/>-->
         <v-container>
             <v-row>
                 <DashboardCard :imageSrc="require('@/assets/election.png')" :informationTitle="title" :informationText="description"/>
@@ -29,12 +21,14 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ElectionChoice from '../inputs/ElectionChoice.vue';
 import DashboardCard from '../cards/DashboardCard.vue';
 import PublishButton from '../buttons/PublishButton.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {
+        ElectionChoice,
         DashboardCard,
         PublishButton,
         PageSubTitle,
@@ -51,12 +45,6 @@ export default {
     }),
     created() {
         this.fetchInformation();
-    },
-    watch: {
-        selectedElection: {
-            handler: 'updateElectionDetails',
-            immediate: true,
-        },
     },
     methods: {
         async updateElectionDetails() {
@@ -124,6 +112,10 @@ export default {
                 }
                 //window.history.back();
             }
+        },
+        async electionValue(params) {
+            this.selectedElection = params;
+            await this.updateElectionDetails();
         },
     }
 }

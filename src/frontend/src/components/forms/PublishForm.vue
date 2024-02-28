@@ -2,21 +2,12 @@
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div v-if="electionData && electionData.length > 0" class="form-container">
         <v-form ref="form">
-            <v-autocomplete
-                v-model="selectedElection"
-                label="Select Election"
-                :items="electionData"
-                item-text="title" 
-                item-value="id"
-                :rules="[]"
-            ></v-autocomplete>
-
+            <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
             <v-text-field class="disabled"
                 disabled
                 v-model="resultDate"
                 label="Result Date"
             ></v-text-field>
-
             <TextInput :label="titleLabel" :required="true" @update:text="keyValue"/>
 
             <div class="d-flex flex-row">
@@ -41,12 +32,14 @@
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
+import ElectionChoice from '../inputs/ElectionChoice.vue';
 import TextInput from '../inputs/TextInput.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {
         SuccessCard,
+        ElectionChoice,
         TextInput,
         PageSubTitle,
     },
@@ -62,12 +55,6 @@ export default {
     }),
     created() {
         this.getElections();
-    },
-    watch: {
-        selectedElection: {
-            handler: 'updateResultDate',
-            immediate: true,
-        },
     },
     /*
     mounted() {
@@ -165,6 +152,10 @@ export default {
         },
         keyValue(params) {
             this.key = params;
+        },
+        async electionValue(params) {
+            this.selectedElection = params;
+            await this.updateResultDate();
         },
     },
 };

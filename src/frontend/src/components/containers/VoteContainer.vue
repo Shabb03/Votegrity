@@ -2,14 +2,7 @@
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div v-if="electionData && electionData.length > 0" class="card-container">
         <v-sheet width="300" class="mx-auto mb-12">
-        <v-autocomplete
-            v-model="selectedElection"
-            label="Select Election"
-            :items="electionData"
-            item-text="title" 
-            item-value="id"
-            :rules="[]"
-        ></v-autocomplete>
+            <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
         </v-sheet>
 
         <div v-if="selectedElection">
@@ -41,12 +34,14 @@
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
+import ElectionChoice from '../inputs/ElectionChoice.vue';
 import VoteCard from '../cards/VoteCard.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {
         SuccessCard,
+        ElectionChoice,
         VoteCard,
         PageSubTitle,
     },
@@ -61,19 +56,12 @@ export default {
     created() {
         this.fetchCandidates();
     },
-    watch: {
-        selectedElection: {
-            handler: 'updateElectionDetails',
-            immediate: true,
-        },
-    },
     methods: {
         async updateElectionDetails() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
-                    //console.log("UPDATE ELECTION DETAILS: ", this.candidateData);
                     const groupSize = 3;
                     for (let i = 0; i < candidateArray.length; i += groupSize) {
                         if (i % 3 === 0) {
@@ -119,7 +107,11 @@ export default {
                 }
                 //window.history.back();
             }
-        }
+        },
+        async electionValue(params) {
+            this.selectedElection = params;
+            await this.updateElectionDetails();
+        },
     }
 }
 </script>
