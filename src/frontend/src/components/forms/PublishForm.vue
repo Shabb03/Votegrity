@@ -1,6 +1,7 @@
 <template>
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div v-if="electionData && electionData.length > 0" class="form-container">
+        <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
             <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
             <v-text-field class="disabled"
@@ -11,7 +12,7 @@
             <TextInput :label="titleLabel" :required="true" @update:text="keyValue"/>
 
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                     Publish Results
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
@@ -31,6 +32,7 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ConfirmationCard from '../ConfirmationCard.vue';
 import SuccessCard from "../SuccessCard.vue";
 import ElectionChoice from '../inputs/ElectionChoice.vue';
 import TextInput from '../inputs/TextInput.vue';
@@ -38,6 +40,7 @@ import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
     components: {
+        ConfirmationCard,
         SuccessCard,
         ElectionChoice,
         TextInput,
@@ -62,6 +65,12 @@ export default {
     },
     */
     methods: {
+        async triggerConfirmationCard() {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.$refs.confirmationCardRef.openDialog();
+            }
+        },
         async readableDate(resultDate) {
             const date = new Date(resultDate);
             const day = date.getDate().toString().padStart(2, '0');
@@ -135,6 +144,9 @@ export default {
                     alert('Error retrieving details:', error);
                 }
             }
+        },
+        async handleContinue() {
+            this.validate();
         },
         /*
         handleKeyUp(event) {

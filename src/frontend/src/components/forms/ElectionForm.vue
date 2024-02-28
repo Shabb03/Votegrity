@@ -1,6 +1,7 @@
 <template>
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
+        <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
             <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
             <DescriptionInput @update:description="descriptionValue"/>
@@ -21,7 +22,7 @@
             <CitizenshipInput :displayCitizenshipRules="false" @update:citizenship="citizenshipValue"/>
 
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                     Create Election
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
@@ -38,6 +39,7 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ConfirmationCard from '../ConfirmationCard.vue';
 import SuccessCard from "../SuccessCard.vue";
 import TextInput from '../inputs/TextInput.vue';
 import DescriptionInput from '../inputs/DescriptionInput.vue';
@@ -48,6 +50,7 @@ import CitizenshipInput from '../inputs/CitizenshipInput.vue';
 
 export default {
     components: {
+        ConfirmationCard,
         SuccessCard,
         TextInput,
         DescriptionInput,
@@ -81,6 +84,12 @@ export default {
     },
     */
     methods: {
+        async triggerConfirmationCard() {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.$refs.confirmationCardRef.openDialog();
+            }
+        },
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
@@ -122,6 +131,9 @@ export default {
                     }
                 }
             }
+        },
+        async handleContinue() {
+            this.validate();
         },
         /*
         handleKeyUp(event) {

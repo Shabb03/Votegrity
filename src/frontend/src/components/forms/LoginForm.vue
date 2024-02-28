@@ -68,8 +68,6 @@ export default {
                     else {
                         const token = loginData.token;
                         await setToken(token);
-                        //localStorage.setItem("votegrityToken",token);
-                        //console.log(loginData.data);
                         if (!loginData.authenticated) {
                             this.successRoute = '/authentication';
                         }

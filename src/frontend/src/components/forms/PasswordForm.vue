@@ -1,6 +1,7 @@
 <template>
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
+        <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
             <v-card
                 class="py-8 px-6 text-center mx-auto mb-4"
@@ -38,7 +39,7 @@
             </v-row>
   
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                     Submit
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
@@ -54,6 +55,7 @@
   
 <script>
 import axios from 'axios';
+import ConfirmationCard from '../ConfirmationCard.vue';
 import SuccessCard from "../SuccessCard.vue";
 import encryptPassword from '../../functions/EncryptPassword.vue';
 import EmailInput from '../inputs/EmailInput.vue';
@@ -62,6 +64,7 @@ import PasswordInput from '../inputs/PasswordInput.vue';
   
 export default {
     components: {
+        ConfirmationCard,
         SuccessCard,
         EmailInput,
         SecurityAnswerInput,
@@ -90,6 +93,12 @@ export default {
     },
     */
     methods: {
+        async triggerConfirmationCard() {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.$refs.confirmationCardRef.openDialog();
+            }
+        },
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
@@ -153,6 +162,9 @@ export default {
                     alert('Error retrieving code:', error);
                 }
             }
+        },
+        async handleContinue() {
+            this.validate();
         },
         /*
         handleKeyUp(event) {

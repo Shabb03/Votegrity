@@ -1,5 +1,6 @@
 <template>
     <div class="form-container">
+        <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
         <v-form ref="form">
             <v-text-field class="disabled"
                 disabled
@@ -41,7 +42,7 @@
             </v-row>
 
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                   Submit
                 </v-btn>
                 <v-btn class="mt-4 ml-10" @click="test">
@@ -57,12 +58,14 @@
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
 import setToken from '../../functions/SetToken.vue';
+import ConfirmationCard from '../ConfirmationCard.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PhoneNumberInput from '../inputs/PhoneNumberInput.vue';
 import DeleteButton from '../buttons/DeleteButton.vue';
 
 export default {
     components: {
+        ConfirmationCard,
         EmailInput,
         PhoneNumberInput,
         DeleteButton,
@@ -86,6 +89,12 @@ export default {
     },
     */
     methods: {
+        async triggerConfirmationCard() {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.$refs.confirmationCardRef.openDialog();
+            }
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -146,6 +155,9 @@ export default {
                     //window.history.back();
                 }
             }
+        },
+        async handleContinue() {
+            this.validate();
         },
         /*
         handleKeyUp(event) {
