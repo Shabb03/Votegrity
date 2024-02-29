@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const loginLimiter = require('../middleware/rateLimiter');
 const authenticateToken = require('../middleware/authenticate');
 
 const registerController = require('../controllers/registerController');
@@ -11,7 +12,7 @@ const deleteController = require('../controllers/deleteController');
 router.get('/securityquestions', registerController.securityQuestions)
 router.post('/register', registerController.signup);  //update with public/private kets and wallet 
 
-router.post('/login', loginController.login);
+router.post('/login', loginLimiter, loginController.login);
 
 router.get('/userinfo', authenticateToken, profileController.userInfo);
 router.post('/userdetails', authenticateToken, profileController.changeUserDetails);

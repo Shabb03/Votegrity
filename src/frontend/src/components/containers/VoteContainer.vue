@@ -94,7 +94,7 @@ export default {
                 const dataArray = response.data.candidates;
                 this.electionData = response.data.candidates;
                 if (dataArray.length === 0) {
-                    window.alert('Error: No Candidates added to election')
+                    alert('Error: Election has no candidates')
                 }
             } 
             catch (error) {
