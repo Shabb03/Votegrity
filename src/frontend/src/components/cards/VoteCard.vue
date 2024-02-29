@@ -110,7 +110,7 @@ export default {
                     console.log(error);
                 } 
                 else {
-                    alert('Error voting:', error);
+                    alert('Error submitting vote:', error);
                 }
             }
         },

@@ -32,7 +32,7 @@ export default {
                 console.log(error);
             } 
             else {
-                alert('Error fetching status: ', error);
+                //alert('Error fetching status: ', error);
             }
             this.loading = false;
         }

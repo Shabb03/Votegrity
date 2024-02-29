@@ -149,7 +149,7 @@ export default {
                     console.log(error);
                 } 
                 else {
-                    await alert('Error retrieving details:', error);
+                    alert('Error retrieving details:', error);
                 }
             }
         },

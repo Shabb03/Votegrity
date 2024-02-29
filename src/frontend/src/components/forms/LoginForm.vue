@@ -3,9 +3,10 @@
         <v-form ref="form">
             <EmailInput @update:email="emailValue"/>
             <PasswordInput @update:password="passwordValue"/>
+            <div class="errorMessage">{{ errorMessage }}</div>
 
             <div class="d-flex flex-row">
-                <v-btn class="mt-4 primary" @click="validate">
+                <v-btn :class="buttonClass" :disabled="isButtonDisabled" @click="validate">
                     Login
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
@@ -40,9 +41,13 @@ export default {
         PasswordInput,
     },
     data: () => ({
+        buttonClass: 'mt-4 primary',
         successRoute: '/vote',
         email: '',
         password: '',
+        errorMessage: '',
+        isButtonDisabled: false,
+        timeRemaining: 0,
     }),
     /*
     mounted() {
@@ -50,7 +55,23 @@ export default {
     },
     */
     methods: {
+        disableButton() {
+            this.buttonClass = 'mt-4 disabled';
+            this.isButtonDisabled = true;
+            // Start a timer to enable the button after the specified time
+            setTimeout(() => {
+                this.enableButton();
+            }, this.timeRemaining * 1000 * 60);
+        },
+        enableButton() {
+            this.errorMessage = '',
+            this.buttonClass = 'mt-4 primary';
+            this.isButtonDisabled = false;
+        },
         async validate() {
+            if (this.isButtonDisabled) {
+                return;
+            }
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 //const encryptedPassword = await encryptPassword(this.password);
@@ -63,7 +84,11 @@ export default {
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);
                     const loginData = response.data;
                     if (loginData.error) {
-                        alert(loginData.error);
+                        if (loginData.time) {
+                            this.timeRemaining = loginData.time;
+                            this.disableButton();
+                        }
+                        this.errorMessage = loginData.error;
                     }
                     else {
                         const token = loginData.token;
@@ -82,7 +107,6 @@ export default {
                         console.log(error);
                     } 
                     else {
-                        console.log(error);
                         alert('Error during login:', error);
                     }
                 }
@@ -128,6 +152,10 @@ export default {
     }
 }
 
+.errorMessage {
+    color: red;
+}
+
 .primary {
     background-color: #00e5ff;
 }
@@ -162,5 +190,10 @@ export default {
     color: blue; 
     margin-top: 2em;
     display: block;
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 </style>
