@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
+const blindSignatures = require('blind-signatures');
 
 
 const sequelize = new Sequelize({
@@ -257,8 +258,47 @@ const Vote = sequelize.define('Vote', {
     electionId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-    }
+    },
+    blindedSignature: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    encryptedVote: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
 });
+
+Vote.prototype.blindSignature = async function (authorityPrivateKey) {
+    const voterId = this.voterId; 
+    const candidateId = this.candidateId;
+
+    const blindedVote = `${voterId},${candidateId}`;
+
+    const blinded = blindSignatures.blind({
+        message: blindedVote,
+        N: authorityPrivateKey.N,
+        E: authorityPrivateKey.E
+    });
+
+    this.blindedSignature = blinded.blinded;
+    await this.save(); // Save blinded signature in the database
+    return blinded.blinded;
+};
+
+Vote.prototype.encryptVote = async function (publicKey) {
+    const voterId = this.voterId;
+    const candidateId = this.candidateId;
+
+    const vote = `${voterId},${candidateId}`; // Combine voter ID and candidate ID
+
+    const pk = new paillier.PublicKey(publicKey);
+    const encryptedVote = pk.encrypt(vote);
+    
+    this.encryptedVote = encryptedVote.toString();
+    await this.save(); // Save encrypted vote in the database
+    return encryptedVote.toString();
+};
 
 const Transaction = sequelize.define('Transaction', {
     id: {
