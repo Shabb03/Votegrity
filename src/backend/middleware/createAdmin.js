@@ -1,8 +1,7 @@
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const readline = require('readline');
-const { isSecurePassword, hashPassword } = require('../controllers/functions/password');
-const db = require('../models/index.js');  
+const { isSecurePassword, hashPassword } = require('../controllers/functions/password');  
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -15,7 +14,7 @@ async function createAdmin() {
         const email = await askQuestion('Enter admin email: ');
         const password = await askQuestion('Enter admin password: ');
 
-        const existingUser = await db.Admin.findOne({ where: { email: email } });
+        const existingUser = await Admin.findOne({ where: { email: email } });
         if (existingUser) {
             console.error('User already exists');
             return;
@@ -42,7 +41,7 @@ async function createAdmin() {
 
           const paillierKeys = paillier.generateRandomKeys(2048);
 
-        const admin = await db.Admin.create({
+        const admin = await Admin.create({
             email: email,
             password: hashedPassword,
             blindPublicKey: blindPublicKey,
@@ -59,7 +58,7 @@ async function createAdmin() {
     }
     finally {
         rl.close();
-        db.sequelize.close();
+        sequelize.close();
     }
 }
 
