@@ -7,6 +7,7 @@ const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/adminRoute');
 const electionRoute = require('./routes/electionRoute');
 const statusRoute = require('./routes/statusRoute');
+const testRoute = require('./routes/testRoute');
 
 const corsOptions = {
     origin: process.env.ORIGIN || 'http://localhost:8080',
@@ -22,15 +23,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.send('Hello, this is a test server!\n');
-});
-
-//API Routes, HOST:PORT/URL (localhost:3000/api/user)
+//API Routes, {HOST}:{PORT}/{URL} e.g (localhost:3000/api/user)
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/election', electionRoute);
 app.use('/api/status', statusRoute);
+app.use('/api/test', testRoute);
 
 app.use(passport.initialize());
 

@@ -7,11 +7,9 @@ const db = require('../models/index.js');
 exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await db.Voter.findByPk(userId);
-
-        const sq1 = await db.SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
-        const sq2 = await db.SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
-
+        const user = await Voter.findByPk(userId);
+        const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
+        const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
         res.json({
             name: user.name,
             email: user.email,
@@ -32,16 +30,15 @@ exports.userInfo = async (req, res) => {
 exports.changeUserDetails = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await db.Voter.findByPk(userId);
-
+        const user = await Voter.findByPk(userId);
         const { newEmail, newNumber } = req.body;
         var message = "";
         var newToken = null;
 
-        if (newEmail && newNumber && newEmail !== null && newNumber !== null) {
-            const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
+        if (newEmail && newEmail !== null && newNumber && newNumber !== null) {
+            const existingEmail = await Voter.findOne({ where: { email: newEmail } });
             if (existingEmail && existingNumber) {
-                return res.status(400).json({ message: 'Number and email already in use' });   
+                return res.json({ error: 'Number and email already in use' });   
             }
             user.email = newEmail;
             user.phoneNumber = newNumber;
@@ -52,7 +49,7 @@ exports.changeUserDetails = async (req, res) => {
         else if (newEmail && newEmail !== null) {
             const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
             if (existingEmail) {
-                return res.status(400).json({ message: 'Email already in use' });
+                return res.json({ error: 'Email already in use' });
             }
             user.email = newEmail;
             await user.save();
@@ -62,14 +59,14 @@ exports.changeUserDetails = async (req, res) => {
         else if (newNumber && newNumber !== null) {
             const existingNumber = await db.Voter.findOne({ where: { phoneNumber: newNumber } });
             if (existingNumber) {
-                return res.status(400).json({ message: 'Number already in use' });
+                return res.json({ error: 'Number already in use' });
             }
             user.phoneNumber = newNumber;
             await user.save();
             message = "Number updated successfully";
         }
         else {
-            return res.status(400).json({ error: 'Either email or phone must be provided.' });
+            return res.json({ error: 'Either email or phone number must be provided.' });
         }        
         return res.json({ 
             email: user.email, 
@@ -87,8 +84,7 @@ exports.changeUserDetails = async (req, res) => {
 exports.getAuthToken = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await db.Voter.findByPk(userId);
-
+        const user = await Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
             return res.json({error: 'User is already authenticated', authenticated: true});
@@ -96,7 +92,6 @@ exports.getAuthToken = async (req, res) => {
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
         await user.save();
-
         sendEmail("Authentication Code", user.email, "Here is your authentication code: " + sixDigitCode);
         res.json({message: "Email sent"});
     }
@@ -109,17 +104,16 @@ exports.getAuthToken = async (req, res) => {
 exports.authAccount = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await db.Voter.findByPk(userId);
-
-        const authToken = req.body.authToken;
-        if (authToken === user.authToken) {
+        const user = await Voter.findByPk(userId);
+        const { token } = req.body;
+        if (token === user.authToken) {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
-            return res.status(200).json({ message: 'New user successfully authenticated' });
+            return res.json({ message: 'New user successfully authenticated' });
         } 
         else {
-            return res.status(401).json({ message: 'Invalid authToken', invalid: true });
+            return res.json({ error: 'Invalid token', invalid: true });
         }
     }
     catch (error) {

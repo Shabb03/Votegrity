@@ -1,6 +1,7 @@
-const { isSecurePassword, hashPassword } = require('./functions/password');
+const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const db = require('../models/index.js');
 const paillier = require('paillier-bigint');
+const countryData = require('../assets/citizenship.json');
 
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
@@ -30,32 +31,29 @@ exports.signup = async (req, res) => {
         }
         const existingUser = await db.Voter.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists, email in use' });
+            return res.json({ error: 'User with email already exists' });
         }
-
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
             return res.json({error: 'Password is not strong enough' });
         }
-
-        const sq1 = await db.SecurityQuestions.findOne({
-            where: { questions: securityQuestion1 },
-            attributes: ['id'],
-        });
-        const sq2 = await db.SecurityQuestions.findOne({
-            where: { questions: securityQuestion2 },
-            attributes: ['id'],
-        });
-
-        if (!sq1 || !sq2) {
-            res.status(404).json({ message: 'Security question not found' });
+        if (!countryData.includes(citizenship)) {
+            return res.json({error: 'Incorrect citizenship provided'});
         }
 
-        const hashedPassword = await hashPassword(password);
+        const sq1 = await SecurityQuestions.findOne({where: { questions: securityQuestion1 }, attributes: ['id'],});
+        const sq2 = await SecurityQuestions.findOne({where: { questions: securityQuestion2 }, attributes: ['id'],});
+        if (!sq1 || !sq2) {
+            res.json({ message: 'Security question not found' });
+        }
+
+        const decryptedPassword = await decryptPassword(password);
+        const hashedPassword = await hashPassword(decryptedPassword);
         const ethereumWallet = generateUserEthereumWallet();
 
         console.log(ethereumWallet.address);
         console.log(ethereumWallet.privateKey);
+
 
         const newUser = await db.Voter.create({
             name: name,
@@ -74,7 +72,6 @@ exports.signup = async (req, res) => {
         });
 
         const userResponse = {
-            id: newUser.id,
             name: newUser.name,
             email: newUser.email,
             publicKey: newUser.publicKey,

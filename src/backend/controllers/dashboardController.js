@@ -3,22 +3,40 @@ const db = require('../models/index.js');
 //Get the details of the current election
 exports.electionDetails = async (req, res) => {
     try {
-        const activeElection = await db.Election.findOne({where: {isActive: true}});
-        if (activeElection) {
-            const totalVoteCount = await db.Vote.count();
-            res.json({
-                title: activeElection.title, 
-                description: activeElection.description, 
-                startDate: activeElection.startDate, 
-                endDate: activeElection.endDate, 
-                resultDate: activeElection.resultDate, 
-                candidateNumber: activeElection.candidateNumber,
-                ageRestriction: activeElection.ageRestriction, 
-                authenticationMethod: activeElection.authenticationMethod,
-                voteCount: totalVoteCount
-            });
-        } else {
-            res.status(404).json({ message: 'No active election found', election: false });
+        const activeElections = await Election.findAll({
+            attributes: ['id', 'title', 'description', 'startDate', 'endDate', 'resultDate', 'candidateNumber', 'ageRestriction', 'authEmail', 'authCitizenship'],
+            where: {
+                isActive: true,
+            },
+            order: [['resultDate', 'DESC']],
+        });
+        if (activeElections) {
+            const result = await Promise.all(activeElections.map(async (election) => {
+                const totalVoteCount = await Vote.count({
+                    where: {
+                        electionId: election.id,
+                    },
+                });
+    
+                return {
+                    id: election.id,
+                    title: election.title,
+                    description: election.description,
+                    startDate: election.startDate,
+                    endDate: election.endDate,
+                    resultDate: election.resultDate,
+                    candidateNumber: election.candidateNumber,
+                    addedCandidates: election.addedCandidates,
+                    ageRestriction: election.ageRestriction,
+                    authEmail: election.authEmail,
+                    authCitizenship: election.authCitizenship,
+                    voteCount: totalVoteCount,
+                };
+            }));
+            res.json({ activeElections: result });
+        } 
+        else {
+            res.json({ error: 'No active election found', election: false });
         }
     }
     catch (error) {
