@@ -9,10 +9,11 @@ const sequelize = new Sequelize({
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
     define: {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci',
+        charset: 'utf8mb4', // Use the appropriate character set
+        collate: 'utf8mb4_unicode_ci', // Use the appropriate collation
     },
 });
+
 
 
 //Models
