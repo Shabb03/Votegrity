@@ -6,12 +6,15 @@
   "type": "commonjs",
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "node server.js",
+    "db:makemigrations": "node node_modules/sequelize-auto-migrations/bin/makemigration.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ariga/atlas-provider-sequelize": "^0.1.4",
+    "aws-sdk": "^2.1571.0",
     "bcrypt": "^5.1.1",
     "blind-signatures": "^1.0.7",
     "cors": "^2.8.5",

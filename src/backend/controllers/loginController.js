@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { decryptPassword } = require('./functions/password');
-const { Admin, Voter } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Generate a login authentication token for the admin or user with the correct login credentials
 exports.login = async (req, res) => {
@@ -12,7 +12,7 @@ exports.login = async (req, res) => {
         }
         //const decryptedPassword = await decryptPassword(password);
 
-        const admin = await Admin.findOne({where: {email: email}});
+        const admin = await db.Admin.findOne({where: {email: email}});
         if (admin) {
             //const isPasswordValid = await bcrypt.compare(decryptedPassword, admin.password);
             const isPasswordValid = await bcrypt.compare(password, admin.password);
@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
                 admin: true,
             })
         }
-        const user = await Voter.findOne({where: {email: email}});
+        const user = await db.Voter.findOne({where: {email: email}});
         if (user) {
             //const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
             const isPasswordValid = await bcrypt.compare(password, user.password);

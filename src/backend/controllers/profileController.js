@@ -7,9 +7,9 @@ const db = require('../models/index.js');
 exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
-        const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
-        const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
+        const user = await db.Voter.findByPk(userId);
+        const sq1 = await db.SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
+        const sq2 = await db.SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
         res.json({
             name: user.name,
             email: user.email,
@@ -84,7 +84,7 @@ exports.changeUserDetails = async (req, res) => {
 exports.getAuthToken = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
             return res.json({error: 'User is already authenticated', authenticated: true});

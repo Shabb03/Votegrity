@@ -4,6 +4,7 @@
     "paillier-bigint": "^3.4.3"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-ignition-ethers": "^0.13.2"
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.13.2",
+    "hardhat": "^2.21.0"
   }
 }

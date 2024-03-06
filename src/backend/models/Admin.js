@@ -31,6 +31,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        privateKeyPath: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     });
 
     return Admin;

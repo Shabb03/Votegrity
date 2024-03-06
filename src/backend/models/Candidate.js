@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const db = require('./index.js');
 
 module.exports = (sequelize) => {
     const Candidate = sequelize.define('Candidate', {
@@ -35,7 +36,16 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull: true,
             defaultValue: false,
+        },   
+        electionId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: db.Election,
+                key: 'id',
+            },
         }
+    
     });
 
     return Candidate;

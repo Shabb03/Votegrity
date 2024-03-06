@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
 const jwt = require('jsonwebtoken');
-const { Voter } = require('../sequelize');
+const db = require('../models/index.js');
 
 const secretKey = 'sharedSecretKey';
 
@@ -11,7 +11,7 @@ exports.test = async (req, res) => {
         if (!email || !password) {
             return res.json({ error: 'All required inputs not provided' });
         }
-        const user = await Voter.findOne({where: {email: email}});
+        const user = await db.Voter.findOne({where: {email: email}});
         if (!user) {
             return res.json({error: 'Account with this email not found'});
         }

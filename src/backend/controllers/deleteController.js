@@ -1,12 +1,12 @@
 const sendEmail = require('./thirdParty/email');
 const generatetoken = require('./functions/generateCode');
-const { Voter } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Get a six digit token via email for users to use to delete their account
 exports.deleteCode = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const token = generatetoken();
         user.resetToken = token;
         await user.save();
@@ -22,7 +22,7 @@ exports.deleteCode = async (req, res) => {
 exports.deleteAccount = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
 
         const { token } = req.body;
         if (token === user.resetToken) {

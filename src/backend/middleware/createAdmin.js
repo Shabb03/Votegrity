@@ -2,6 +2,8 @@ const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const readline = require('readline');
 const { isSecurePassword, hashPassword } = require('../controllers/functions/password');  
+const keyFunctions = require('../middleware/keyFunctions');
+const db = require('../models/index.js');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -14,7 +16,7 @@ async function createAdmin() {
         const email = await askQuestion('Enter admin email: ');
         const password = await askQuestion('Enter admin password: ');
 
-        const existingUser = await Admin.findOne({ where: { email: email } });
+        const existingUser = await db.Admin.findOne({ where: { email: email } });
         if (existingUser) {
             console.error('User already exists');
             return;
@@ -39,9 +41,9 @@ async function createAdmin() {
             }
           });
 
-          const paillierKeys = paillier.generateRandomKeys(2048);
+        const paillierKeys = paillier.generateRandomKeys(2048);
 
-        const admin = await Admin.create({
+        const admin = await db.Admin.create({
             email: email,
             password: hashedPassword,
             blindPublicKey: blindPublicKey,
@@ -49,6 +51,12 @@ async function createAdmin() {
             paillierPublicKey: paillierKeys.publicKey,
             paillierPrivateKey: paillierKeys.PrivateKey,
         });
+
+        const encryptedAdminKey = keyFunctions.encryptAdminKey(admin.Id, paillierKeys.PrivateKey);
+        const privateKeyPath = keyFunctions.storeEncryptedAdminKeysOnS3(votegritybucket, encryptedAdminKey, admin.email);
+
+        await admin.Update({ privateKeyPath: privateKeyPath });
+
         console.log('\n\nAdmin created successfully\n');
         console.log('\n\nThis is your blind signature private key: ${blindPrivateKey}\n')
         console.log('\n\nThis is your encryption private key: ${paillierPrivateKey}\n')

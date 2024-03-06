@@ -32,6 +32,14 @@ module.exports = (sequelize) => {
                 key: 'id',
             },
         },
+        electionId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: db.Election,
+                key: 'id',
+            },
+        },    
         blindedSignature: {
             type: DataTypes.TEXT,
             allowNull: true,
@@ -57,13 +65,13 @@ module.exports = (sequelize) => {
         this.blindedSignature = blindedVote.blinded;
         await this.save();
         return blindedVote.blinded;
-    }
+    };
 
     Vote.prototype.encryptVote = async function (adminPublicKey) {
         const voterId = this.voterId;
         const candidateId = this.candidateId;
 
-        const vote = `${voterId},${candidateId}`; // Combine voter ID and candidate ID
+        const vote = '${voterId},${candidateId}'; // Combine voter ID and candidate ID
 
         const pk = new paillier.PublicKey(adminPublicKey);
         const encryptedVote = pk.encrypt(vote);
@@ -71,7 +79,7 @@ module.exports = (sequelize) => {
         this.encryptedVote = encryptedVote.toString();
         await this.save(); // Save encrypted vote in the database
         return encryptedVote.toString();
-    }
+    };
 
     return Vote;
 }

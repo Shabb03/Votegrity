@@ -21,14 +21,9 @@ contract VotingContract {
     }
 
     // Function to register a voter
-    //function registerVoter() external {
-        // Perform voter registration logic here
-        // Ensure only eligible voters are registered
-        // For example: require(voterEligibility[msg.sender] == true, "Voter not eligible");
-        
-        // Set voter's address in the ballot mapping
-        //ballots[msg.sender].voterAddress = msg.sender;
-    //}
+    function registerVoter() external { 
+        ballots[msg.sender].voterAddress = msg.sender;
+    }
 
     // Function to submit a ballot
     function submitBallot(bytes32 _encryptedVote, bytes32 _blindSignature) external onlyRegisteredVoter {

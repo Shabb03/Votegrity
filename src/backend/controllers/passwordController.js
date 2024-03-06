@@ -1,7 +1,7 @@
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
-const { Voter, SecurityQuestions } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Send a six digit code via email if the user has forgotten their password
 exports.authCode = async (req, res) => {

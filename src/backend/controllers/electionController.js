@@ -1,4 +1,4 @@
-const { Candidate, Election } = require('../sequelize');
+const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
 
 //Create a new election
@@ -11,7 +11,7 @@ exports.addElection = async (req, res) => {
         if (countryData !== null && !countryData.includes(citizenship)) {
             return res.json({error: 'Incorrect citizenship provided'});
         }
-        const newElection = await Election.create({
+        const newElection = await db.Election.create({
             title: title,
             description: description,
             startDate: startDate,
@@ -34,7 +34,7 @@ exports.addElection = async (req, res) => {
 
 exports.getNewElections = async (req, res) => {
     try {
-        const activeElections = await Election.findAll({
+        const activeElections = await db.Election.findAll({
             attributes: ['id', 'title', 'candidateNumber'],
             where: {
                 isActive: true,
@@ -42,7 +42,7 @@ exports.getNewElections = async (req, res) => {
             order: [['resultDate', 'DESC']],
         });
         const result = await Promise.all(activeElections.map(async (election) => {
-            const addedCandidates = await Candidate.count({
+            const addedCandidates = await db.Candidate.count({
                 where: {
                     electionId: election.id,
                 },
