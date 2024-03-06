@@ -17,8 +17,6 @@ unit-test-backend-job:
     - npm test
     - sleep 60
     - echo "Code coverage is 90%"
-  variables:
-    EXAMPLE: $EXAMPLE
 
 unit-test-frontend-job:
   stage: test
