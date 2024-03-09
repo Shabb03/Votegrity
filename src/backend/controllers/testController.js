@@ -1,33 +1,13 @@
 const { Voter } = require('../sequelize');
+const { hashPassword } = require('./functions/password');
 const { generateKeyPairSync, privateDecrypt } = require('crypto');
-
-const secretKey = 'sharedSecretKey';
 
 exports.gettest = async (req, res) => {
     try {
-        const user = await Voter.findByPk(1);
-
-        if (!user.privateKey || !user.publicKey) {
-            const { privateKey, publicKey } = generateKeyPairSync('rsa', {
-                modulusLength: 2048, // the length of your key in bits
-                publicKeyEncoding: {
-                    type: 'spki',
-                    format: 'pem',
-                },
-                    privateKeyEncoding: {
-                    type: 'pkcs8',
-                    format: 'pem',
-                },
-            });
-
-            console.log("publickey", publicKey);
-            console.log("privatekey", privateKey);
-
-            user.privateKey = privateKey;
-            user.publicKey = publicKey;
-            await user.save();
-        }
-        return res.json({privateKey: user.privateKey, publicKey: user.publicKey});
+        const password = 'SecurePassword1!';
+        const saltRounds = 10;
+        //const hashedPassword = await hashPassword(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
     } 
     catch (error) {
         console.log(error);

@@ -1,8 +1,5 @@
 const bcrypt = require('bcrypt');
-const { privateDecrypt } = require('crypto');
-const { isSecurePassword, hashPassword, decryptPassword } = require('../controllers/functions/password');
-
-jest.mock('crypto');
+const { isSecurePassword, hashPassword } = require('../controllers/functions/password');
 
 //check if the function tests the security level of the password
 describe('isSecurePassword', () => {
@@ -22,27 +19,12 @@ describe('isSecurePassword', () => {
 //check if the password is hashed into a secure string
 describe('hashPassword', () => {
     test('should hash the password', async () => {
-        console.log("BEGIN!");
         const password = 'SecurePassword1!';
-        const saltRounds = 1;
-        //const hashedPassword = await hashPassword(password);
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        console.log(hashedPassword);
+        const hashedPassword = await hashPassword(password);
         expect(typeof hashedPassword).toBe('string');
 
         bcrypt.compare = jest.fn().mockResolvedValue(true);
         const match = await bcrypt.compare(password, hashedPassword);
         expect(match).toBe(true);
-    }, 30000);
-});
-
-//check if the password is being decrypted correctly
-describe('decryptPassword function', () => {
-    test('should decrypt the password', async () => {
-        privateDecrypt.mockReturnValueOnce(Buffer.from('DecryptedPassword'));
-        const privateKey = 'mockPrivateKey';
-        const encryptedPassword = 'mockEncryptedPassword';
-        const result = await decryptPassword(privateKey, encryptedPassword);
-        expect(result).toBe('DecryptedPassword');
-    }, 8000);
+    }, 3000);
 });
