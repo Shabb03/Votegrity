@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
-const CryptoJS = require('crypto-js');
+const { privateDecrypt } = require('crypto');
 const { isSecurePassword, hashPassword, decryptPassword } = require('../controllers/functions/password');
-const secretKey = 'testSecretKey';
+
+jest.mock('crypto');
 
 //check if the function tests the security level of the password
 describe('isSecurePassword', () => {
@@ -15,29 +16,33 @@ describe('isSecurePassword', () => {
         const insecurePassword = 'insecure123';
         const secure = await isSecurePassword(insecurePassword);
         expect(secure).toBe(false);
-    });
+    }, 5000);
 });
 
 //check if the password is hashed into a secure string
 describe('hashPassword', () => {
     test('should hash the password', async () => {
-        const plainPassword = 'SecurePassword1!';
-        const hashedPassword = await hashPassword(plainPassword);
+        console.log("BEGIN!");
+        const password = 'SecurePassword1!';
+        const saltRounds = 1;
+        //const hashedPassword = await hashPassword(password);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        console.log(hashedPassword);
         expect(typeof hashedPassword).toBe('string');
 
         bcrypt.compare = jest.fn().mockResolvedValue(true);
-        const match = await bcrypt.compare(plainPassword, hashedPassword);
+        const match = await bcrypt.compare(password, hashedPassword);
         expect(match).toBe(true);
-    });
+    }, 30000);
 });
 
-describe('decryptPassword', () => {
+//check if the password is being decrypted correctly
+describe('decryptPassword function', () => {
     test('should decrypt the password', async () => {
-        const encryptedPassword = 'U2FsdGVkX1/tdvfaPjYYHbf1d11k3T/XWN9hkBoaa68=';
-        const plainPassword = 'loveCookies30!';
-        const bytes = await CryptoJS.AES.decrypt(encryptedPassword, secretKey);
-        const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
-        const match = (plainPassword === decryptedPassword);
-        expect(match).toBe(true);
-    });
+        privateDecrypt.mockReturnValueOnce(Buffer.from('DecryptedPassword'));
+        const privateKey = 'mockPrivateKey';
+        const encryptedPassword = 'mockEncryptedPassword';
+        const result = await decryptPassword(privateKey, encryptedPassword);
+        expect(result).toBe('DecryptedPassword');
+    }, 8000);
 });

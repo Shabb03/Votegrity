@@ -1,7 +1,37 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { decryptPassword } = require('./functions/password');
+const { generateAdminKeys, generateUserKeys } = require('./functions/generateKeys');
 const { Admin, Voter } = require('../sequelize');
+
+//get the user's publicKey to encrypt the password in the frontend
+exports.getKey = async (req, res) => {
+    try {
+        const {email} = req.body;
+        if (!email) {
+            return res.json({ error: 'Email not provided' });
+        }
+        const admin = await Admin.findOne({where: {email: email}});
+        if (admin) {
+            if (!admin.privateKey || !admin.publicKey) {
+                await generateAdminKeys(admin.id);
+            }
+            return res.json({publicKey: admin.publicKey});
+        }
+        const user = await Voter.findOne({where: {email: email}});
+        if (user) {
+            if (!user.privateKey || !user.publicKey) {
+                await generateUserKeys(user.id);
+            }
+            return res.json({publicKey: user.publicKey});
+        }
+        return res.json({error: 'Account with this email not found'});
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).send({error: 'An error has occured trying to log in'})
+    }
+}
 
 //Generate a login authentication token for the admin or user with the correct login credentials
 exports.login = async (req, res) => {
@@ -10,12 +40,12 @@ exports.login = async (req, res) => {
         if (!email || !password) {
             return res.json({ error: 'All required inputs not provided' });
         }
-        //const decryptedPassword = await decryptPassword(password);
 
         const admin = await Admin.findOne({where: {email: email}});
         if (admin) {
-            //const isPasswordValid = await bcrypt.compare(decryptedPassword, admin.password);
-            const isPasswordValid = await bcrypt.compare(password, admin.password);
+            const decryptedPassword = await decryptPassword(admin.privateKey, password);
+            const isPasswordValid = await bcrypt.compare(decryptedPassword, admin.password);
+            //const isPasswordValid = await bcrypt.compare(password, admin.password);
             if (!isPasswordValid) {
                 return res.json({error: 'Password is incorrect'});
             }
@@ -28,8 +58,9 @@ exports.login = async (req, res) => {
         }
         const user = await Voter.findOne({where: {email: email}});
         if (user) {
-            //const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
-            const isPasswordValid = await bcrypt.compare(password, user.password);
+            const decryptedPassword = await decryptPassword(user.privateKey, password);
+            const isPasswordValid = await bcrypt.compare(decryptedPassword, user.password);
+            //const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
                 return res.json({error: 'Password is incorrect'});
             }
@@ -44,6 +75,7 @@ exports.login = async (req, res) => {
         return res.json({error: 'Account with this email not found'});
     } 
     catch (error) {
+        console.log(error);
         res.status(500).send({error: 'An error has occured trying to log in'})
     }
 }

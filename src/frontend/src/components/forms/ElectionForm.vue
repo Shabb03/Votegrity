@@ -183,46 +183,5 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-    background-color: white;
-    margin-top: 5em !important;
-    margin-bottom: 5em !important;
-    width: 50%;
-    margin: auto;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-
-    @media (max-width: 600px) {
-        width: 100%;
-    }
-}
-
-.primary {
-    background-color: #00e5ff;
-}
-
-.primary:hover, 
-.primary:focus {
-    cursor: 'pointer';
-    font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #2616bb;
-    transform: translateY(-0.25em);
-}
-.primary:active {
-    cursor: wait;
-}
-
-.secondary {
-    background-color: #2616bb;
-    color: white;
-}
-
-.secondary:hover, 
-.secondary:focus {
-    cursor: 'pointer';
-    font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #00e5ff;
-    transform: translateY(-0.25em);
-}
+@import '../../styles/form.css';
 </style>

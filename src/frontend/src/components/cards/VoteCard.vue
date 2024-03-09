@@ -119,6 +119,8 @@ export default {
 </script>
 
 <style scoped>
+@import '../../styles/colours.css';
+
 .v-card {
     max-width: 350px !important; 
     width: 100% !important; 
@@ -129,14 +131,14 @@ export default {
     font-weight: bold;
     margin: auto;
     margin-bottom: 0.5em;
-    background-color: #00e5ff;
-    border: 2px solid #000;
+    background-color: var(--primary-color);
+    border: 2px solid var(--border);
 }
 
 .v-btn:hover {
     cursor: 'pointer';
-    color: #00e5ff;
-    background-color: black;
+    color: var(--primary-color);
+    background-color: var(--border);
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 .v-btn:active {

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
+const { privateDecrypt } = require('crypto');
 require('dotenv').config();
 
 const saltRounds = parseInt(process.env.SALTROUNDS);
@@ -21,10 +22,13 @@ async function hashPassword(password) {
     return hashedPassword;
 }
 
-async function decryptPassword(password) {
-    const bytes = await CryptoJS.AES.decrypt(password, secretKey);
-    const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
-    return decryptedPassword;
+async function decryptPassword(privateKey, encryptedPassword) {
+    const encryptedData = Buffer.from(encryptedPassword)
+    const decryptedData = privateDecrypt(
+        privateKey,
+        encryptedData
+    );
+    return decryptedData.toString('utf-8');
 }
 
 module.exports = {

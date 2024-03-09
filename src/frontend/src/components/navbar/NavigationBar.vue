@@ -1,6 +1,6 @@
 <template>
     <header>
-        <v-app-bar :elevation="9">
+        <v-app-bar class="navbar" :elevation="9">
             <div class="spacer"></div>
             <slot></slot>
         </v-app-bar>
@@ -8,28 +8,12 @@
 </template>
   
 <script>
-
-  export default {
+export default {
     name: 'NavigationBar',
-  };
+};
 </script>
   
 <style scoped>
-  header {
-    width:100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    top:0; left: 0;
-    z-index: 1000;
-  }
-  .v-app-bar {
-    background-color: #f7f8f8;
-  }
-
-  .spacer {
-    flex: 1;
-  }
-  </style>
+@import '../../styles/navbar.css';
+</style>
   
