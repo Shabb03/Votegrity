@@ -43,9 +43,9 @@ exports.login = async (req, res) => {
 
         const admin = await Admin.findOne({where: {email: email}});
         if (admin) {
-            const decryptedPassword = await decryptPassword(admin.privateKey, password);
-            const isPasswordValid = await bcrypt.compare(decryptedPassword, admin.password);
-            //const isPasswordValid = await bcrypt.compare(password, admin.password);
+            //const decryptedPassword = await decryptPassword(admin.privateKey, password);
+            //const isPasswordValid = await bcrypt.compare(decryptedPassword, admin.password);
+            const isPasswordValid = await bcrypt.compare(password, admin.password);
             if (!isPasswordValid) {
                 return res.json({error: 'Password is incorrect'});
             }

@@ -12,13 +12,20 @@
                         <VoteCard
                             @callSuccessCard="triggerSuccessCard"
                             :key="index"
-                            :electionId="selectedElection"
                             :candidateId="candidate.id"
                             :name="candidate.name"
                             :dateOfBirth="parseDate(candidate.dateOfBirth)"
                             :voice="candidate.voice"
                             :party="candidate.party"
                             :biography="candidate.biography"
+                        />
+                        <VoteButton
+                            @callSuccessCard="triggerSuccessCard"
+                            :key="index"
+                            :electionId="selectedElection"
+                            :electionType="electionType"
+                            :candidateId="candidate.id"
+                            :name="candidate.name"
                         />
                     </div>
                 </v-row>
@@ -36,6 +43,7 @@ import getToken from '../../functions/GetToken.vue';
 import SuccessCard from "../SuccessCard.vue";
 import ElectionChoice from '../inputs/ElectionChoice.vue';
 import VoteCard from '../cards/VoteCard.vue';
+import VoteButton from '../buttons/VoteButton.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 
 export default {
@@ -43,6 +51,7 @@ export default {
         SuccessCard,
         ElectionChoice,
         VoteCard,
+        VoteButton,
         PageSubTitle,
     },
     data: () => ({
@@ -51,6 +60,7 @@ export default {
         electionData: [],
         candidateData: [],
         selectedElection: null,
+        electionType: '',
         pageSubTitle: 'No Active Elections currently',
     }),
     created() {
@@ -61,6 +71,7 @@ export default {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
+                    this.electionType = this.electionData[selectedElectionIndex].type;
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
                     const groupSize = 3;
                     for (let i = 0; i < candidateArray.length; i += groupSize) {

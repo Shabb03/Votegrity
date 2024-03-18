@@ -75,6 +75,7 @@ export default {
             if (valid) {
                 try {
                     const encryptedPassword = await encryptPassword(this.email, this.password);
+                    console.log(encryptedPassword);
                     const postData = {
                         email: this.email,
                         password: encryptedPassword,

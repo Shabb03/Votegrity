@@ -94,7 +94,7 @@ export default {
                     for (const index in this.electionData) {
                         const item = this.electionData[index];
                         const resultDate = this.formatResultDate(item.resultDate);
-                        item.description = item.description + "<br><br>Result Date: " + resultDate;
+                        item.description = item.description + "<br><br>Result Date: " + resultDate + "<br><br>Election Type: " + item.type;
                         const today = new Date();
                         const daysDifference = this.getDaysDifference(today, item.endDate);
                         item.resultDate = daysDifference.toString();

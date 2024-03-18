@@ -1,5 +1,5 @@
 const { generateKeyPairSync } = require('crypto');
-const { Admin, Voter } = require('../../sequelize');
+const { Admin, Voter, Election } = require('../../sequelize');
 
 async function generateKeys() {
     const { privateKey, publicKey } = generateKeyPairSync('rsa', {
@@ -32,8 +32,17 @@ async function generateUserKeys(id) {
     await user.save();
 }
 
+/*async function generateElectionKeys(id) {
+    const election = await Election.findByPk(id);
+    const { privateKey, publicKey } = await generateKeys();
+    election.privateKey = privateKey;
+    election.publicKey = publicKey;
+    await election.save();
+}*/
+
 module.exports = {
     generateKeys,
     generateAdminKeys,
-    generateUserKeys
+    generateUserKeys,
+    //generateElectionKeys,
 };

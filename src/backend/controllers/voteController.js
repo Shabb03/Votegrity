@@ -31,7 +31,7 @@ exports.getAllCandidates = async (req, res) => {
                     { authCitizenship: user.citizenship },
                 ],
             },
-            attributes: ['id', 'title'],
+            attributes: ['id', 'title', 'type'],
             order: [['resultDate', 'DESC']],
         });
 
@@ -43,6 +43,7 @@ exports.getAllCandidates = async (req, res) => {
             return {
                 id: election.id,
                 title: election.title,
+                type: election.type,
                 candidates,
             };
         }));
@@ -80,10 +81,15 @@ exports.submitVote = async (req, res) => {
         if (!authenticatedUser) {
             return res.json({error: 'User is not authenticated', authenticated: false});
         }
-        const { candidateId, electionId } = req.body;
-        if (!candidateId || electionId) {
+        //const electionType = req.body.type;
+        //if and else statements for election type
+
+        const { candidateId, electionId, type } = req.body;
+        if (!candidateId || !electionId) {
             return res.json({error: 'No candidate or election selected'});
         }
+
+        /*
         const election = Election.findByPk(electionId);
         const age = calculateAge(user.dateOfBirth);
         const email = user.email;
@@ -92,6 +98,9 @@ exports.submitVote = async (req, res) => {
         if (age < election.ageRestriction || (election.authEmail && emailDomain !== election.authEmail) || (election.authCitizenship && user.citizenship !== election.authCitizenship)) {
             return res.json({error: 'You do not meet the voting requirements'});
         }
+        */
+
+        console.log(candidateId, electionId, type);
 
         //Work on this later to synchronize with the blockchain network
 
@@ -105,6 +114,7 @@ exports.submitVote = async (req, res) => {
         res.json({ message: 'Vote submitted successfully'});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

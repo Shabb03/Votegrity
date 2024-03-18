@@ -400,6 +400,10 @@ const Election = sequelize.define('Election', {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     results: {
         type: DataTypes.INTEGER,
         allowNull: true,
