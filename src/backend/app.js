@@ -2,12 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const bodyParser = require('body-parser')
+const rateLimit = require('express-rate-limit');
 
 const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/adminRoute');
 const electionRoute = require('./routes/electionRoute');
 const statusRoute = require('./routes/statusRoute');
 const testRoute = require('./routes/testRoute');
+
+const minutesTimout = 1;
+const limiter = rateLimit({
+    windowMs: minutesTimout * 60 * 1000,
+    max: 200,
+    handler: (req, res) => {
+        res.json({ error: 'Too many requests from this IP, please try again later.'});
+    },
+});
 
 const corsOptions = {
     origin: process.env.ORIGIN || 'http://localhost:8080',
@@ -18,6 +28,7 @@ const corsOptions = {
 
 const app = express();
 app.use(express.json());
+app.use(limiter);
 app.use(cors());
 
 app.use(bodyParser.json());
