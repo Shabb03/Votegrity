@@ -46,8 +46,10 @@ exports.signup = async (req, res) => {
             res.json({ message: 'Security question not found' });
         }
 
-        const decryptedPassword = await decryptPassword(password);
-        const hashedPassword = await hashPassword(decryptedPassword);
+        //const decryptedPassword = await decryptPassword(password);
+        //const hashedPassword = await hashPassword(decryptedPassword);
+
+        const hashedPassword = await hashPassword(password);
 
         const newUser = await Voter.create({
             name: name,

@@ -4,7 +4,7 @@ const { Vote, Election } = require('../sequelize');
 exports.electionDetails = async (req, res) => {
     try {
         const activeElections = await Election.findAll({
-            attributes: ['id', 'title', 'description', 'startDate', 'endDate', 'resultDate', 'candidateNumber', 'ageRestriction', 'authEmail', 'authCitizenship'],
+            attributes: ['id', 'title', 'description', 'startDate', 'endDate', 'resultDate', 'candidateNumber', 'ageRestriction', 'authEmail', 'authCitizenship', 'type'],
             where: {
                 isActive: true,
             },
@@ -12,6 +12,8 @@ exports.electionDetails = async (req, res) => {
         });
         if (activeElections) {
             const result = await Promise.all(activeElections.map(async (election) => {
+                //need to change this to accomodate different types of votes
+                //maybe add a voted: bool column to the Voter database
                 const totalVoteCount = await Vote.count({
                     where: {
                         electionId: election.id,
@@ -30,6 +32,7 @@ exports.electionDetails = async (req, res) => {
                     ageRestriction: election.ageRestriction,
                     authEmail: election.authEmail,
                     authCitizenship: election.authCitizenship,
+                    type: election.type,
                     voteCount: totalVoteCount,
                 };
             }));
@@ -40,6 +43,7 @@ exports.electionDetails = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

@@ -1,7 +1,5 @@
 const bcrypt = require('bcrypt');
-const CryptoJS = require('crypto-js');
-const { isSecurePassword, hashPassword, decryptPassword } = require('../controllers/functions/password');
-const secretKey = 'testSecretKey';
+const { isSecurePassword, hashPassword } = require('../controllers/functions/password');
 
 //check if the function tests the security level of the password
 describe('isSecurePassword', () => {
@@ -15,29 +13,18 @@ describe('isSecurePassword', () => {
         const insecurePassword = 'insecure123';
         const secure = await isSecurePassword(insecurePassword);
         expect(secure).toBe(false);
-    });
+    }, 5000);
 });
 
 //check if the password is hashed into a secure string
 describe('hashPassword', () => {
     test('should hash the password', async () => {
-        const plainPassword = 'SecurePassword1!';
-        const hashedPassword = await hashPassword(plainPassword);
+        const password = 'SecurePassword1!';
+        const hashedPassword = await hashPassword(password);
         expect(typeof hashedPassword).toBe('string');
 
         bcrypt.compare = jest.fn().mockResolvedValue(true);
-        const match = await bcrypt.compare(plainPassword, hashedPassword);
+        const match = await bcrypt.compare(password, hashedPassword);
         expect(match).toBe(true);
-    });
-});
-
-describe('decryptPassword', () => {
-    test('should decrypt the password', async () => {
-        const encryptedPassword = 'U2FsdGVkX1/tdvfaPjYYHbf1d11k3T/XWN9hkBoaa68=';
-        const plainPassword = 'loveCookies30!';
-        const bytes = await CryptoJS.AES.decrypt(encryptedPassword, secretKey);
-        const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
-        const match = (plainPassword === decryptedPassword);
-        expect(match).toBe(true);
-    });
+    }, 3000);
 });

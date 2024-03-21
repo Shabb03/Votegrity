@@ -14,10 +14,6 @@
                 <div>{{ party }}</div>
                 <div>{{ biography }}</div>
             </v-card-text>
-
-            <v-card-actions>
-                <v-btn @click="vote(candidateId)">Vote</v-btn>
-            </v-card-actions>
         </v-card>
     </v-col>
 </template>
@@ -31,7 +27,6 @@ export default {
         imageSrc: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
     }),
     props: {
-        electionId: Number,
         candidateId: Number,
         name: String,
         dateOfBirth: Date,
@@ -83,37 +78,6 @@ export default {
             }
             return age;
         },
-        async callSuccess() {
-            this.$emit('callSuccessCard');
-        },
-        async vote(candidateId) {
-            try {
-                const authToken = getToken();
-                const postData = {
-                    candidateId: candidateId,
-                    electionId: this.electionId,
-                };
-                const response = await axios.post('http://localhost:3000/api/election/vote', postData, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                });
-                if (response.data.error) {
-                    alert(response.data.error);
-                }
-                else {
-                    this.callSuccess();
-                }
-            } 
-            catch (error) {
-                if (process.env.NODE_ENV === 'test') {
-                    console.log(error);
-                } 
-                else {
-                    alert('Error submitting vote:', error);
-                }
-            }
-        },
     },
 }
 </script>
@@ -123,23 +87,5 @@ export default {
     max-width: 350px !important; 
     width: 100% !important; 
     margin: auto !important;
-}
-.v-btn {
-    font-size: 1em;
-    font-weight: bold;
-    margin: auto;
-    margin-bottom: 0.5em;
-    background-color: #00e5ff;
-    border: 2px solid #000;
-}
-
-.v-btn:hover {
-    cursor: 'pointer';
-    color: #00e5ff;
-    background-color: black;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
-.v-btn:active {
-    cursor: wait;
 }
 </style>

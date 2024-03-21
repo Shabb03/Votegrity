@@ -5,12 +5,17 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
+    /*
     username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
+    */
+    username: 'root',
+    password: 'EmeraldDragon9332',
+    database: 'votegrity',
     define: {
-        charset: 'utf8mb4', // Use the appropriate character set
-        collate: 'utf8mb4_unicode_ci', // Use the appropriate collation
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
     },
 });
 
@@ -395,6 +400,10 @@ const Election = sequelize.define('Election', {
     authCitizenship: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     results: {
         type: DataTypes.INTEGER,
