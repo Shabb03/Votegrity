@@ -6,6 +6,7 @@ function generateSixDigitCode() {
     return randomSixDigitNumber.toString();
 }
 
+//Generate a 10 character publish key to publish election
 function generatePublishKey() {
     const allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!$&';
     let randomString = '';
