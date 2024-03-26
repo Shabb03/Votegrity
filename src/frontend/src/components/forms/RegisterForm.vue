@@ -37,7 +37,7 @@
 <script>
 import axios from 'axios';
 import SuccessCard from "../SuccessCard.vue";
-import encryptPassword from '../../functions/EncryptPassword.vue';
+//import encryptPassword from '../../functions/EncryptPassword.vue';
 import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
@@ -87,11 +87,12 @@ export default {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                const encryptedPassword = await encryptPassword(this.password);
+                //const encryptedPassword = await encryptPassword(this.email, this.password);
                 const postData = {
                     name: this.name,
                     email: this.email,
-                    password: encryptedPassword,
+                    //password: encryptedPassword,
+                    password: this.password,
                     dateOfBirth: this.date,
                     specialNumber: this.specialNumber,
                     citizenship: this.citizenship,
@@ -143,9 +144,6 @@ export default {
             console.log("sa1", this.sa1);
             console.log("sq2", this.sq2);
             console.log("sa2", this.sa2);
-
-            const encryptedPassword = await encryptPassword(this.password);
-            console.log(encryptedPassword);
         },
         nameValue(params) {
             this.name = params;
@@ -185,52 +183,5 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-    background-color: white;
-    margin-top: 5em !important;
-    margin-bottom: 5em !important;
-    width: 50%;
-    margin: auto;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-
-    @media (max-width: 600px) {
-        width: 100%;
-    }
-}
-
-.primary {
-    background-color: #00e5ff;
-}
-
-.primary:hover, 
-.primary:focus {
-    cursor: 'pointer';
-    font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #2616bb;
-    transform: translateY(-0.25em);
-}
-.primary:active {
-    cursor: wait;
-}
-
-.secondary {
-    background-color: #2616bb;
-    color: white;
-}
-
-.secondary:hover, 
-.secondary:focus {
-    cursor: 'pointer';
-    font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #00e5ff;
-    transform: translateY(-0.25em);
-}
-
-.form-link {
-    color: blue; 
-    margin-top: 2em;
-    display: block;
-}
+@import '../../styles/form.css';
 </style>

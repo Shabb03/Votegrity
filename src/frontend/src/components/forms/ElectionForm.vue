@@ -16,6 +16,7 @@
                     <DateInput :label="resultDateLabel" @update:date="resultDateValue"/>
                 </v-col>
             </v-row>
+            <ProcessInput @update:process="processValue"/>
             <NumberInput :label="numberLabel" :required="true" @update:number="numberValue"/>
             <NumberInput :label="ageLabel" @update:number="ageValue"/>
             <EmailAuthenticationInput @update:emailDomain="emailDomainValue"/>
@@ -44,6 +45,7 @@ import SuccessCard from "../SuccessCard.vue";
 import TextInput from '../inputs/TextInput.vue';
 import DescriptionInput from '../inputs/DescriptionInput.vue';
 import DateInput from '../inputs/DateInput.vue';
+import ProcessInput from '../inputs/ProcessInput.vue';
 import NumberInput from '../inputs/NumberInput.vue';
 import EmailAuthenticationInput from '../inputs/EmailAuthenticationInput.vue';
 import CitizenshipInput from '../inputs/CitizenshipInput.vue';
@@ -55,6 +57,7 @@ export default {
         TextInput,
         DescriptionInput,
         DateInput,
+        ProcessInput,
         NumberInput,
         EmailAuthenticationInput,
         CitizenshipInput,
@@ -73,6 +76,7 @@ export default {
         startDate: null,
         endDate: null,
         resultDate: null,
+        type: null,
         number: 0,
         age: 0,
         emailDomain: null,
@@ -106,6 +110,7 @@ export default {
                     ageRestriction: this.age,
                     authEmail: this.emailDomain,
                     authCitizenship: this.citizenship,
+                    type: this.type,
                 };
                 try {
                     const token = await getToken();
@@ -169,6 +174,9 @@ export default {
         resultDateValue(params) {
             this.resultDate = params;
         },
+        processValue(params) {
+            this.type = params;
+        },
         ageValue(params) {
             this.age = params;
         },
@@ -183,46 +191,5 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-    background-color: white;
-    margin-top: 5em !important;
-    margin-bottom: 5em !important;
-    width: 50%;
-    margin: auto;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-
-    @media (max-width: 600px) {
-        width: 100%;
-    }
-}
-
-.primary {
-    background-color: #00e5ff;
-}
-
-.primary:hover, 
-.primary:focus {
-    cursor: 'pointer';
-    font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #2616bb;
-    transform: translateY(-0.25em);
-}
-.primary:active {
-    cursor: wait;
-}
-
-.secondary {
-    background-color: #2616bb;
-    color: white;
-}
-
-.secondary:hover, 
-.secondary:focus {
-    cursor: 'pointer';
-    font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #00e5ff;
-    transform: translateY(-0.25em);
-}
+@import '../../styles/form.css';
 </style>

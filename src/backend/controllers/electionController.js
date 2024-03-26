@@ -1,17 +1,23 @@
+const { generateKeys } = require('./functions/generateKeys');
 const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
+const votingProcess = require('../assets/process.json');
 
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
-        const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship } = req.body;
-        if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship) {
+        const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship, type } = req.body;
+        if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship || !type) {
             return res.json({ error: 'All required inputs not provided' });
         }        
         if (countryData !== null && !countryData.includes(citizenship)) {
             return res.json({error: 'Incorrect citizenship provided'});
         }
-        const newElection = await db.Election.create({
+        if (type !== null && !votingProcess.includes(type)) {
+            return res.json({error: 'Incorrect election voting process provided'});
+        }
+        const { privateKey, publicKey } = await generateKeys();
+        const newElection = await Election.create({
             title: title,
             description: description,
             startDate: startDate,
@@ -19,11 +25,12 @@ exports.addElection = async (req, res) => {
             resultDate: resultDate,
             candidateNumber: candidateNumber,
             ageRestriction: ageRestriction,
-            privateKey: null,
-            publicKey: null,
+            privateKey: privateKey,
+            publicKey: publicKey,
             results: null,
             authEmail: authEmail,
             authCitizenship: authCitizenship,
+            type: type,
         });
         res.json({election: newElection.title, message: 'Election created successfully'});
     }

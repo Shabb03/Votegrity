@@ -1,0 +1,11 @@
+:root {
+    --primary-color: #00e5ff;
+    --secondary-color: #2616bb;
+    --navbar-bg: white;
+    --border: black;
+    --form-bg: white;
+    --text-inverse: white;
+    --text-link: blue;
+    --text-error: red;
+    --white-button: white;
+}  

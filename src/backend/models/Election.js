@@ -53,6 +53,10 @@ module.exports = (sequelize) => {
             allowNull: false,
             defaultValue: true,
         },
+        type: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         results: {
             type: DataTypes.INTEGER,
             allowNull: true,

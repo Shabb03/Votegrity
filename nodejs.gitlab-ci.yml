@@ -17,6 +17,18 @@ unit-test-backend-job:
     - npm test
     - sleep 60
     - echo "Code coverage is 90%"
+  variables:
+    PORT: $PORT
+    SQL_USERNAME: $SQL_USERNAME
+    SQL_PASSWORD: $SQL_PASSWORD
+    SQL_DATABASE: $SQL_DATABASE
+    SECRET_KEY: $SECRET_KEY
+    ADMIN_SECRET_KEY: $ADMIN_SECRET_KEY
+    DECRYPT_PASSWORD_KEY: $DECRYPT_PASSWORD_KEY
+    SALTROUNDS: $SALTROUNDS
+    EMAIL_USERNAME: $EMAIL_USERNAME
+    EMAIL_PASSWORD: $EMAIL_PASSWORD
+    ORIGIN: $ORIGIN
 
 unit-test-frontend-job:
   stage: test

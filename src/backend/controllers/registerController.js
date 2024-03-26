@@ -46,13 +46,15 @@ exports.signup = async (req, res) => {
             res.json({ message: 'Security question not found' });
         }
 
-        const decryptedPassword = await decryptPassword(password);
-        const hashedPassword = await hashPassword(decryptedPassword);
+        //const decryptedPassword = await decryptPassword(password);
+        //const hashedPassword = await hashPassword(decryptedPassword);
         const ethereumWallet = generateUserEthereumWallet();
 
         console.log(ethereumWallet.address);
         console.log(ethereumWallet.privateKey);
 
+
+        const hashedPassword = await hashPassword(password);
 
         const newUser = await db.Voter.create({
             name: name,

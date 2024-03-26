@@ -27,6 +27,8 @@ exports.publishResults = async (req, res) => {
         }
 
         //do something to publish results using privateKey and get total voteCount
+
+        //do something to get all the votes for that specific candidate
         
         /*
         const newResult = await Result.create({

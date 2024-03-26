@@ -18,7 +18,7 @@
             class="my-4 primary"
             height="40"
             variant="tonal"
-            width="70%"
+            width="100%"
             @click="postAuthCode"
         >{{ button }}
         </v-btn>
@@ -159,19 +159,21 @@ export default {
 </script>
 
 <style scoped>
+@import '../../styles/colours.css';
+
 .code-container {
     margin-top: 5em !important;
 }
 
 .v-btn {
-    background-color: #00e5ff;
+    background-color: var(--primary-color);
 }
 
 .v-btn:hover, 
 .v-btn:focus {
     cursor: 'pointer';
     font-weight: bolder;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 #2616bb;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 var(--secondary-color);
     transform: translateY(-0.25em);
 }
 .v-btn:active {
