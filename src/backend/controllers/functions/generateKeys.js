@@ -32,17 +32,17 @@ async function generateUserKeys(id) {
     await user.save();
 }
 
-/*async function generateElectionKeys(id) {
+async function generateElectionKeys(id) {
     const election = await Election.findByPk(id);
     const { privateKey, publicKey } = await generateKeys();
     election.privateKey = privateKey;
     election.publicKey = publicKey;
     await election.save();
-}*/
+}
 
 module.exports = {
     generateKeys,
     generateAdminKeys,
     generateUserKeys,
-    //generateElectionKeys,
+    generateElectionKeys,
 };

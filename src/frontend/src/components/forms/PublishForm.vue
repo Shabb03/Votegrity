@@ -32,6 +32,7 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import encryptKey from '../../functions/EncryptKey.vue';
 import ConfirmationCard from '../ConfirmationCard.vue';
 import SuccessCard from "../SuccessCard.vue";
 import ElectionChoice from '../inputs/ElectionChoice.vue';
@@ -97,18 +98,22 @@ export default {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                const encryptedKey = await encryptKey(this.selectedElection, this.key);
                 const postData = {
                     electionId: this.selectedElection,
-                    privateKey: this.key,
+                    publishKey: encryptedKey,
                 };
+                console.log("POSTDATA", postData);
                 try {
                     const token = await getToken();
+                    console.log("TOKEN", token);
                     const response = await axios.post('http://localhost:3000/api/admin/publishresults', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
                     const electionData = response.data;
+                    console.log(electionData);
                     if (electionData.error) {
                         alert(electionData.error);
                     }

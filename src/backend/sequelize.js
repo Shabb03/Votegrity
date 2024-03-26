@@ -405,6 +405,10 @@ const Election = sequelize.define('Election', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    publishKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     results: {
         type: DataTypes.INTEGER,
         allowNull: true,

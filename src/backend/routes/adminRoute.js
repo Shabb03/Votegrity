@@ -28,7 +28,8 @@ router.post('/addcandidate', isAdmin, upload.single('image'), electionController
 
 router.get('/election', isAdmin, dashboardController.electionDetails);
 
+router.post('/publickey', resultController.getKey);
 router.get('/activeelections', isAdmin, resultController.getActiveElections);
-router.post('/publishresults', isAdmin, resultController.publishResults);   //Update with private/public keys
+router.post('/publishresults', isAdmin, resultController.publishResults);
 
 module.exports = router;

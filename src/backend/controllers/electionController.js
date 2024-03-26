@@ -1,11 +1,17 @@
+const sendEmail = require('./thirdParty/email');
 const { generateKeys } = require('./functions/generateKeys');
-const { Candidate, Election } = require('../sequelize');
+const { generatePublishKey } = require('./functions/generateCode');
+const { decryptPassword } = require('./functions/password');
+const { Admin, Candidate, Election } = require('../sequelize');
 const countryData = require('../assets/citizenship.json');
 const votingProcess = require('../assets/process.json');
 
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
+        const userId = req.user.id;
+        const user = await Admin.findByPk(userId);
+
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship, type } = req.body;
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship || !type) {
             return res.json({ error: 'All required inputs not provided' });
@@ -17,6 +23,8 @@ exports.addElection = async (req, res) => {
             return res.json({error: 'Incorrect election voting process provided'});
         }
         const { privateKey, publicKey } = await generateKeys();
+        const publishKey = await generatePublishKey();
+        sendEmail("Election Publish Key", user.email, "Here is your code to publish your new election " + title + ": " + publishKey);
         const newElection = await Election.create({
             title: title,
             description: description,
@@ -31,6 +39,7 @@ exports.addElection = async (req, res) => {
             authEmail: authEmail,
             authCitizenship: authCitizenship,
             type: type,
+            publishKey: publishKey,
         });
         res.json({election: newElection.title, message: 'Election created successfully'});
     }
