@@ -29,9 +29,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
     </div>
@@ -88,15 +85,18 @@ export default {
     },
     */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //submit the details and create a new election
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -137,6 +137,7 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
@@ -147,14 +148,9 @@ export default {
             }
         },
         */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log(this.title);
-            console.log(this.startDate);
-            console.log(this.endDate);
-            console.log(this.resultDate);
         },
         titleValue(params) {
             this.title = params;

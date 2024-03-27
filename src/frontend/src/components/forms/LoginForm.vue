@@ -12,9 +12,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
         <v-row>
@@ -55,6 +52,7 @@ export default {
     },
     */
     methods: {
+        //disable the login button
         disableButton() {
             this.buttonClass = 'mt-4 disabled';
             this.isButtonDisabled = true;
@@ -62,11 +60,13 @@ export default {
                 this.enableButton();
             }, this.timeRemaining * 1000 * 60);
         },
+        //enable the login button
         enableButton() {
             this.errorMessage = '',
             this.buttonClass = 'mt-4 primary';
             this.isButtonDisabled = false;
         },
+        //submit the user's credentials and store the authentication token if correct
         async validate() {
             if (this.isButtonDisabled) {
                 return;
@@ -75,7 +75,6 @@ export default {
             if (valid) {
                 try {
                     const encryptedPassword = await encryptPassword(this.email, this.password);
-                    console.log(encryptedPassword);
                     const postData = {
                         email: this.email,
                         password: encryptedPassword,
@@ -119,12 +118,9 @@ export default {
             }
         },
         */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log("email:", this.email);
-            console.log("password", this.password);
         },
         emailValue(params) {
             this.email = params;

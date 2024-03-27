@@ -13,6 +13,7 @@ export default {
             loading: true,
         };
     },
+    //check if the user is not authenticated otherwise redirect
     async created() {
         try {
             const token = await getToken();

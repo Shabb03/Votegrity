@@ -3,6 +3,7 @@ const { generateKeyPairSync } = require('crypto');
 
 jest.mock('crypto');
 
+//check if the generateKeys generates a private and publuc key pair
 describe('generateKeys', () => {
     test('should generate key pair', async () => {
         const mockPrivateKey = 'mockPrivateKey';

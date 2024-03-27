@@ -58,10 +58,6 @@
                         <h3 class="errorMessage">{{ errorMessage }}</h3>
                     </v-sheet>
                 </div>
-
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </v-container>
         </div>
     </div>
@@ -109,6 +105,7 @@ export default {
         this.fetchCandidates();
     },
     methods: {
+        //update the election details based on the chosen election to view
         async updateElectionDetails() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -134,6 +131,7 @@ export default {
                 }
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard(name=null) {
             this.successMessage = 'You have successfully voted' 
             if (name !== null) {
@@ -141,6 +139,7 @@ export default {
             }
             this.$refs.successCardRef.openDialog();
         },
+        //check if 2 or more candidates have the same rank preference assigned
         async checkRank() {
             const valueSet = new Set();
             for (const key in this.ranks) {
@@ -155,6 +154,7 @@ export default {
             }
             return true;
         },
+        //check if all score points provided have been used
         async checkScore(){
             if (this.totalScore < 0) {
                 this.errorMessage = "Too many points used";
@@ -166,14 +166,13 @@ export default {
             }
             return true;
         },
+        //cast the vote
         async vote() {
             try {
                 this.errorMessage = '';
                 const postData = {
                     electionId: this.selectedElection,
                     type: this.electionType,
-                    //ranks: this.ranks,
-                    //scores: this.scores,
                 };
                 if (this.electionType === 'ranked') {
                     if (await this.checkRank()) {
@@ -192,9 +191,6 @@ export default {
                     }
                 }
                 const authToken = await getToken();
-                console.log(authToken);
-                console.log(postData);
-                
                 const response = await axios.post('http://localhost:3000/api/election/vote', postData, {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
@@ -216,10 +212,12 @@ export default {
                 }
             }
         },
+        //parse the date string into a readable format
         parseDate(dateString) {
             const [year, month, day] = dateString.split('-');
             return new Date(year, month - 1, day);
         },
+        //fetch all candidates for the chosen election
         async fetchCandidates() {
             try {
                 const authToken = await getToken();
@@ -258,10 +256,6 @@ export default {
             }
             this.totalScore = initialScore;
         },
-        test() {
-            console.log("Ranks", this.ranks);
-            console.log("Scores", this.scores);
-        }
     }
 }
 </script>

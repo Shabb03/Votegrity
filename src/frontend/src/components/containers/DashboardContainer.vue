@@ -47,6 +47,7 @@ export default {
         this.fetchInformation();
     },
     methods: {
+        //update the election details based on the chosen election to view
         async updateElectionDetails() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -63,6 +64,7 @@ export default {
                 }
             }
         },
+        //format the date to DD/MM/YYYY
         formatResultDate(dateInput) {
         const date = new Date(dateInput);
             return date.toLocaleDateString('en-GB', {
@@ -71,6 +73,7 @@ export default {
                 day: 'numeric',
             });
         },
+        //get the difference between current date and result date
         getDaysDifference(startDate, endDate) {
             const oneDay = 24 * 60 * 60 * 1000;
             const start = new Date(startDate);
@@ -78,6 +81,7 @@ export default {
             const daysDifference = Math.round((end - start) / oneDay);
             return daysDifference;
         },
+        //get all active elections
         async fetchInformation() {
             try {
                 const authToken = await getToken();

@@ -12,6 +12,7 @@ exports.securityQuestions = async (req, res) => {
         res.json({ questions });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -72,6 +73,7 @@ exports.signup = async (req, res) => {
         res.status(201).json({ user: userResponse, message: 'User created successfully' });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

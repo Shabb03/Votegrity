@@ -1,6 +1,7 @@
 const { generateKeyPairSync } = require('crypto');
 const { Admin, Voter, Election } = require('../../sequelize');
 
+//generate a private and public key pair
 async function generateKeys() {
     const { privateKey, publicKey } = generateKeyPairSync('rsa', {
         modulusLength: 2048,
@@ -16,6 +17,7 @@ async function generateKeys() {
     return { privateKey, publicKey };
 }
 
+//generate a private and public key pair for admin
 async function generateAdminKeys(id) {
     const admin = await Admin.findByPk(id);
     const { privateKey, publicKey } = await generateKeys();
@@ -24,6 +26,7 @@ async function generateAdminKeys(id) {
     await user.save();
 }
 
+//generate a private and public key pair for user
 async function generateUserKeys(id) {
     const user = await Voter.findByPk(id);
     const { privateKey, publicKey } = await generateKeys();
@@ -32,6 +35,7 @@ async function generateUserKeys(id) {
     await user.save();
 }
 
+//generate a private and public key pair for an election
 async function generateElectionKeys(id) {
     const election = await Election.findByPk(id);
     const { privateKey, publicKey } = await generateKeys();

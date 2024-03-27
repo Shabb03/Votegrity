@@ -38,6 +38,7 @@ export default {
         this.fetchImageData();
     },
     methods: {
+        //used to convert images into a displayable format
         arrayBufferToBase64(buffer) {
             let binary = '';
             const bytes = new Uint8Array(buffer);
@@ -46,6 +47,7 @@ export default {
             }
             return btoa(binary);
         },
+        //get the image of the candidate
         async fetchImageData() {
             try {
                 const authToken = await getToken();
@@ -68,6 +70,7 @@ export default {
                 }
             }
         },
+        //calculate the age of the candidate given the date of birth
         calculateAge(dateOfBirth) {
             const today = new Date();
             const birthDate = new Date(dateOfBirth);

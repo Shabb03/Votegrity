@@ -6,7 +6,7 @@ require('dotenv').config();
 const saltRounds = parseInt(process.env.SALTROUNDS);
 const secretKey = process.env.DECRYPT_PASSWORD_KEY;
 
-//Check if the password meets the security requirements
+//check if the password meets the security requirements
 async function isSecurePassword(password) {
     const hasNumber = /\d/.test(password);
     const hasLowercase = /[a-z]/.test(password);
@@ -16,12 +16,13 @@ async function isSecurePassword(password) {
     return hasNumber && hasLowercase && hasUppercase && hasSpecialChar && hasMinLength;
 }
 
-//Encrypt the password using hashing
+//hash the password
 async function hashPassword(password) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     return hashedPassword;
 }
 
+//decrypt the given password using the private key provided
 async function decryptPassword(privateKey, encryptedPassword) {
     const encryptedData = Buffer.from(encryptedPassword)
     const decryptedData = privateDecrypt(

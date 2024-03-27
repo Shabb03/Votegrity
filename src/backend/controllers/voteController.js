@@ -51,6 +51,7 @@ exports.getAllCandidates = async (req, res) => {
         return res.json({candidates: candidatesByElection});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -69,6 +70,7 @@ exports.getImage = async (req, res) => {
         res.send(imageData);
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

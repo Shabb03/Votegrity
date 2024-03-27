@@ -18,9 +18,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
     </div>
@@ -76,12 +73,14 @@ export default {
     },
     */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //display the number of added candidates and the number of candidates required for the election
         async updateCandidateCounts() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -95,6 +94,7 @@ export default {
                 }
             }
         },
+        //submit the new candidates details and add them to the election
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -136,6 +136,7 @@ export default {
                 }
             }
         },
+        //get all new elections where the added candidates are less than the required candidates
         async getElections() {
             try {
                 const authToken = await getToken();
@@ -156,6 +157,7 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
@@ -166,16 +168,9 @@ export default {
             }
         },
         */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            /*
-            console.log(this.name);
-            console.log(this.image);
-            console.log(this.voice);
-            */
-            console.log(this.selectedElection);
         },
         nameValue(params) {
           this.name = params;

@@ -28,6 +28,7 @@ exports.getResults = async (req, res) => {
         res.json({ electionResults: result });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

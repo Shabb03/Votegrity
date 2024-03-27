@@ -86,9 +86,11 @@ export default {
         this.getAuthCode();
     },
     methods: {
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //get the authentication code from the provided api url path
         async getAuthCode() {
             try {
                 const url = 'http://localhost:3000/api' + this.getApiUrl;
@@ -119,6 +121,7 @@ export default {
                 }
             }
         },
+        //post the authentication code to the provided api url path
         async postAuthCode() {
             try {
                 const postData = {

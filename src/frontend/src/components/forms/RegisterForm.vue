@@ -25,9 +25,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
         <router-link class="form-link" to="/login">Login</router-link>
@@ -81,9 +78,11 @@ export default {
     },
     */
     methods: {
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //register the new user with the provided details
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -129,21 +128,9 @@ export default {
             }
         },
         */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        async test() {
-            console.log("name", this.name);
-            console.log("email", this.email);
-            console.log("password", this.password);
-            console.log("citizenship", this.citizenship);
-            console.log("special number", this.specialNumber);
-            console.log("phone number", this.phoneNumber);
-            console.log("date", this.date);
-            console.log("sq1", this.sq1);
-            console.log("sa1", this.sa1);
-            console.log("sq2", this.sq2);
-            console.log("sa2", this.sa2);
         },
         nameValue(params) {
             this.name = params;

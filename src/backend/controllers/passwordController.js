@@ -26,6 +26,7 @@ exports.authCode = async (req, res) => {
         res.json({message: "Email sent", securityQuestion1: sq1.questions, securityQuestion2: sq2.questions});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
@@ -59,6 +60,7 @@ exports.changePassword = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

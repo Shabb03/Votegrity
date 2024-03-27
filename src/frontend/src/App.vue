@@ -17,7 +17,6 @@ export default {
 @import './styles/colours.css';
 
 .v-main {
-    /*background: linear-gradient(115deg, #00e5ff 10%, #9f01ea 90%);*/
     background: linear-gradient(115deg, var(--primary-color) 10%, var(--secondary-color) 90%);
 }
 </style>

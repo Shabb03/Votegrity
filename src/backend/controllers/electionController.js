@@ -44,10 +44,12 @@ exports.addElection = async (req, res) => {
         res.json({election: newElection.title, message: 'Election created successfully'});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
+//get a list of all new elections where the number of added candidates is less than the required number of candidates
 exports.getNewElections = async (req, res) => {
     try {
         const activeElections = await Election.findAll({
@@ -77,6 +79,7 @@ exports.getNewElections = async (req, res) => {
         res.json({ activeElections: filteredResult });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -108,6 +111,7 @@ exports.addCandidate = async (req, res) => {
         res.json({candidate: newCandidate, message: 'Candidate created successfully'});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

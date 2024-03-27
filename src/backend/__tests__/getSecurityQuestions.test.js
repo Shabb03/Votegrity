@@ -21,21 +21,21 @@ afterAll(async () => {
 
 //check if the route returns a list of all security questions
 describe('GET /api/user/securityquestions', () => {
-  test('should return an array of security questions', async () => {
-    const mockSecurityQuestions = [
-      { questions: 'Question 1' },
-      { questions: 'Question 2' },
-    ];
-    jest.spyOn(SecurityQuestions, 'findAll').mockResolvedValue(mockSecurityQuestions);
-    const response = await request(app).get('/api/user/securityquestions');
-    expect(response.status).toBe(200);
-    expect(response.body.questions).toEqual(['Question 1', 'Question 2']);
-  });
+    test('should return an array of security questions', async () => {
+        const mockSecurityQuestions = [
+            { questions: 'Question 1' },
+            { questions: 'Question 2' },
+        ];
+        jest.spyOn(SecurityQuestions, 'findAll').mockResolvedValue(mockSecurityQuestions);
+        const response = await request(app).get('/api/user/securityquestions');
+        expect(response.status).toBe(200);
+        expect(response.body.questions).toEqual(['Question 1', 'Question 2']);
+    });
 
-  test('should handle errors and return 500 status', async () => {
-    jest.spyOn(SecurityQuestions, 'findAll').mockRejectedValue(new Error('Mock error'));
-    const response = await request(app).get('/api/user/securityquestions');
-    expect(response.status).toBe(500);
-    expect(response.body.message).toBe('Internal server error');
-  });
+    test('should handle errors and return 500 status', async () => {
+        jest.spyOn(SecurityQuestions, 'findAll').mockRejectedValue(new Error('Mock error'));
+        const response = await request(app).get('/api/user/securityquestions');
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe('Internal server error');
+    });
 });

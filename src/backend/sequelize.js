@@ -5,14 +5,9 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: '127.0.0.1',
-    /*
     username: process.env.SQL_USERNAME,
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
-    */
-    username: 'root',
-    password: 'EmeraldDragon9332',
-    database: 'votegrity',
     define: {
         charset: 'utf8mb4',
         collate: 'utf8mb4_unicode_ci',
@@ -202,16 +197,6 @@ const Block = sequelize.define('Block', {
         primaryKey: true,
         autoIncrement: true,
     },
-    /*
-    previousHash: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        references: {
-              model: Block,
-              key: 'hash',
-        },
-    },
-    */
     previousHash: {
         type: DataTypes.STRING,
         allowNull: true,

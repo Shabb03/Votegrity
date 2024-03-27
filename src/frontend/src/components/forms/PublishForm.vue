@@ -18,9 +18,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
     </div>
@@ -66,12 +63,14 @@ export default {
     },
     */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //convert the Date provided into a readable format
         async readableDate(resultDate) {
             const date = new Date(resultDate);
             const day = date.getDate().toString().padStart(2, '0');
@@ -80,6 +79,7 @@ export default {
             const formattedDate = `${day}/${month}/${year}`;
             return formattedDate;
         },
+        //update the result date depending on the election chosen
         async updateResultDate() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -92,9 +92,11 @@ export default {
                 }
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //publish the chosen election with the key provided
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -103,17 +105,14 @@ export default {
                     electionId: this.selectedElection,
                     publishKey: encryptedKey,
                 };
-                console.log("POSTDATA", postData);
                 try {
                     const token = await getToken();
-                    console.log("TOKEN", token);
                     const response = await axios.post('http://localhost:3000/api/admin/publishresults', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
                     const electionData = response.data;
-                    console.log(electionData);
                     if (electionData.error) {
                         alert(electionData.error);
                     }
@@ -131,6 +130,7 @@ export default {
                 }
             }
         },
+        //get all active elections that require publishing
         async getElections() {
             try {
                 const authToken = await getToken();
@@ -150,6 +150,7 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
@@ -160,12 +161,9 @@ export default {
             }
         },
         */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log(this.email);
-            console.log(this.password);
         },
         keyValue(params) {
             this.key = params;

@@ -22,6 +22,7 @@ exports.userInfo = async (req, res) => {
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -76,6 +77,7 @@ exports.changeUserDetails = async (req, res) => {
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -96,6 +98,7 @@ exports.getAuthToken = async (req, res) => {
         res.json({message: "Email sent"});
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
@@ -117,6 +120,7 @@ exports.authAccount = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

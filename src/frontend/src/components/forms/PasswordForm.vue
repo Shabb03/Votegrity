@@ -45,9 +45,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
     </div>
@@ -93,15 +90,18 @@ export default {
     },
     */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //submit the user's new password to change their password along with their provided reset token
         async validate() {
             if (this.password1 !== this.password2) {
                 alert('Passwords do not match');
@@ -137,6 +137,7 @@ export default {
                 }
             }
         },
+        //send the user a reset token via email to change their passwords
         async getAuthCode() {
             try {
                 const postData = {
@@ -159,6 +160,7 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
@@ -169,11 +171,9 @@ export default {
             }
         },
         */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log(this.password);
         },
         emailValue(params) {
             this.email = params;

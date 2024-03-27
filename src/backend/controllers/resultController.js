@@ -2,6 +2,7 @@ const { generateElectionKeys } = require('./functions/generateKeys');
 const { decryptPassword } = require('./functions/password');
 const { Election } = require('../sequelize');
 
+//get the election's public key
 exports.getKey = async (req, res) => {
     try {
         const {electionId} = req.body;

@@ -40,6 +40,7 @@ exports.getStatus = async (req, res) => {
         return res.json({status: 'Not Logged in', loggedOut: true, wrongToken: true });
     } 
     catch (error) {
+        console.log(error);
         res.status(500).json({error: 'An error has occured getting the status of the user'})
     }
 }

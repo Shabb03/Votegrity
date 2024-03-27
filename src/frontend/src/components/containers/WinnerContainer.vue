@@ -36,6 +36,7 @@ export default {
         this.fetchWinner();
     },
     methods: {
+        //used to convert images into a displayable format
         arrayBufferToBase64(buffer) {
             let binary = '';
             const bytes = new Uint8Array(buffer);
@@ -44,6 +45,7 @@ export default {
             }
             return btoa(binary);
         },
+        //get the image of the winner
         async fetchWinner() {
             try {
                 const authToken = await getToken();
