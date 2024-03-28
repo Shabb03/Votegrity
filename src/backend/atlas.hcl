@@ -3,16 +3,16 @@ data "external_schema" "sequelize" {
         "npx",
         "@ariga/atlas-provider-sequelize",
         "load",
-        "--path", "./models,
-        "--dialect", "mysql",
+        "--path", "./models",
+        "--dialect", "mysql", // mariadb | postgres | sqlite | mssql
     ]
 }
 
 env "sequelize" {
     src = data.external_schema.sequelize.url
-    dev = "docker://mysql/8/dev"
+    dev = "mysql://root:Tommy2045%40@localhost:3306/votegrity"
     migration {
-        dir = "file://migrations"
+        dir = "file://./migrations"
     }
     format {
         migrate {

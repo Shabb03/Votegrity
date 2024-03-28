@@ -10,14 +10,14 @@ const readFileAsync = promisify(fs.readFile);
 
 const keyFunctions = require('../middleware/keyFunctions.js')
 
-const Web3 = require('web3');
-const web3 = new Web3(process.env.PRIVATE_KEY);
-
 const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
 const contractAddress = '0x0xE4cbd0825a4A2673d00196d8172e1E5DA359F3D6';
 
 const dotenv = require('dotenv');
 dotenv.config();
+
+const { Web3 } = require('web3');
+const web3 = new Web3(process.env.API_URL);
 
 //Get the details of all candidates in the current election
 exports.getAllCandidates = async (req, res) => {
@@ -163,7 +163,8 @@ exports.submitVote = async (req, res) => {
         const admin = await db.Admin.findOne({ where: { electionId: user.electionId } });
 
         const bucketName = "votegritybucket";
-        const adminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
+        const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
+        const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
         const adminPublicKey = admin.paillierPublicKey;
         
         const vote = await db.Vote.create({
