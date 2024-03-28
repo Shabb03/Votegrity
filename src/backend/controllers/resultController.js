@@ -1,28 +1,5 @@
-const { generateElectionKeys } = require('./functions/generateKeys');
 const { decryptPassword } = require('./functions/password');
 const { Election } = require('../sequelize');
-
-//get the election's public key
-exports.getKey = async (req, res) => {
-    try {
-        const {electionId} = req.body;
-        if (!electionId) {
-            return res.json({ error: 'Election id not provided' });
-        }
-        const election = await Election.findByPk(electionId);
-        if (election) {
-            if (!election.privateKey || !election.publicKey) {
-                await generateElectionKeys(election.id);
-            }
-            return res.json({publicKey: election.publicKey});
-        }
-        return res.json({error: 'Election with this id not found'});
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-}
 
 //get all active elections
 exports.getActiveElections = async (req, res) => {
@@ -49,7 +26,7 @@ exports.publishResults = async (req, res) => {
         if (!election || !election.isActive) {
             res.json({error: 'Active Election not found'});
         }
-        const decryptedKey = await decryptPassword(election.privateKey, publishKey);
+        const decryptedKey = await decryptPassword(publishKey);
         if (decryptedKey !== election.publishKey) {
             res.json({error: 'Incorrect publish key provided'});
         }

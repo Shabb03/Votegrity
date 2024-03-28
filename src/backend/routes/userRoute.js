@@ -12,7 +12,6 @@ const deleteController = require('../controllers/deleteController');
 router.get('/securityquestions', registerController.securityQuestions);
 router.post('/register', registerController.signup);
 
-router.post('/publickey', loginController.getKey);
 router.post('/login', loginLimiter, loginController.login);
 
 router.get('/userinfo', authenticateToken, profileController.userInfo);

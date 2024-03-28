@@ -48,7 +48,7 @@ exports.changePassword = async (req, res) => {
             if (!isSecure) {
                 return res.json({error: 'Password is not strong enough'});
             }
-            const decryptedPassword = await decryptPassword(user.privateKey, password);
+            const decryptedPassword = await decryptPassword(password);
             const hashedPassword = await hashPassword(decryptedPassword);
             user.password = hashedPassword;
             user.resetToken = null;
