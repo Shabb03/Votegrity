@@ -1,6 +1,7 @@
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const { SecurityQuestions, Voter } = require('../sequelize');  
 const countryData = require('../assets/citizenship.json');
+const paillier = require('paillier-bigint');
 
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
@@ -52,6 +53,9 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await hashPassword(password);
 
+        const { paillierPublicKey, paillierPrivateKey } = paillier.generateRandomKeys(2048);
+        const ethereumWallet = generateUserEthereumWallet();
+
         const newUser = await Voter.create({
             name: name,
             email: email,
@@ -60,6 +64,10 @@ exports.signup = async (req, res) => {
             specialNumber: specialNumber,
             citizenship: citizenship,
             phoneNumber: phoneNumber,
+            paillierPrivateKey: paillierPrivateKey,
+            paillierPublicKey: paillierPublicKey,
+            walletPrivateKey: ethereumWallet.privateKey,
+            walletAddress: ethereumWallet.address,
             securityQuestion1: sq1.id, 
             securityAnswer1: securityAnswer1, 
             securityQuestion2: sq2.id, 
@@ -69,11 +77,25 @@ exports.signup = async (req, res) => {
         const userResponse = {
             name: newUser.name,
             email: newUser.email,
+            publicKey: newUser.publicKey,
+            privateKey: newUser.privateKey,
         };
         res.status(201).json({ user: userResponse, message: 'User created successfully' });
     }
     catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+
+    function generateUserEthereumWallet()
+    {
+        const privateKey = ethereumWallet.generate().getPrivateKey();
+        const wallet = ethereumWallet.fromPrivateKey(privateKey);
+        const address = '0x${wallet.getAddress().toString("hex")}';
+
+        return {
+            privateKey: privateKey.toString('hex'),
+            address: address
+        };
     }
 };

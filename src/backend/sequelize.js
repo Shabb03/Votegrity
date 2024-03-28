@@ -83,11 +83,19 @@ const Voter = sequelize.define('Voter', {
         allowNull: false,
         defaultValue: false,
     },
-    privateKey: {
+    paillierPrivateKey: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    publicKey: {
+    paillierPublicKey: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    walletPrivateKey: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    walletAddress: {
         type: DataTypes.STRING,
         allowNull: true,
     },
