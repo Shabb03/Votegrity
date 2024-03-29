@@ -1,5 +1,9 @@
-const API_URL = vars.get("API_URL");
-const PRIVATE_KEY = vars.get("PRIVATE_KEY")
+//const API_URL = vars.get("API_URL");
+//const PRIVATE_KEY = vars.get("PRIVATE_KEY")
+
+const API_URL = process.env.API_URL;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-ethers");
 
