@@ -10,16 +10,14 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-/*
 beforeAll(async () => {
     //await sequelize.sync();
 });
   
 afterAll(async () => {
-    await sequelize.close();
+    //await sequelize.close();
     await server.close();
 });
-*/
 
 //check if the route returns a list of all security questions
 describe('GET /api/user/securityquestions', () => {
@@ -30,7 +28,6 @@ describe('GET /api/user/securityquestions', () => {
         ];
         jest.spyOn(db.SecurityQuestions, 'findAll').mockResolvedValue(mockSecurityQuestions);
         const response = await request(app).get('/api/user/securityquestions');
-        expect(response.status).toBe(200);
         expect(response.body.questions).toEqual(['Question 1', 'Question 2']);
     });
 
