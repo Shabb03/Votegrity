@@ -6,13 +6,17 @@
   "type": "commonjs",
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "node server.js",
+    "db:makemigrations": "node node_modules/sequelize-auto-migrations/bin/makemigration.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ariga/atlas-provider-sequelize": "^0.1.4",
+    "aws-sdk": "^2.1571.0",
     "bcrypt": "^5.1.1",
+    "blind-signatures": "^1.0.7",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
@@ -30,8 +34,9 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "readline": "^1.3.0",
-    "sequelize": "^6.35.2",
-    "supertest": "^6.3.4"
+    "sequelize": "^6.37.0",
+    "supertest": "^6.3.4",
+    "web3": "^4.7.0"
   },
   "devDependencies": {
     "jest": "^29.7.0"

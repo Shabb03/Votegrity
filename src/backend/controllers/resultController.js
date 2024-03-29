@@ -1,10 +1,10 @@
 const { decryptPassword } = require('./functions/password');
-const { Election } = require('../sequelize');
+const db = require('../models/index.js');
 
 //get all active elections
 exports.getActiveElections = async (req, res) => {
     try {
-        const activeElections = await Election.findAll({
+        const activeElections = await db.Election.findAll({
             attributes: ['id', 'title', 'resultDate'],
             where: {
                 isActive: true,
@@ -22,7 +22,8 @@ exports.getActiveElections = async (req, res) => {
 exports.publishResults = async (req, res) => {
     try {
         const { electionId, publishKey } = req.body; 
-        const election = await Election.findByPk(electionId);
+        const election = await db.Election.findByPk(electionId);
+
         if (!election || !election.isActive) {
             res.json({error: 'Active Election not found'});
         }

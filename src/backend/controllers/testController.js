@@ -1,4 +1,7 @@
-const { Voter } = require('../sequelize');
+const bcrypt = require('bcrypt');
+const CryptoJS = require('crypto-js');
+const jwt = require('jsonwebtoken');
+const db = require('../models/index.js');
 const { hashPassword } = require('./functions/password');
 const { generateKeyPairSync, privateDecrypt } = require('crypto');
 

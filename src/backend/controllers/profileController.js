@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
 const sendEmail = require('./thirdParty/email');
 const generateSixDigitCode = require('./functions/generateCode');
-const { Voter, SecurityQuestions } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Get the information of the user
 exports.userInfo = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
-        const sq1 = await SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
-        const sq2 = await SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
+        const user = await db.Voter.findByPk(userId);
+        const sq1 = await db.SecurityQuestions.findByPk(user.securityQuestion1, { attributes: ['id', 'questions'] });
+        const sq2 = await db.SecurityQuestions.findByPk(user.securityQuestion2, { attributes: ['id', 'questions'] });
         res.json({
             name: user.name,
             email: user.email,
@@ -48,7 +48,7 @@ exports.changeUserDetails = async (req, res) => {
             newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         }
         else if (newEmail && newEmail !== null) {
-            const existingEmail = await Voter.findOne({ where: { email: newEmail } });
+            const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
             if (existingEmail) {
                 return res.json({ error: 'Email already in use' });
             }
@@ -58,7 +58,7 @@ exports.changeUserDetails = async (req, res) => {
             newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
         }
         else if (newNumber && newNumber !== null) {
-            const existingNumber = await Voter.findOne({ where: { phoneNumber: newNumber } });
+            const existingNumber = await db.Voter.findOne({ where: { phoneNumber: newNumber } });
             if (existingNumber) {
                 return res.json({ error: 'Number already in use' });
             }
@@ -86,7 +86,7 @@ exports.changeUserDetails = async (req, res) => {
 exports.getAuthToken = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
             return res.json({error: 'User is already authenticated', authenticated: true});

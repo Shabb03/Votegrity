@@ -1,5 +1,5 @@
 const calculateAge = require('./functions/calculateAge');
-const { Voter, Candidate, Vote, Election } = require('../sequelize');
+const db = require('../models/index.js');
 const Sequelize = require('sequelize');
 const processes = require('../assets/process.json');
 
@@ -8,18 +8,29 @@ const path = require('path');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
+const keyFunctions = require('../middleware/keyFunctions.js')
+
+//const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+const contractAddress = '0x0xE4cbd0825a4A2673d00196d8172e1E5DA359F3D6';
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+const { Web3 } = require('web3');
+const web3 = new Web3(process.env.API_URL);
+
 //Get the details of all candidates in the current election
 exports.getAllCandidates = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
 
         const age = calculateAge(user.dateOfBirth);
         const email = user.email;
         const emailAtIndex = email.indexOf('@');
         const emailDomain = email.substring(emailAtIndex);
 
-        const activeElections = await Election.findAll({
+        const activeElections = await db.Election.findAll({
             where: {
                 isActive: true,
                 ageRestriction: { [Sequelize.Op.lte]: age },
@@ -37,7 +48,7 @@ exports.getAllCandidates = async (req, res) => {
         });
 
         const candidatesByElection = await Promise.all(activeElections.map(async (election) => {
-            const candidates = await Candidate.findAll({
+            const candidates = await db.Candidate.findAll({
                 where: { electionId: election.id },
                 attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
             });
@@ -60,7 +71,7 @@ exports.getAllCandidates = async (req, res) => {
 exports.getImage = async (req, res) => {
     try {
         const { id } = req.params;
-        const candidate = await Candidate.findByPk(id);
+        const candidate = await db.Candidate.findByPk(id);
         if (!candidate) {
             return res.json({ message: 'Candidate not found' });
         }
@@ -80,7 +91,7 @@ exports.submitVote = async (req, res) => {
     //Work on this later to synchronize with the blockchain network
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (!authenticatedUser) {
             return res.json({error: 'User is not authenticated', authenticated: false});
@@ -90,7 +101,7 @@ exports.submitVote = async (req, res) => {
             return res.json({error: 'Incorrect election type'});
         }
         const { electionId } = req.body;
-        const election = Election.findByPk(electionId);
+        const election = db.Election.findByPk(electionId);
         const age = calculateAge(user.dateOfBirth);
         const email = user.email;
         const emailAtIndex = email.indexOf('@');
@@ -151,6 +162,33 @@ exports.submitVote = async (req, res) => {
             }
         }
         
+        const admin = await db.Admin.findOne({ where: { electionId: user.electionId } });
+
+        const bucketName = "votegritybucket";
+        const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
+        const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
+        const adminPublicKey = admin.paillierPublicKey;
+        
+        const vote = await db.Vote.create({
+            voterId: userId,
+            candidateId: candidateId,
+            electionId: electionId,
+        });
+
+        const blindedSignature = vote.blindSignature(adminPrivateKey);
+        const encryptedVote = vote.encryptVote(adminPublicKey);
+
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+        contract.methods.submitBallot(encryptedVote, blindedSignature)
+        .send({ from: '${user.walletAddress}' })
+        .on('receipt', receipt => {
+            console.log(receipt);
+        })
+        .on('error', error => {
+            console.error(error);
+        });
+
         res.json({ message: 'Vote submitted successfully'});
     }
     catch (error) {

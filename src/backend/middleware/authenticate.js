@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Voter } = require('../sequelize');
+const db = require('../models/index.js');
 require('dotenv').config();
 const secretKey = process.env.SECRET_KEY
 
@@ -14,7 +14,7 @@ async function authenticateToken(req, res, next) {
         const acessUser = jwt.verify(token, secretKey);
         req.user = acessUser;
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

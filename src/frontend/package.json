@@ -23,6 +23,7 @@
     "roboto-fontface": "*",
     "vee-validate": "^4.12.4",
     "vue": "^3.2.13",
+    "vue-cli": "^2.9.6",
     "vue-router": "^4.0.13",
     "vuetify": "^3.5.1",
     "webfontloader": "^1.0.0"
@@ -33,7 +34,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-unit-jest": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vue/cli-service": "^3.3.1",
     "@vue/test-utils": "^2.4.4",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
     "babel-jest": "^27.0.6",

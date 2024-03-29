@@ -1,9 +1,9 @@
-const { Result, Election, Candidate } = require('../sequelize');
+const db = require('../models/index.js');
 
 //Get the resulting winner of current election
 exports.getResults = async (req, res) => {
     try {
-        const activeElections = await Election.findAll({
+        const activeElections = await db.Election.findAll({
             attributes: ['id', 'title', 'results'],
             where: {
                 isActive: false,
@@ -12,8 +12,8 @@ exports.getResults = async (req, res) => {
         });
 
         const result = await Promise.all(activeElections.map(async (election) => {
-            const results = await Result.findByPk(election.results);
-            const candidate = await Candidate.findByPk(results.winner);
+            const results = await db.Result.findByPk(election.results);
+            const candidate = await db.Candidate.findByPk(results.winner);
             return {
                 title: election.title,
                 id: candidate.id,

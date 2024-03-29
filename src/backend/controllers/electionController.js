@@ -1,8 +1,7 @@
 const sendEmail = require('./thirdParty/email');
 const { generateKeys } = require('./functions/generateKeys');
 const { generatePublishKey } = require('./functions/generateCode');
-const { decryptPassword } = require('./functions/password');
-const { Admin, Candidate, Election } = require('../sequelize');
+const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
 const votingProcess = require('../assets/process.json');
 
@@ -52,7 +51,7 @@ exports.addElection = async (req, res) => {
 //get a list of all new elections where the number of added candidates is less than the required number of candidates
 exports.getNewElections = async (req, res) => {
     try {
-        const activeElections = await Election.findAll({
+        const activeElections = await db.Election.findAll({
             attributes: ['id', 'title', 'candidateNumber'],
             where: {
                 isActive: true,
@@ -60,7 +59,7 @@ exports.getNewElections = async (req, res) => {
             order: [['resultDate', 'DESC']],
         });
         const result = await Promise.all(activeElections.map(async (election) => {
-            const addedCandidates = await Candidate.count({
+            const addedCandidates = await db.Candidate.count({
                 where: {
                     electionId: election.id,
                 },
@@ -99,7 +98,7 @@ exports.addCandidate = async (req, res) => {
         }
         const image = req.file;
         const imagePath = image.filename;
-        const newCandidate = await Candidate.create({
+        const newCandidate = await db.Candidate.create({
             name: name,
             voice: voice,
             party: party,
