@@ -110,7 +110,6 @@ exports.submitVote = async (req, res) => {
             return res.json({error: 'You do not meet the voting requirements'});
         }
 
-        //if and else statements for election type
         if (electionType ===  processes[0]) {
             //majority vote contract
             const { candidateId } = req.body;
@@ -161,6 +160,23 @@ exports.submitVote = async (req, res) => {
                 return res.json({error: 'All available score points must be used'});
             }
         }
+        else if (electionType === processes[3]) {
+            //single-transferrable vote contract
+            const { ranks } = req.body;
+            if (!ranks) {
+                return res.json({error: 'Vote rankings not provided'});
+            }
+            const valueSet = new Set();
+            for (const key in ranks) {
+                const value = ranks[key];
+                if (valueSet.has(value)) {
+                    return res.json({error: 'Multiple candidates have the same ranking'});
+                } 
+                else {
+                    valueSet.add(value);
+                }
+            }
+        }
         
         const admin = await db.Admin.findOne({ where: { electionId: user.electionId } });
 
@@ -168,6 +184,7 @@ exports.submitVote = async (req, res) => {
         const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
         const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
         const adminPublicKey = admin.paillierPublicKey;
+        
         
         const vote = await db.Vote.create({
             voterId: userId,

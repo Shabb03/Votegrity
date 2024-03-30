@@ -13,7 +13,7 @@ exports.addElection = async (req, res) => {
 
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship, type } = req.body;
         if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship || !type) {
-            return res.json({ error: 'All required inputs not provided' });
+            return res.json({error: 'All required inputs not provided'});
         }        
         if (countryData !== null && !countryData.includes(citizenship)) {
             return res.json({error: 'Incorrect citizenship provided'});

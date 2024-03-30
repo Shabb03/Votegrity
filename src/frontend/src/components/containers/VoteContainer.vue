@@ -43,6 +43,13 @@
                                 @update:score="updateScore(candidate.id, $event)"
                             />
                         </div>
+                        <div v-if="electionType === 'single-transferable'">
+                            <RankChoiceInput
+                                :key="candidate.id"
+                                :rankData="rankList"
+                                @update:rank="updateRank(candidate.id, $event)"
+                            />
+                        </div>
                     </div>
                 </v-row>
                 <div v-if="electionType === 'ranked'">
@@ -115,6 +122,7 @@ export default {
                     //this.electionType = 'majority';
                     //this.electionType = 'ranked';
                     this.electionType = 'point-based';
+                    //this.electionType = 'single-transferable';
 
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
                     this.rankList = Array.from({ length: candidateArray.length }, (_, index) => index + 1);
@@ -187,6 +195,14 @@ export default {
                         postData.scores = this.scores;
                     }
                     else {
+                        return;
+                    }
+                }
+                else if (this.electionType === 'single-transferable') {
+                    if (await this.checkRank()) {
+                        postData.ranks = this.ranks;
+                    }
+                    else {   
                         return;
                     }
                 }

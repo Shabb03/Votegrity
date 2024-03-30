@@ -27,6 +27,27 @@ exports.userInfo = async (req, res) => {
     }
 };
 
+async function changeEmail(user, newEmail) {
+    const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
+    if (existingEmail) {
+        return null;
+    }
+    user.email = newEmail;
+    await user.save();
+    newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+    return newToken;
+};
+
+async function changeNumber(user, newNumber) {
+    const existingNumber = await db.Voter.findOne({ where: { phoneNumber: newNumber } });
+    if (existingNumber) {
+        return null;
+    }
+    user.phoneNumber = newNumber;
+    await user.save();
+    return 0
+};
+
 //Change the user's email or phone number
 exports.changeUserDetails = async (req, res) => {
     try {
@@ -36,39 +57,23 @@ exports.changeUserDetails = async (req, res) => {
         var message = "";
         var newToken = null;
 
-        if (newEmail && newEmail !== null && newNumber && newNumber !== null) {
-            const existingEmail = await Voter.findOne({ where: { email: newEmail } });
-            if (existingEmail && existingNumber) {
-                return res.json({ error: 'Number and email already in use' });   
-            }
-            user.email = newEmail;
-            user.phoneNumber = newNumber;
-            await user.save();
-            message = "Email and Number updated successfully";
-            newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
-        }
-        else if (newEmail && newEmail !== null) {
-            const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
-            if (existingEmail) {
+        if (newEmail === null && newNumber === null) {
+            return res.json({ error: 'Either email or phone number must be provided.' });
+        } 
+        if (newEmail && newEmail !== null) {
+            let newToken = await changeEmail(user, newEmail);
+            if (newToken === null) {
                 return res.json({ error: 'Email already in use' });
             }
-            user.email = newEmail;
-            await user.save();
-            message = "Email updated successfully";
-            newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+            message = message = "Email updated successfully. ";
         }
-        else if (newNumber && newNumber !== null) {
-            const existingNumber = await db.Voter.findOne({ where: { phoneNumber: newNumber } });
-            if (existingNumber) {
+        if (newNumber && newNumber !== null) {
+            let updatedNumber = await changeNumber(user, newNumber);
+            if (updatedNumber === null) {
                 return res.json({ error: 'Number already in use' });
             }
-            user.phoneNumber = newNumber;
-            await user.save();
-            message = "Number updated successfully";
-        }
-        else {
-            return res.json({ error: 'Either email or phone number must be provided.' });
-        }        
+            message = message + "Number updated successfully. ";
+        }    
         return res.json({ 
             email: user.email, 
             number: user.phoneNumber, 
