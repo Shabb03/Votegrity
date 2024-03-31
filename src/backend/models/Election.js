@@ -8,6 +8,10 @@ module.exports = (sequelize) => {
             primaryKey: true,
             autoIncrement: true,
         },
+        adminId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         title: {
             type: DataTypes.STRING,
             allowNull: false,

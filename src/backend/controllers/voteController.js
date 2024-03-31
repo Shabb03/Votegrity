@@ -178,7 +178,8 @@ exports.submitVote = async (req, res) => {
             }
         }
         
-        const admin = await db.Admin.findOne({ where: { electionId: user.electionId } });
+        //const admin = await db.Admin.findOne({ where: { id: 1 } });
+        const admin = await db.Admin.findByPk(election.adminId);
 
         const bucketName = "votegritybucket";
         const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
