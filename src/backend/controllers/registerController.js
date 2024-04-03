@@ -1,7 +1,9 @@
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
+//const { encryptKey } = require('./functions/encryptKeys')
 const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
 const paillier = require('paillier-bigint');
+const { Wallet } = require('ethers');
 
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
@@ -48,13 +50,12 @@ exports.signup = async (req, res) => {
             res.json({ message: 'Security question not found' });
         }
 
-        //const decryptedPassword = await decryptPassword(password);
-        //const hashedPassword = await hashPassword(decryptedPassword);
-
-        const { paillierPublicKey, paillierPrivateKey } = paillier.generateRandomKeys(2048);
+        const { paillierPublicKey, paillierPrivateKey } = await paillier.generateRandomKeys(2048);
         const ethereumWallet = generateUserEthereumWallet();
 
-        const hashedPassword = await hashPassword(password);
+        const decryptedPassword = await decryptPassword(password);
+        const hashedPassword = await hashPassword(decryptedPassword);
+        //const hashedPassword = await hashPassword(password);
         const newUser = await db.Voter.create({
             name: name,
             email: email,
@@ -71,13 +72,17 @@ exports.signup = async (req, res) => {
             securityAnswer2: securityAnswer2,
         });
 
+        //const encryptedPaillierPublicKey = encryptKey(paillierPublicKey);
+        //const encryptedPaillierPrivateKey = encryptKey(paillierPrivateKey);
+
         const userResponse = {
             name: newUser.name,
             email: newUser.email,
-            publicKey: newUser.publicKey,
-            privateKey: newUser.privateKey,
+            //this is risky to send as is
+            publicKey: paillierPublicKey,
+            privateKey: paillierPrivateKey,
         };
-        res.status(201).json({ user: userResponse, message: 'User created successfully' });
+        res.json({ user: userResponse, message: 'User created successfully' });
     }
     catch (error) {
         console.log(error);
@@ -86,13 +91,21 @@ exports.signup = async (req, res) => {
 
     function generateUserEthereumWallet()
     {
+        /*
         const privateKey = ethereumWallet.generate().getPrivateKey();
         const wallet = ethereumWallet.fromPrivateKey(privateKey);
-        const address = '0x${wallet.getAddress().toString("hex")}';
+        const address = `0x${wallet.getAddress().toString("hex")}`;
 
         return {
             privateKey: privateKey.toString('hex'),
             address: address
         };
-    }
+        */
+
+        const wallet = Wallet.createRandom();
+        return {
+            privateKey: wallet.privateKey,
+            address: wallet.address
+        };
+    };
 };

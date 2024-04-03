@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('./index.js');
+const paillier = require('paillier-bigint');
+const BlindSignature = require('blind-signatures');
 
 module.exports = (sequelize) => {
     const Vote = sequelize.define('Vote', {
@@ -54,14 +56,16 @@ module.exports = (sequelize) => {
         const voterId = this.voterId;
         const candidateId = this.candidateId;
 
-        const combinedVote = '${voterId},${candidateId}';
+        const combinedVote = `${voterId},${candidateId}`;
 
-        const blindedVote = blindSignatures.blind({
+        //shab: will need to look at documentation for this, not working
+        const blindedVote = BlindSignature.blind({
             message: combinedVote,
             N: adminPrivateKey.N,
             E: adminPrivateKey.E
         });
 
+        //shab: will need to look at documentation for this, not working
         this.blindedSignature = blindedVote.blinded;
         await this.save();
         return blindedVote.blinded;
@@ -71,9 +75,9 @@ module.exports = (sequelize) => {
         const voterId = this.voterId;
         const candidateId = this.candidateId;
 
-        const vote = '${voterId},${candidateId}'; // Combine voter ID and candidate ID
+        const vote = `${voterId},${candidateId}`; // Combine voter ID and candidate ID
 
-        const pk = new paillier.PublicKey(adminPublicKey);
+        const pk = new paillier.PublicKey(adminPublicKey.n, adminPublicKey.g); //create public key
         const encryptedVote = pk.encrypt(vote);
         
         this.encryptedVote = encryptedVote.toString();

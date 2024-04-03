@@ -11,6 +11,7 @@ const electionRoute = require('./routes/electionRoute');
 const statusRoute = require('./routes/statusRoute');
 const testRoute = require('./routes/testRoute');
 
+//limit the number of requests per minute from an IP address to prevent ddos attacks
 const minutesTimout = 1;
 const limiter = rateLimit({
     windowMs: minutesTimout * 60 * 1000,
@@ -20,6 +21,7 @@ const limiter = rateLimit({
     },
 });
 
+//only allow certain url's to interact with the server
 const allowedOrigins = ['http://localhost:8080', 'http://localhost:8081'];
 const corsOptions = {
     //origin: process.env.ORIGIN || 'http://localhost:8080',

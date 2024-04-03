@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk');AWS
 require('dotenv').config();
 
 // Initialize AWS SDK with environment variables
@@ -16,7 +16,7 @@ async function storeEncryptedAdminKeysOnS3(bucketName, encryptedAdminKey, adminN
     try {
         const params = {
             Bucket: bucketName,
-            Key: 'encrypted-${adminName}-key.txt',
+            Key: `encrypted-${adminName}-key.txt`,
             Body: encryptedAdminKey,
             ContentType: 'text/plain' // Set content type accordingly
         };
@@ -47,15 +47,17 @@ async function downloadEncryptedAdminKeysFromS3(bucketName, objectKey) {
 async function encryptAdminKey(adminKeyId, adminKey) {
     try {
         // Parameters for KMS encryption operation
+        const adminString = adminKey.toString();
+        const adminKeyBuffer = Buffer.from(adminKey, 'utf8');
         const params = {
             KeyId: adminKeyId,
-            Plaintext: Buffer.from(adminKey, 'utf8')
+            Plaintext: adminKeyBuffer
+            //Plaintext: Buffer.from(adminKey, 'utf8')   //won't work as adminKey is type object, not accepted
         };
 
         // Encrypt the admin key using AWS KMS
-        const data = await kms.encrypt(params).promise();
-        const encryptedAdminKey = data.CiphertextBlob.toString('base64');
-
+        //const data = await kms.encrypt(params).promise();
+        //const encryptedAdminKey = data.CiphertextBlob.toString('base64');
         return encryptedAdminKey;
     } catch (error) {
         console.error('Error encrypting admin key:', error);
@@ -73,6 +75,7 @@ async function decryptAdminKey(encryptedAdminKey) {
 
         // Decrypt the admin key using AWS KMS
         const data = await kms.decrypt(params).promise();
+        //shab: but if it's a string then how can it be used?
         const decryptedAdminKey = data.Plaintext.toString('utf8');
 
         return decryptedAdminKey;

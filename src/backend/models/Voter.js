@@ -98,6 +98,5 @@ module.exports = (sequelize) => {
             defaultValue: false,
         },
     });
-
     return Voter;
 }

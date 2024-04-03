@@ -10,7 +10,7 @@ const readFileAsync = promisify(fs.readFile);
 
 const keyFunctions = require('../middleware/keyFunctions.js')
 
-//const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/VotingContract.json');
 const contractAddress = '0x0xE4cbd0825a4A2673d00196d8172e1E5DA359F3D6';
 
 const dotenv = require('dotenv');
@@ -178,10 +178,9 @@ exports.submitVote = async (req, res) => {
             }
         }
         
-        //const admin = await db.Admin.findOne({ where: { id: 1 } });
         const admin = await db.Admin.findByPk(election.adminId);
 
-        const bucketName = "votegritybucket";
+        const bucketName = "votegritybucket2";
         const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
         const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
         const adminPublicKey = admin.paillierPublicKey;
@@ -199,7 +198,7 @@ exports.submitVote = async (req, res) => {
         const contract = new web3.eth.Contract(contractABI, contractAddress);
 
         contract.methods.submitBallot(encryptedVote, blindedSignature)
-        .send({ from: '${user.walletAddress}' })
+        .send({ from: `${user.walletAddress}` })
         .on('receipt', receipt => {
             console.log(receipt);
         })
