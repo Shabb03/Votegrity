@@ -10,7 +10,9 @@ const readFileAsync = promisify(fs.readFile);
 
 const keyFunctions = require('../middleware/keyFunctions.js')
 
-const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/VotingContract.json');
+if (process.env.NODE_ENV !== 'test') {
+    const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/VotingContract.json');
+}
 const contractAddress = '0x0xE4cbd0825a4A2673d00196d8172e1E5DA359F3D6';
 
 const dotenv = require('dotenv');
