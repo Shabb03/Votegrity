@@ -102,7 +102,7 @@ export default {
         candidateData: [],
         selectedElection: null,
         electionType: '',
-        totalScore: 100,
+        totalScore: 10,
         rankList: null,
         ranks: {},
         scores: {},
@@ -117,11 +117,11 @@ export default {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
-                    //this.electionType = this.electionData[selectedElectionIndex].type;
+                    this.electionType = this.electionData[selectedElectionIndex].type;
 
                     //this.electionType = 'majority';
                     //this.electionType = 'ranked';
-                    this.electionType = 'point-based';
+                    //this.electionType = 'point-based';
                     //this.electionType = 'single-transferable';
 
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
@@ -266,7 +266,7 @@ export default {
         },
         updateScore(candidateId, score) {
             this.scores[candidateId] = score;
-            let initialScore = 100;
+            let initialScore = 10;
             for (const key in this.scores) {
                 initialScore -= this.scores[key];
             }

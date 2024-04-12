@@ -40,7 +40,11 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        authenticationMethod: {
+        authEmail: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+        },
+        authCitizenship: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
         },
@@ -60,14 +64,6 @@ module.exports = (sequelize) => {
         type: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        results: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: db.Result,
-                key: 'id',
-            },
         },
     });
     return Election;

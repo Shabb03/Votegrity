@@ -7,7 +7,7 @@
             <v-row>
                 <DashboardCard :imageSrc="require('@/assets/election.png')" :informationTitle="title" :informationText="description"/>
                 <DashboardCard :imageSrc="require('@/assets/date.png')" :informationTitle="daysLeft + ' Days Left'"/>
-                <DashboardCard :imageSrc="require('@/assets/votes.png')" :informationTitle="voteCount + ' Total Votes'"/>
+                <!--<DashboardCard :imageSrc="require('@/assets/votes.png')" :informationTitle="voteCount + ' Total Votes'"/>-->
                 <DashboardCard :imageSrc="require('@/assets/candidate.png')" :informationTitle="'Candidates: ' + candidateNumber"/>
             </v-row>
         </v-container>
@@ -38,7 +38,7 @@ export default {
         description: '',
         daysLeft: '',
         candidateNumber: '',
-        voteCount: '',
+        //voteCount: '',
         electionData: [],
         selectedElection: null,
         pageSubTitle: 'No Active Elections currently',
@@ -57,7 +57,7 @@ export default {
                     this.description = electionD.description;
                     this.daysLeft = electionD.resultDate;
                     this.candidateNumber = electionD.candidateNumber;
-                    this.voteCount = electionD.voteCount;
+                    //this.voteCount = electionD.voteCount;
                 } 
                 else {
                     alert('Selected election not found in electionData');

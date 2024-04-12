@@ -12,14 +12,6 @@ exports.electionDetails = async (req, res) => {
         });
         if (activeElections) {
             const result = await Promise.all(activeElections.map(async (election) => {
-                //need to change this to accomodate different types of votes
-                //maybe add a voted: bool column to the Voter database
-                const totalVoteCount = await db.Vote.count({
-                    where: {
-                        electionId: election.id,
-                    },
-                });
-    
                 return {
                     id: election.id,
                     title: election.title,
@@ -33,11 +25,10 @@ exports.electionDetails = async (req, res) => {
                     authEmail: election.authEmail,
                     authCitizenship: election.authCitizenship,
                     type: election.type,
-                    voteCount: totalVoteCount,
                 };
             }));
             res.json({ activeElections: result });
-        } 
+        }
         else {
             res.json({ error: 'No active election found', election: false });
         }

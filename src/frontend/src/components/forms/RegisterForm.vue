@@ -34,7 +34,7 @@
 <script>
 import axios from 'axios';
 import SuccessCard from "../SuccessCard.vue";
-//import encryptPassword from '../../functions/EncryptPassword.vue';
+import encryptPassword from '../../functions/EncryptPassword.vue';
 import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
@@ -86,12 +86,12 @@ export default {
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                //const encryptedPassword = await encryptPassword(this.email, this.password);
+                const encryptedPassword = await encryptPassword(this.password);
                 const postData = {
                     name: this.name,
                     email: this.email,
-                    //password: encryptedPassword,
-                    password: this.password,
+                    password: encryptedPassword,
+                    //password: this.password,
                     dateOfBirth: this.date,
                     specialNumber: this.specialNumber,
                     citizenship: this.citizenship,
@@ -107,6 +107,16 @@ export default {
                         alert(response.data.error);
                     }
                     else {
+                        /*
+                        const encryptedPublicKey = response.data.publicKey;
+                        const encryptedPrivateKey = response.data.privateKey;
+                        const publicKey =
+                        const privateKey =
+                        */
+                        const publicKey = response.data.publicKey;
+                        const privateKey = response.data.privateKey;
+                        localStorage.setItem("votegrityPublicKey", publicKey);
+                        localStorage.setItem("votegrityPrivateKey", privateKey);
                         await this.triggerSuccessCard();
                     }
 

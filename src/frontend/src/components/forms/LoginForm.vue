@@ -74,7 +74,7 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 try {
-                    const encryptedPassword = await encryptPassword(this.email, this.password);
+                    const encryptedPassword = await encryptPassword(this.password);
                     const postData = {
                         email: this.email,
                         password: encryptedPassword,

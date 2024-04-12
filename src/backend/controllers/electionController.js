@@ -12,14 +12,14 @@ exports.addElection = async (req, res) => {
         const user = await Admin.findByPk(userId);
 
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship, type } = req.body;
-        if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship || !type) {
-            return res.json({error: 'All required inputs not provided'});
-        }        
+        if (!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship || !type) {
+            return res.json({ error: 'All required inputs not provided' });
+        }
         if (countryData !== null && !countryData.includes(citizenship)) {
-            return res.json({error: 'Incorrect citizenship provided'});
+            return res.json({ error: 'Incorrect citizenship provided' });
         }
         if (type !== null && !votingProcess.includes(type)) {
-            return res.json({error: 'Incorrect election voting process provided'});
+            return res.json({ error: 'Incorrect election voting process provided' });
         }
         const { privateKey, publicKey } = await generateKeys();
         const publishKey = await generatePublishKey();
@@ -34,13 +34,12 @@ exports.addElection = async (req, res) => {
             ageRestriction: ageRestriction,
             privateKey: privateKey,
             publicKey: publicKey,
-            results: null,
             authEmail: authEmail,
             authCitizenship: authCitizenship,
             type: type,
             publishKey: publishKey,
         });
-        res.json({election: newElection.title, message: 'Election created successfully'});
+        res.json({ election: newElection.title, message: 'Election created successfully' });
     }
     catch (error) {
         console.log(error);
@@ -71,8 +70,8 @@ exports.getNewElections = async (req, res) => {
                     candidateNumber: election.candidateNumber,
                     addedCandidates: addedCandidates,
                 };
-            } 
-            else {return null;}
+            }
+            else { return null; }
         }));
         const filteredResult = result.filter(election => election !== null);
         res.json({ activeElections: filteredResult });
@@ -92,9 +91,9 @@ exports.addCandidate = async (req, res) => {
         }
         const activeElection = await Election.findByPk(electionId);
         const candidateCount = activeElection.candidateCount;
-        const totalCandidates = await Candidate.count({where: {electionId: electionId}});
+        const totalCandidates = await Candidate.count({ where: { electionId: electionId } });
         if (totalCandidates >= candidateCount) {
-            return res.json({error: "Total number of candidates exceeded"});
+            return res.json({ error: "Total number of candidates exceeded" });
         }
         const image = req.file;
         const imagePath = image.filename;
@@ -107,7 +106,7 @@ exports.addCandidate = async (req, res) => {
             biography: biography,
             electionId: electionId,
         });
-        res.json({candidate: newCandidate, message: 'Candidate created successfully'});
+        res.json({ candidate: newCandidate, message: 'Candidate created successfully' });
     }
     catch (error) {
         console.log(error);

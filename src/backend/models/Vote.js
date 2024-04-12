@@ -57,15 +57,13 @@ module.exports = (sequelize) => {
         const candidateId = this.candidateId;
 
         const combinedVote = `${voterId},${candidateId}`;
-
-        //shab: will need to look at documentation for this, not working
+        
         const blindedVote = BlindSignature.blind({
             message: combinedVote,
             N: adminPrivateKey.N,
             E: adminPrivateKey.E
         });
 
-        //shab: will need to look at documentation for this, not working
         this.blindedSignature = blindedVote.blinded;
         await this.save();
         return blindedVote.blinded;

@@ -4,7 +4,7 @@ const db = require('../models/index.js');
 exports.getResults = async (req, res) => {
     try {
         const activeElections = await db.Election.findAll({
-            attributes: ['id', 'title', 'results'],
+            attributes: ['id', 'title', 'resultDate'],
             where: {
                 isActive: false,
             },
@@ -12,20 +12,26 @@ exports.getResults = async (req, res) => {
         });
 
         const result = await Promise.all(activeElections.map(async (election) => {
-            const results = await db.Result.findByPk(election.results);
-            const candidate = await db.Candidate.findByPk(results.winner);
+            const electionId = election.id;
+            const results = await db.Result.findAll({ where: { electionId: electionId } });
+            const candidates = await Promise.all(results.map(async (result) => {
+                const candidate = await db.Candidate.findByPk(result.winner);
+                return {
+                    id: candidate.id,
+                    name: candidate.name,
+                    voice: candidate.voice,
+                    party: candidate.party,
+                    image: candidate.image,
+                    biography: candidate.biography,
+                    voteCount: result.voteCount
+                };
+            }));
             return {
-                title: election.title,
-                id: candidate.id,
-                name: candidate.name,
-                voice: candidate.voice,
-                party: candidate.party,
-                image: candidate.image,
-                biography: candidate.biography,
-                voteCount: results.voteCount
+                id: electionId,
+                candidates: candidates
             };
         }));
-        res.json({ electionResults: result });
+        return res.json({ electionResults: result });
     }
     catch (error) {
         console.log(error);
