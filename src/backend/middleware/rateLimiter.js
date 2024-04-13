@@ -1,5 +1,5 @@
 const rateLimit = require('express-rate-limit');
-const minutesTimout = 1;  //update to be 5 minutes later
+const minutesTimout = 5;
 
 //limit the amount of times a user can attempt to login incorrectly and set a timeout
 const loginLimiter = rateLimit({

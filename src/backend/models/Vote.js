@@ -41,7 +41,7 @@ module.exports = (sequelize) => {
                 model: db.Election,
                 key: 'id',
             },
-        },    
+        },
         blindedSignature: {
             type: DataTypes.TEXT,
             allowNull: true,
@@ -57,7 +57,7 @@ module.exports = (sequelize) => {
         const candidateId = this.candidateId;
 
         const combinedVote = `${voterId},${candidateId}`;
-        
+
         const blindedVote = BlindSignature.blind({
             message: combinedVote,
             N: adminPrivateKey.N,
@@ -75,9 +75,9 @@ module.exports = (sequelize) => {
 
         const vote = `${voterId},${candidateId}`; // Combine voter ID and candidate ID
 
-        const pk = new paillier.PublicKey(adminPublicKey.n, adminPublicKey.g); //create public key
+        const pk = new paillier.PublicKey(adminPublicKey.n, adminPublicKey.g);
         const encryptedVote = pk.encrypt(vote);
-        
+
         this.encryptedVote = encryptedVote.toString();
         await this.save(); // Save encrypted vote in the database
         return encryptedVote.toString();

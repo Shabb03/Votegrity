@@ -25,12 +25,12 @@ exports.signup = async (req, res) => {
     try {
         const { name, email, password, dateOfBirth, specialNumber, citizenship, phoneNumber, securityQuestion1, securityAnswer1, securityQuestion2, securityAnswer2 } = req.body;
         if (!name || !email || !password || !dateOfBirth || !specialNumber || !citizenship || !phoneNumber || !securityQuestion1 || !securityAnswer1 || !securityQuestion2 || !securityAnswer2) {
-            return res.json({error: 'All required inputs not provided'});
+            return res.json({ error: 'All required inputs not provided' });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.json({error: 'Invalid Email'});
+            return res.json({ error: 'Invalid Email' });
         }
         const existingUser = await db.Voter.findOne({ where: { email } });
         if (existingUser) {
@@ -38,14 +38,14 @@ exports.signup = async (req, res) => {
         }
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
-            return res.json({error: 'Password is not strong enough' });
+            return res.json({ error: 'Password is not strong enough' });
         }
         if (!countryData.includes(citizenship)) {
-            return res.json({error: 'Incorrect citizenship provided'});
+            return res.json({ error: 'Incorrect citizenship provided' });
         }
 
-        const sq1 = await db.SecurityQuestions.findOne({where: { questions: securityQuestion1 }, attributes: ['id'],});
-        const sq2 = await db.SecurityQuestions.findOne({where: { questions: securityQuestion2 }, attributes: ['id'],});
+        const sq1 = await db.SecurityQuestions.findOne({ where: { questions: securityQuestion1 }, attributes: ['id'], });
+        const sq2 = await db.SecurityQuestions.findOne({ where: { questions: securityQuestion2 }, attributes: ['id'], });
         if (!sq1 || !sq2) {
             res.json({ message: 'Security question not found' });
         }
@@ -55,7 +55,6 @@ exports.signup = async (req, res) => {
 
         const decryptedPassword = await decryptPassword(password);
         const hashedPassword = await hashPassword(decryptedPassword);
-        //const hashedPassword = await hashPassword(password);
         const newUser = await db.Voter.create({
             name: name,
             email: email,
@@ -64,11 +63,11 @@ exports.signup = async (req, res) => {
             specialNumber: specialNumber,
             citizenship: citizenship,
             phoneNumber: phoneNumber,
-            walletPrivateKey: ethereumWallet.privateKey,
+            walletPrivateKey: ethereumWallet.privateKey,  // probably better to store in user's side
             walletAddress: ethereumWallet.address,
-            securityQuestion1: sq1.id, 
-            securityAnswer1: securityAnswer1, 
-            securityQuestion2: sq2.id, 
+            securityQuestion1: sq1.id,
+            securityAnswer1: securityAnswer1,
+            securityQuestion2: sq2.id,
             securityAnswer2: securityAnswer2,
         });
 
@@ -78,7 +77,6 @@ exports.signup = async (req, res) => {
         const userResponse = {
             name: newUser.name,
             email: newUser.email,
-            //this is risky to send as is
             publicKey: paillierPublicKey,
             privateKey: paillierPrivateKey,
         };
@@ -89,8 +87,7 @@ exports.signup = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 
-    function generateUserEthereumWallet()
-    {
+    function generateUserEthereumWallet() {
         /*
         const privateKey = ethereumWallet.generate().getPrivateKey();
         const wallet = ethereumWallet.fromPrivateKey(privateKey);

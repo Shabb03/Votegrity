@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const sendEmail = require('./thirdParty/email');
-const generateSixDigitCode = require('./functions/generateCode');
+const { generateSixDigitCode } = require('./functions/generateCode');
 const db = require('../models/index.js');
 
 //Get the information of the user
@@ -52,14 +52,14 @@ async function changeNumber(user, newNumber) {
 exports.changeUserDetails = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const { newEmail, newNumber } = req.body;
         var message = "";
         var newToken = null;
 
         if (newEmail === null && newNumber === null) {
             return res.json({ error: 'Either email or phone number must be provided.' });
-        } 
+        }
         if (newEmail && newEmail !== null) {
             let newToken = await changeEmail(user, newEmail);
             if (newToken === null) {
@@ -73,12 +73,12 @@ exports.changeUserDetails = async (req, res) => {
                 return res.json({ error: 'Number already in use' });
             }
             message = message + "Number updated successfully. ";
-        }    
-        return res.json({ 
-            email: user.email, 
-            number: user.phoneNumber, 
-            message: message, 
-            token: newToken 
+        }
+        return res.json({
+            email: user.email,
+            number: user.phoneNumber,
+            message: message,
+            token: newToken
         });
     }
     catch (error) {
@@ -94,13 +94,13 @@ exports.getAuthToken = async (req, res) => {
         const user = await db.Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
-            return res.json({error: 'User is already authenticated', authenticated: true});
+            return res.json({ error: 'User is already authenticated', authenticated: true });
         }
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
         await user.save();
         sendEmail("Authentication Code", user.email, "Here is your authentication code: " + sixDigitCode);
-        res.json({message: "Email sent"});
+        res.json({ message: "Email sent" });
     }
     catch (error) {
         console.log(error);
@@ -112,14 +112,14 @@ exports.getAuthToken = async (req, res) => {
 exports.authAccount = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const { token } = req.body;
         if (token === user.authToken) {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
             return res.json({ message: 'New user successfully authenticated' });
-        } 
+        }
         else {
             return res.json({ error: 'Invalid token', invalid: true });
         }

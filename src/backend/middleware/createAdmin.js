@@ -1,7 +1,7 @@
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const readline = require('readline');
-const { isSecurePassword, hashPassword } = require('../controllers/functions/password');  
+const { isSecurePassword, hashPassword } = require('../controllers/functions/password');
 const keyFunctions = require('../middleware/keyFunctions');
 const crypto = require('crypto');
 const paillier = require('paillier-bigint');
@@ -31,6 +31,7 @@ async function createAdmin() {
         const hashedPassword = await hashPassword(password);
 
         // key creation for admins used for the paillier encryption and blind signature implementation
+        /*
         const { privateKey, publicKey } = await crypto.generateKeyPairSync('rsa', {
             modulusLength: 2048,
             publicKeyEncoding: {
@@ -44,6 +45,11 @@ async function createAdmin() {
         });
         const blindPublicKey = publicKey;
         const blindPrivateKey = privateKey;
+        */
+
+        const { keyPair } = BlindSignature.keyGeneration({ b: 2048 });
+        const blindPublicKey = null;
+        const blindPrivateKey = keyPair.n.toString() + '#' + keyPair.e.toString();
 
         const paillierKeys = await paillier.generateRandomKeys(2048);
 
@@ -52,11 +58,11 @@ async function createAdmin() {
             password: hashedPassword,
             blindPublicKey: blindPublicKey,
             blindPrivateKey: blindPrivateKey,
-            paillierPublicKey: paillierKeys.publicKey,
-            paillierPrivateKey: paillierKeys.privateKey,
+            paillierPublicKey: paillierKeys.publicKey.n + '#' + paillierKeys.publicKey.g,
+            paillierPrivateKey: paillierKeys.privateKey.lambda + '#' + paillierKeys.privateKey.mu,
         });
 
-        const encryptedAdminKey = keyFunctions.encryptAdminKey(admin.id, paillierKeys.privateKey);
+        const encryptedAdminKey = keyFunctions.encryptAdminKey(admin.id, blindPrivateKey);
         const privateKeyPath = keyFunctions.storeEncryptedAdminKeysOnS3('votegritybucket2', encryptedAdminKey, admin.email);
 
         admin.privateKeyPath = privateKeyPath;
@@ -64,8 +70,7 @@ async function createAdmin() {
 
         console.log(`\n\nAdmin created successfully\n`);
         console.log(`\n\nThis is your blind signature private key: ${blindPrivateKey}\n`);
-        //console.log(`\n\nThis is your encryption private key: ${paillierPrivateKey}\n`);
-        console.log(`\n\nThis is your encryption private key: ${admin.paillierPrivateKey}\n`);
+        console.log(`\n\nThis is your encryption private key: ${paillierKeys.privateKey}\n`);
         console.log(`\n\nDo NOT share these credentials with anyone\n`);
     }
     catch (error) {

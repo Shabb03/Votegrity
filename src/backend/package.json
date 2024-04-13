@@ -16,6 +16,7 @@
     "@ariga/atlas-provider-sequelize": "^0.1.4",
     "aws-sdk": "^2.1590.0",
     "bcrypt": "^5.1.1",
+    "big-integer": "^1.6.52",
     "blind-signatures": "^1.0.7",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

@@ -10,7 +10,7 @@ const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const BlindSignature = require('blind-signatures');
 
-//const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/wrong/Vote.json');
+//const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const dotenv = require('dotenv');
@@ -19,15 +19,162 @@ dotenv.config();
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
 
+const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+
+function processObject(obj) {
+    const size = Object.keys(obj).length - 1;
+    const keys = Object.keys(obj).map(Number).sort((a, b) => b - a);
+    const result = keys.map((key, i) => {
+        const value = obj[key];
+        const powered = BigInt(primes[size - i] ** value);
+        console.log(primes[size - i], value);
+        const padded = powered.toString().padStart(6, '0');
+        return padded;
+    });
+    return result.join(''); // Join the padded strings
+}
+
+async function extractArray(x, y) {
+    const originalArray = [];
+    let remainingY = y;
+    for (let exponent = x; exponent >= 1; exponent--) {
+        const currentPower = Math.pow(x, exponent);
+        const count = Math.floor(remainingY / currentPower);
+        originalArray.push(...Array(count).fill(exponent));
+        remainingY -= count * currentPower;
+    }
+    const total = originalArray.reduce((total, num) => total + num, 0)
+    return total;
+}
+
+async function totalVotes(candidateIds, final) {
+    const bigIntStr = final.toString();
+    console.log(bigIntStr);
+    const result = {};
+    const n = candidateIds.length;
+    for (let i = 0; i < n; i++) {
+        const start = -6 * (i + 1);
+        const end = i === 0 ? 0 : -6 * i;
+        console.log("\ntotalVotes", start, end);
+        const stringNum = end === 0 ? bigIntStr.slice(start) : bigIntStr.slice(start, end);
+        const prime = primes[i]
+        console.log("\ntotalVotes", candidateIds[i], prime, parseInt(stringNum));
+        const num = await extractArray(prime, parseInt(stringNum));
+        console.log("\ntotalVotes", num);
+        result[candidateIds[i]] = num;
+    }
+    return result;
+}
+
+async function decodeNumber(number) {
+    let obj = {};
+    let num = Number(number);
+    primes.forEach((prime, index) => {
+        let exponent = 0;
+        while (num % prime === 0) {
+            exponent++;
+            num /= prime;
+        }
+        if (exponent > 0) {
+            obj[prime] = exponent;
+        }
+    })
+    return obj;
+}
+
+function encodeObject(obj) {
+    let combinedNumber = 1;
+    Object.keys(obj).forEach((key, index) => {
+        combinedNumber *= Math.pow(primes[index], obj[key]);
+    });
+    return combinedNumber;
+}
+
+async function vote4(ranks) {
+    const encodedNumber = encodeObject(ranks);
+    const bigIntValue = BigInt(encodedNumber);
+    return bigIntValue;
+};
+
 exports.gettest = async (req, res) => {
     try {
+        const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
         //return res.json({ message: "done" });
-        const electionId = 2;
+
+        const admin = await db.Admin.findByPk(1);
+        const adminPublicKey = admin.paillierPublicKey;
+        const adminPrivateKey = admin.paillierPrivateKey;
+        const publicKeyParts = adminPublicKey.split('#');
+        const n = BigInt(publicKeyParts[0]);
+        const g = BigInt(publicKeyParts[1]);
+        const newPublicKey = new paillier.PublicKey(n, g);
+        const privateKeyParts = adminPrivateKey.split('#');
+        const lambda = BigInt(privateKeyParts[0]);
+        const mu = BigInt(privateKeyParts[1]);
+        const newPrivateKey = new paillier.PrivateKey(lambda, mu, newPublicKey);
+
+
+        const electionId = 3;
+
+
+        const user = await db.Voter.findByPk(2);
+
+        const myObj = { 2: 1, 5: 2, 6: 3 };
+        const vote = await vote4(myObj);
+        console.log("\nvote\n", vote);
+
+        const encryptedVote = await newPublicKey.encrypt(vote);
+        console.log("\nencrypted vote\n", encryptedVote);
+        const { blinded, r } = await BlindSignature.blind({
+            message: vote.toString(),
+            N: publicKeyParts[0].toString(),
+            E: publicKeyParts[1].toString(),
+        });
+        const eV = encryptedVote.toString();
+        const bS = blinded.toString();
+        console.log("\ninit\n", eV, bS);
+
+        await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
+            .on('receipt', receipt => {
+                console.log(receipt);
+            })
+            .on('error', error => {
+                console.error(error);
+            });
+        await contract.methods.submitBallot(eV, bS, electionId).send({ from: `${user.walletAddress}`, gas: 3000000 })
+            .on('receipt', receipt => {
+                console.log(receipt);
+            })
+            .on('error', error => {
+                console.error(error);
+            });
+
+        return res.json({ message: "done" });
+
+        const voteArr = [];
+        const votes2 = await contract.methods.getEncryptedVotes(electionId).call({ gas: 3000000 });
+        console.log(votes2);
+        for (let index in votes2) {
+            let vote = BigInt(votes2[index]);
+            const decryptedVote = await newPrivateKey.decrypt(vote);
+            const orgVote = await decodeNumber(decryptedVote);
+            voteArr.push(orgVote);
+        }
+        console.log(voteArr);
+
+        return res.json({ message: "done" });
+
+
+        /*
+        const obj = { 2: 1, 5: 2, 6: 3 }
+        const test = processObject(obj);
+        console.log(test);
+        return res.json({ message: "done" });
+        */
+
+
         //const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
         //const votes = await contract.methods.getVotes(electionId);
-
-        const allEncryptedVotes = [];
-        const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 
         //const totalVotes = await contract.methods.getVotes(2).call({ from: '0xbDA5747bFD65F08deb54cb465eB87D40e51B197E' });
         //const totalVotes = await contract.methods.test().call({ from: '0xbDA5747bFD65F08deb54cb465eB87D40e51B197E' });
@@ -39,9 +186,41 @@ exports.gettest = async (req, res) => {
             });
         */
 
-        const votes = await contract.methods.getEncryptedVotes(electionId).call();
+        const candidates = await db.Candidate.findAll({
+            where: { electionId: 2 },
+            attributes: ['id'],
+            order: [['id', 'ASC']]
+        });
+        const candidateIds = candidates.map(candidate => candidate.id);
 
-        console.log("\n\n", votes);
+        const votes = await contract.methods.getEncryptedVotes(electionId).call({ gas: 3000000 });
+        console.log(votes);
+        console.log("\n\n", votes[0], "\n\n");
+
+        let sum = BigInt(0);
+        for (let index in votes) {
+            let vote = votes[index];
+            console.log("vote", vote);
+            let currentNum = newPrivateKey.decrypt(BigInt(vote));
+            console.log("currentNum", currentNum);
+            const currentNum2 = await totalVotes(candidateIds, currentNum);
+            console.log("currentNum2", currentNum2);
+            let origSum = sum;
+            console.log("sum1", sum, vote, BigInt(vote));
+            const voteBig = BigInt(vote);
+            if (sum === BigInt(0)) {
+                sum = voteBig;
+            }
+            else {
+                sum = newPublicKey.addition(origSum, voteBig); //does not work if one value is 0 sheesh
+            }
+            console.log(newPublicKey.addition(origSum, voteBig));
+            console.log("sum2", origSum, sum);
+        }
+        const final = newPrivateKey.decrypt(sum);
+        console.log("final", final);
+        const result = await totalVotes(candidateIds, final);
+        console.log("\n\n", result);
         //await contract.methods.test().call().then(console.log);
 
         //console.log("\n\n", totalVotes, "\n\n");
@@ -289,7 +468,6 @@ console.log('Total ranking for user id 2:', totalRankingForUser2);
 exports.posttest = async (req, res) => {
     try {
         //return res.json({ message: "done" });
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
         /*
         const paillierKeys = await paillier.generateRandomKeys(2048);
