@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, STRING } = require('sequelize');
 const db = require('./index.js');
 
 module.exports = (sequelize) => {
@@ -48,14 +48,6 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull: true,
         },
-        privateKey: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        publicKey: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
         isActive: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -65,6 +57,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        publishKey: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        }
+
     });
     return Election;
 }

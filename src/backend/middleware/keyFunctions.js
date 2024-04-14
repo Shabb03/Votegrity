@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');AWS
+const AWS = require('aws-sdk'); AWS
 require('dotenv').config();
 
 // Initialize AWS SDK with environment variables
@@ -47,7 +47,6 @@ async function downloadEncryptedAdminKeysFromS3(bucketName, objectKey) {
 async function encryptAdminKey(adminKeyId, adminKey) {
     try {
         // Parameters for KMS encryption operation
-        const adminString = adminKey.toString();
         const adminKeyBuffer = Buffer.from(adminKey, 'utf8');
         const params = {
             KeyId: adminKeyId,
@@ -56,8 +55,8 @@ async function encryptAdminKey(adminKeyId, adminKey) {
         };
 
         // Encrypt the admin key using AWS KMS
-        //const data = await kms.encrypt(params).promise();
-        //const encryptedAdminKey = data.CiphertextBlob.toString('base64');
+        const data = await kms.encrypt(params).promise();
+        const encryptedAdminKey = data.CiphertextBlob.toString('base64');
         return encryptedAdminKey;
     } catch (error) {
         console.error('Error encrypting admin key:', error);
@@ -85,4 +84,4 @@ async function decryptAdminKey(encryptedAdminKey) {
     }
 }
 
-module.exports = {storeEncryptedAdminKeysOnS3, downloadEncryptedAdminKeysFromS3, encryptAdminKey, decryptAdminKey}
+module.exports = { storeEncryptedAdminKeysOnS3, downloadEncryptedAdminKeysFromS3, encryptAdminKey, decryptAdminKey }

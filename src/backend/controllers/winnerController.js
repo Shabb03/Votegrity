@@ -11,6 +11,8 @@ exports.getResults = async (req, res) => {
             order: [['resultDate', 'DESC']],
         });
 
+        console.log("\n\nactive elections", activeElections);
+
         const result = await Promise.all(activeElections.map(async (election) => {
             const electionId = election.id;
             const results = await db.Result.findAll({ where: { electionId: electionId } });
@@ -28,6 +30,7 @@ exports.getResults = async (req, res) => {
             }));
             return {
                 id: electionId,
+                title: election.title,
                 candidates: candidates
             };
         }));

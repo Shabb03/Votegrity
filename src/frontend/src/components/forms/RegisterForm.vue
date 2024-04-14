@@ -1,7 +1,7 @@
 <template>
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue"/>
             <EmailInput @update:email="emailValue"/>
             <PasswordInput :displayPasswordRules="true" @update:password="passwordValue"/>
@@ -72,11 +72,6 @@ export default {
         sq2: '',
         sa2: '',
     }),
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
         //open the success card dialog box
         async triggerSuccessCard() {
@@ -91,7 +86,6 @@ export default {
                     name: this.name,
                     email: this.email,
                     password: encryptedPassword,
-                    //password: this.password,
                     dateOfBirth: this.date,
                     specialNumber: this.specialNumber,
                     citizenship: this.citizenship,
@@ -131,13 +125,6 @@ export default {
                 }
             }
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
         //reset all inputs to empty
         reset() {
             this.$refs.form.reset()

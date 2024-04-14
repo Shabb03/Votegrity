@@ -71,11 +71,13 @@
     <div v-else>
         <PageSubTitle :pageSubTitle="pageSubTitle" />
     </div>
+    <ResultsButton/>
 </template>
   
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ResultsButton from '../buttons/ResultsButton.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 import SuccessCard from "../SuccessCard.vue";
 import ElectionChoice from '../inputs/ElectionChoice.vue';
@@ -86,6 +88,7 @@ import VoteScoreInput from '../inputs/VoteScoreInput.vue';
 
 export default {
     components: {
+        ResultsButton,
         PageSubTitle,
         SuccessCard,
         ElectionChoice,

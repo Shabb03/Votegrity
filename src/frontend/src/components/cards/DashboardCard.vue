@@ -3,7 +3,7 @@
         <v-card max-width="250" elevation="16" class="card-box">
             <v-img
                 width="250"
-                :src="imageSrc || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
+                :src="imageSrc || '@/assets/votes.png'"
                 cover
             >
             </v-img>

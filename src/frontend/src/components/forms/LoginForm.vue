@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <EmailInput @update:email="emailValue"/>
             <PasswordInput @update:password="passwordValue"/>
             <div class="errorMessage">{{ errorMessage }}</div>
@@ -46,11 +46,6 @@ export default {
         isButtonDisabled: false,
         timeRemaining: 0,
     }),
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
         //disable the login button
         disableButton() {
@@ -78,7 +73,6 @@ export default {
                     const postData = {
                         email: this.email,
                         password: encryptedPassword,
-                        //password: this.password,
                     };
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);
                     const loginData = response.data;
@@ -111,13 +105,6 @@ export default {
                 }
             }
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
         //reset all inputs to empty
         reset() {
             this.$refs.form.reset()

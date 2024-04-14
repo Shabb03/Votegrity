@@ -3,7 +3,7 @@
         class="bg-white"
         width="10"
         :aspect-ratio="2"
-        :src="image || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
+        :src="image || require('@/assets/candidate.png')"
     ></v-img>
 </template>
 

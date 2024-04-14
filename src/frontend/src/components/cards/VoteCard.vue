@@ -4,7 +4,7 @@
             <v-img
                 class="align-end text-white"
                 height="350"
-                :src="imageSrc || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
+                :src="imageSrc || '@/assets/candidate.png'"
                 cover
             >
             <v-card-title>{{ name }}, {{ calculateAge(dateOfBirth) }}</v-card-title>
@@ -24,7 +24,7 @@ import getToken from '../../functions/GetToken.vue';
 
 export default {
     data: () => ({
-        imageSrc: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
+        imageSrc: '@/assets/candidate.png',
     }),
     props: {
         candidateId: Number,

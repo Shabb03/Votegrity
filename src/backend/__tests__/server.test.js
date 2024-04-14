@@ -3,6 +3,9 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const http = require('http');
 const app = require('../app');
 const db = require('../models/index.js');
+jest.mock('../../blockchain/contract/artifacts/contracts/Vote.sol/wrong/Vote.json', () => {
+    return {};
+});
 
 const port = process.env.PORT || 3000;
 app.set('port', port);
@@ -28,10 +31,10 @@ async function closeServer(resolve) {
 describe('Server', () => {
     test('should listen on port 3000', async () => {
         //await new Promise((resolve) => {
-            server.listen(port, async () => {
-                expect(server.address().port.toString()).toEqual(port.toString());
-                //await server.close(resolve);
-            });
+        server.listen(port, async () => {
+            expect(server.address().port.toString()).toEqual(port.toString());
+            //await server.close(resolve);
+        });
         //});
     }, 30000);
 });

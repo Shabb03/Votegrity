@@ -47,6 +47,7 @@ export default {
                     console.log(error);
                 } 
                 else {
+                    this.$router.push('/login');
                     //alert('Server Error: ', error);
                 }
             }

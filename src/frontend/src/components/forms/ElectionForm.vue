@@ -2,7 +2,7 @@
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
         <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
             <DescriptionInput @update:description="descriptionValue"/>
             <v-row>
@@ -79,11 +79,6 @@ export default {
         emailDomain: null,
         citizenship: null,
     }),
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
         //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
@@ -141,13 +136,6 @@ export default {
         async handleContinue() {
             this.validate();
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
         //reset all inputs to empty
         reset() {
             this.$refs.form.reset()

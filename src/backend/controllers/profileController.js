@@ -3,6 +3,12 @@ const sendEmail = require('./thirdParty/email');
 const { generateSixDigitCode } = require('./functions/generateCode');
 const db = require('../models/index.js');
 
+const { Web3 } = require('web3');
+const web3 = new Web3(process.env.API_URL);
+
+const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+const contractAddress = process.env.CONTRACT_ADDRESS;
+
 //Get the information of the user
 exports.userInfo = async (req, res) => {
     try {
@@ -118,6 +124,15 @@ exports.authAccount = async (req, res) => {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
+            const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
+            await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
+                .on('receipt', receipt => {
+                    console.log(receipt);
+                })
+                .on('error', error => {
+                    console.error(error);
+                });
+
             return res.json({ message: 'New user successfully authenticated' });
         }
         else {
