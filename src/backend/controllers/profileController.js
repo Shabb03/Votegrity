@@ -6,7 +6,7 @@ const db = require('../models/index.js');
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
 
-const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+//const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
 //Get the information of the user
