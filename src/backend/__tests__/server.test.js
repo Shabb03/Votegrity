@@ -3,9 +3,6 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const http = require('http');
 const app = require('../app');
 const db = require('../models/index.js');
-jest.mock('../../blockchain/contract/artifacts/contracts/Vote.sol/wrong/Vote.json', () => {
-    return {};
-});
 
 const port = process.env.PORT || 3000;
 app.set('port', port);
