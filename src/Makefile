@@ -1,10 +1,14 @@
 SERVER_DIR = backend
 CLIENT_DIR = frontend
 BLOCK_DIR = blockchain/contract
+ADMIN_DIR = backend/middleware
 
 install-backend:
 	@echo "Installing server dependencies..."
 	cd $(SERVER_DIR) && npm install
+
+create-admin:
+	cd $(ADMIN_DIR) && node createAdmin.js
 
 install-frontend:
 	@echo "Installing client dependencies..."
