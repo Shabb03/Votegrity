@@ -22,6 +22,7 @@ const sequelize = new Sequelize({
 
 sequelize.authenticate().then(function(errors) { console.log(errors) });
 
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

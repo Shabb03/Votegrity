@@ -2,6 +2,8 @@ const { generateKeys } = require('./functions/generateKeys');
 const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
 const votingProcess = require('../assets/process.json');
+const { where } = require('sequelize');
+const primes = require('fast-primes');
 
 //Create a new election
 exports.addElection = async (req, res) => {
@@ -87,6 +89,30 @@ exports.addCandidate = async (req, res) => {
         }
         const image = req.file;
         const imagePath = image.filename;
+
+        const primeNo = primes.range.fast(2, 50);
+        const otherCandidates = db.Candidate.findAll({
+            where: {
+              electionId: electionId
+            }
+          });
+
+        const candidatesWithSamePrime = db.Candidate.findAll({
+        where: {
+            primeNumber: primeNo
+        }
+        });
+
+        while (candidatesWithSamePrime.length != 0)
+        {
+            primeNo = primeGenerator({min:2, max: 50});
+            candidatesWithSamePrime = db.Candidate.findAll({
+                where: {
+                    primeNumber: primeNo
+                }
+            });
+        }
+
         const newCandidate = await db.Candidate.create({
             name: name,
             voice: voice,
@@ -95,6 +121,7 @@ exports.addCandidate = async (req, res) => {
             dateOfBirth: dateOfBirth,
             biography: biography,
             electionId: electionId,
+            primeNumber: primeNo,
         });
         res.json({candidate: newCandidate, message: 'Candidate created successfully'});
     }

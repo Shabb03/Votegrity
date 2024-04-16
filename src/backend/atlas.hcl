@@ -12,7 +12,7 @@ env "sequelize" {
     src = data.external_schema.sequelize.url
     dev = "mysql://root:Tommy2045%40@localhost:3306/votegrity"
     migration {
-        dir = "file://./migrations"
+        dir = "file://migrations"
     }
     format {
         migrate {

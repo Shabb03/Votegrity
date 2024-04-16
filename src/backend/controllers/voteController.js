@@ -10,7 +10,8 @@ const readFileAsync = promisify(fs.readFile);
 
 const keyFunctions = require('../middleware/keyFunctions.js')
 
-const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+const contract = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+const contractABI = contract.abi;
 const contractAddress = '0x0xE4cbd0825a4A2673d00196d8172e1E5DA359F3D6';
 
 const dotenv = require('dotenv');
@@ -108,6 +109,16 @@ exports.submitVote = async (req, res) => {
             return res.json({error: 'You do not meet the voting requirements'});
         }
 
+        const admin = await db.Admin.findOne({ where: { electionId: user.electionId } });
+
+        const bucketName = "votegritybucket";
+        const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
+        const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
+        const adminPublicKey = admin.paillierPublicKey;
+
+        var encryptedVote;
+        var blindedSignature;
+
         //if and else statements for election type
         if (electionType ===  processes[0]) {
             //majority vote contract
@@ -119,13 +130,16 @@ exports.submitVote = async (req, res) => {
             if (!candidate) {
                 return res.json({error: 'Selected candidate not found'});
             }
-            /*
-            const vote = await Vote.create({
-                voterId: userId,
-                candidateId: candidateId,
+            
+            const primeNo = candidate.primeNumber;
+            const vote = await db.Vote.create({
                 electionId: electionId,
             });
-            */
+    
+            encryptedVote = await vote.encryptVoteForMajority(adminPublicKey, primeNo);
+            blindedSignature =  await vote.blindSignature(adminPrivateKey, encryptedVote);
+
+            await vote.update()
         }
         else if (electionType === processes[1]) {
             //ranking vote contract
@@ -159,22 +173,6 @@ exports.submitVote = async (req, res) => {
                 return res.json({error: 'All available score points must be used'});
             }
         }
-        
-        const admin = await db.Admin.findOne({ where: { electionId: user.electionId } });
-
-        const bucketName = "votegritybucket";
-        const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
-        const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
-        const adminPublicKey = admin.paillierPublicKey;
-        
-        const vote = await db.Vote.create({
-            voterId: userId,
-            candidateId: candidateId,
-            electionId: electionId,
-        });
-
-        const blindedSignature = vote.blindSignature(adminPrivateKey);
-        const encryptedVote = vote.encryptVote(adminPublicKey);
 
         const contract = new web3.eth.Contract(contractABI, contractAddress);
 

@@ -44,6 +44,10 @@ module.exports = (sequelize) => {
                 model: db.Election,
                 key: 'id',
             },
+        },
+        primeNumber: {
+            type: DataTypes.BIGINT,
+            allowNull: false,
         }
     
     });

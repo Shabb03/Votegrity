@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('./index.js');
+const blindSignatures = require('blind-signatures');
+const paillier = require('paillier-bigint');
 
 module.exports = (sequelize) => {
     const Vote = sequelize.define('Vote', {
@@ -7,30 +9,6 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
-        },
-        voterId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: db.Voter,
-                key: 'id',
-            },
-        },
-        candidateId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: db.Candidate,
-                key: 'id',
-            },
-        },
-        blockId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: db.Block,
-                key: 'id',
-            },
         },
         electionId: {
             type: DataTypes.INTEGER,
@@ -41,23 +19,19 @@ module.exports = (sequelize) => {
             },
         },    
         blindedSignature: {
-            type: DataTypes.TEXT,
+            type: DataTypes.BIGINT,
             allowNull: true,
         },
         encryptedVote: {
-            type: DataTypes.TEXT,
+            type: DataTypes.BIGINT,
             allowNull: true,
         },
     });
 
-    Vote.prototype.blindSignature = async function (adminPrivateKey) {
-        const voterId = this.voterId;
-        const candidateId = this.candidateId;
-
-        const combinedVote = '${voterId},${candidateId}';
+    Vote.prototype.blindSignature = async function (adminPrivateKey, encryptedVote) {
 
         const blindedVote = blindSignatures.blind({
-            message: combinedVote,
+            message: encryptedVote,
             N: adminPrivateKey.N,
             E: adminPrivateKey.E
         });
@@ -67,18 +41,14 @@ module.exports = (sequelize) => {
         return blindedVote.blinded;
     };
 
-    Vote.prototype.encryptVote = async function (adminPublicKey) {
-        const voterId = this.voterId;
-        const candidateId = this.candidateId;
-
-        const vote = '${voterId},${candidateId}'; // Combine voter ID and candidate ID
-
+    Vote.prototype.encryptVoteForMajority = async function (adminPublicKey, primeNumber) {
         const pk = new paillier.PublicKey(adminPublicKey);
+        const vote = Math.pow(10, primeNumber);
         const encryptedVote = pk.encrypt(vote);
         
-        this.encryptedVote = encryptedVote.toString();
-        await this.save(); // Save encrypted vote in the database
-        return encryptedVote.toString();
+        this.encryptedVote = encryptedVote;
+        await this.save();
+        return encryptedVote;
     };
 
     return Vote;

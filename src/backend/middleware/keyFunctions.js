@@ -1,15 +1,41 @@
 const AWS = require('aws-sdk');
+
+const {
+    KMS
+} = require('@aws-sdk/client-kms');
+
+const {
+    Upload
+} = require('@aws-sdk/lib-storage');
+
+const {
+    S3
+} = require('@aws-sdk/client-s3');
+
 require('dotenv').config();
 
-// Initialize AWS SDK with environment variables
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.AWS_REGION
 });
 
-const s3 = new AWS.S3();
-const kms = new AWS.KMS();
+const s3 = new S3({
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    },
+
+    region: process.env.AWS_REGION
+});
+const kms = new KMS({
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    },
+
+    region: process.env.AWS_REGION
+});
 
 // Function to store encrypted admin keys on S3
 async function storeEncryptedAdminKeysOnS3(bucketName, encryptedAdminKey, adminName) {
@@ -20,9 +46,12 @@ async function storeEncryptedAdminKeysOnS3(bucketName, encryptedAdminKey, adminN
             Body: encryptedAdminKey,
             ContentType: 'text/plain' // Set content type accordingly
         };
-        const data = await s3.upload(params).promise();
-        return data.Key;
+        const data = await new Upload({
+            client: s3,
+            params
+        }).done();
         console.log('File uploaded successfully:', data.Location);
+        return data.Key;
     } catch (error) {
         console.error('Error uploading file to S3:', error);
     }
@@ -35,7 +64,7 @@ async function downloadEncryptedAdminKeysFromS3(bucketName, objectKey) {
             Bucket: bucketName,
             Key: objectKey
         };
-        const data = await s3.getObject(params).promise();
+        const data = await s3.getObject(params);
         return data.Body;
     } catch (error) {
         console.error('Error downloading encrypted admin keys from S3:', error);
@@ -53,7 +82,7 @@ async function encryptAdminKey(adminKeyId, adminKey) {
         };
 
         // Encrypt the admin key using AWS KMS
-        const data = await kms.encrypt(params).promise();
+        const data = await kms.encrypt(params);
         const encryptedAdminKey = data.CiphertextBlob.toString('base64');
 
         return encryptedAdminKey;
@@ -72,7 +101,7 @@ async function decryptAdminKey(encryptedAdminKey) {
         };
 
         // Decrypt the admin key using AWS KMS
-        const data = await kms.decrypt(params).promise();
+        const data = await kms.decrypt(params);
         const decryptedAdminKey = data.Plaintext.toString('utf8');
 
         return decryptedAdminKey;
