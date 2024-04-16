@@ -121,12 +121,6 @@ export default {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
                     this.electionType = this.electionData[selectedElectionIndex].type;
-
-                    //this.electionType = 'majority';
-                    //this.electionType = 'ranked';
-                    //this.electionType = 'point-based';
-                    //this.electionType = 'single-transferable';
-
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
                     this.rankList = Array.from({ length: candidateArray.length }, (_, index) => index + 1);
                     const groupSize = 3;
