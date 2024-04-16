@@ -101,7 +101,7 @@ export default {
                     },
                 });
                 if (response.data.error) {
-                    //alert("error: ", response.data.error);
+                    console.log(response.data.error);
                 }
                 else {
                     if (response.data.authenticated) {

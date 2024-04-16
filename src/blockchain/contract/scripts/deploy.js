@@ -4,7 +4,6 @@ async function main() {
 
   // Deploy the contract
   const vote = await Vote.deploy();
-
   console.log("Contract deployed to address:", vote.target);
 }
 

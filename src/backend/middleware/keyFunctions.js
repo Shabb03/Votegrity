@@ -51,7 +51,6 @@ async function encryptAdminKey(adminKeyId, adminKey) {
         const params = {
             KeyId: adminKeyId,
             Plaintext: adminKeyBuffer
-            //Plaintext: Buffer.from(adminKey, 'utf8')   //won't work as adminKey is type object, not accepted
         };
 
         // Encrypt the admin key using AWS KMS
@@ -74,7 +73,6 @@ async function decryptAdminKey(encryptedAdminKey) {
 
         // Decrypt the admin key using AWS KMS
         const data = await kms.decrypt(params).promise();
-        //shab: but if it's a string then how can it be used?
         const decryptedAdminKey = data.Plaintext.toString('utf8');
 
         return decryptedAdminKey;

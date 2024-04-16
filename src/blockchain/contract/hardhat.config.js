@@ -1,6 +1,4 @@
-//const API_URL = vars.get("API_URL");
-//const PRIVATE_KEY = vars.get("PRIVATE_KEY")
-
+require('dotenv').config();
 const API_URL = process.env.API_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
@@ -8,15 +6,24 @@ require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-ethers");
 
 module.exports = {
-  defaultNetwork: "sepolia",
+  //defaultNetwork: "sepolia",
   networks: {
+    /*
     hardhat: {
+      chainId: 31337
     },
+    */
+    ganache: {
+      url: "http://127.0.0.1:7545", // Ganache default RPC endpoint
+      chainId: 1337, // Ganache default chain ID
+    },
+    /*
     sepolia: {
-      chainId: 11155111,
+      chainId: 31337,
       url: API_URL,
       accounts: [ PRIVATE_KEY ]
     }
+    */
   },
   solidity: {
     version: "0.8.24",

@@ -63,7 +63,7 @@ exports.signup = async (req, res) => {
             specialNumber: specialNumber,
             citizenship: citizenship,
             phoneNumber: phoneNumber,
-            walletPrivateKey: ethereumWallet.privateKey,  // probably better to store in user's side
+            walletPrivateKey: ethereumWallet.privateKey,
             walletAddress: ethereumWallet.address,
             securityQuestion1: sq1.id,
             securityAnswer1: securityAnswer1,

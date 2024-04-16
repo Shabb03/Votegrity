@@ -107,10 +107,10 @@ export default {
                         const publicKey =
                         const privateKey =
                         */
-                        const publicKey = response.data.publicKey;
-                        const privateKey = response.data.privateKey;
-                        localStorage.setItem("votegrityPublicKey", publicKey);
-                        localStorage.setItem("votegrityPrivateKey", privateKey);
+                        //const publicKey = response.data.publicKey;
+                        //const privateKey = response.data.privateKey;
+                        //localStorage.setItem("votegrityPublicKey", publicKey);
+                        //localStorage.setItem("votegrityPrivateKey", privateKey);
                         await this.triggerSuccessCard();
                     }
 

@@ -9,21 +9,6 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-/*
-beforeAll(async () => {
-    //await sequelize.sync();
-});
-  
-afterAll(async () => {
-    await sequelize.close();
-});
-
-async function closeServer(resolve) {
-    await sequelize.close();
-    await server.close(resolve);
-}
-*/
-
 //check if the server runs on port 3000
 describe('Server', () => {
     test('should listen on port 3000', async () => {

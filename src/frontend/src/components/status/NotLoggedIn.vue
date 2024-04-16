@@ -32,9 +32,6 @@ export default {
             if (process.env.NODE_ENV === 'test') {
                 console.log(error);
             } 
-            else {
-                //alert('Error fetching status: ', error);
-            }
             this.loading = false;
         }
     },

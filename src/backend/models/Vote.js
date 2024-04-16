@@ -67,12 +67,13 @@ module.exports = (sequelize) => {
 
         const vote = `${voterId},${candidateId}`; // Combine voter ID and candidate ID
 
-        const pk = new paillier.PublicKey(adminPublicKey.n, adminPublicKey.g);
+        const pk = new paillier.PublicKey(adminPublicKey);
         const encryptedVote = pk.encrypt(vote);
 
         this.encryptedVote = encryptedVote.toString();
         await this.save(); // Save encrypted vote in the database
         return encryptedVote.toString();
+
     };
 
     return Vote;

@@ -17,6 +17,7 @@ const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
 
 //const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
+const contractABI = require(process.env.CONTRACT_ABI);
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
@@ -45,7 +46,7 @@ async function checkCandidate(candidateId) {
     if (!candidateId) {
         return "No candidate or election selected";
     }
-    const candidate = await Candidate.findByPk(candidateId);
+    const candidate = await db.Candidate.findByPk(candidateId);
     if (!candidate) {
         return "Selected candidate not found";
     }
@@ -99,6 +100,15 @@ function processObject(obj) {
     return result.join(''); // Join the padded strings
 }
 
+//for ranking system, combine the ranks into one bigint using primes to the power of ranks
+function calculateProduct(obj) {
+    let product = 1;
+    for (const [key, value] of Object.entries(obj)) {
+        product *= Math.pow(parseInt(key), parseInt(value));
+    }
+    return product;
+}
+
 //for stv system, using a complex mathemtaical formula and prime numbers, combine the ranks to be able to be decoded to it's original form
 function encodeObject(obj) {
     let combinedNumber = 1;
@@ -115,7 +125,6 @@ async function voteBlindSignature(adminPrivateKey, vote) {
         N: parts[0].toString(),
         E: parts[1].toString(),
     });
-    //console.log(blinded, r);
     return blinded;
 };
 
@@ -142,7 +151,8 @@ async function vote1(userId, candidateId, electionId, adminPrivateKey, adminPubl
 
 //voting process for ranked voting
 async function vote2(ranks, adminPrivateKey, adminPublicKey) {
-    const processedStr = await processObject(ranks);
+    //const processedStr = await processObject(ranks);
+    const processedStr = await calculateProduct(ranks);
     const bigIntValue = BigInt(processedStr);
     const blindedSignature = await voteBlindSignature(adminPrivateKey, bigIntValue);
     const encryptedVote = await voteEncryptVote(adminPublicKey, bigIntValue);
@@ -179,20 +189,29 @@ async function solContract(userId, electionId, encryptedVote, blindedSignature) 
 
     const user = await db.Voter.findByPk(userId);
     const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
-    await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
-        .on('receipt', receipt => {
-            console.log(receipt);
-        })
-        .on('error', error => {
-            console.error(error);
-        });
-    await contract.methods.submitBallot(encryptedVote, bS, electionId).send({ from: `${user.walletAddress}`, gas: 3000000 })
-        .on('receipt', receipt => {
-            console.log(receipt);
-        })
-        .on('error', error => {
-            console.error(error);
-        });
+
+    try {
+        /*
+        await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
+            .on('receipt', receipt => {
+                console.log(receipt);
+            })
+            .on('error', error => {
+                console.error(error);
+            });
+        */
+        await contract.methods.submitBallot(encryptedVote, bS, electionId).send({ from: `${user.walletAddress}`, gas: 3000000 })
+            .on('receipt', receipt => {
+                console.log(receipt);
+            })
+            .on('error', error => {
+                console.error(error);
+            });
+        return true;
+    }
+    catch (error) {
+        return false;
+    }
 };
 
 //Get the details of all candidates in the current election
@@ -297,7 +316,10 @@ exports.submitVote = async (req, res) => {
                 return res.json({ error: cand });
             }
             const { blindedSignature, encryptedVote } = await vote1(userId, candidateId, electionId, adminPrivateKey, adminPublicKey);
-            solContract(userId, electionId, encryptedVote, blindedSignature);
+            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
+            if (!submitted) {
+                return res.json({ error: 'Ballot already cast' });
+            }
             return res.json({ message: 'Vote submitted successfully' });
         }
         //ranking voting process
@@ -308,7 +330,10 @@ exports.submitVote = async (req, res) => {
                 return res.json({ error: checkRank });
             }
             const { blindedSignature, encryptedVote } = await vote2(ranks, adminPrivateKey, adminPublicKey);
-            await solContract(userId, electionId, encryptedVote, blindedSignature);
+            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
+            if (!submitted) {
+                return res.json({ error: 'Ballot already cast' });
+            }
             return res.json({ message: 'Vote submitted successfully' });
         }
         //score based voting process
@@ -319,7 +344,10 @@ exports.submitVote = async (req, res) => {
                 return res.json({ error: checkScore });
             }
             const { blindedSignature, encryptedVote } = await vote3(scores, adminPrivateKey, adminPublicKey);
-            solContract(userId, electionId, encryptedVote, blindedSignature);
+            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
+            if (!submitted) {
+                return res.json({ error: 'Ballot already cast' });
+            }
             return res.json({ message: 'Vote submitted successfully' });
         }
         //single-transferrable voting process
@@ -330,7 +358,10 @@ exports.submitVote = async (req, res) => {
                 return res.json({ error: checkRank });
             }
             const { blindedSignature, encryptedVote } = await vote4(ranks, adminPrivateKey, adminPublicKey);
-            solContract(userId, electionId, encryptedVote, blindedSignature);
+            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
+            if (!submitted) {
+                return res.json({ error: 'Ballot already cast' });
+            }
             return res.json({ message: 'Vote submitted successfully' });
         }
     }

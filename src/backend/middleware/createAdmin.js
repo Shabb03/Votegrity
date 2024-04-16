@@ -15,6 +15,7 @@ const rl = readline.createInterface({
 //Create an admin via terminal command line interface
 async function createAdmin() {
     try {
+        console.log("\n\n\n\n\n\n\n\n\n\n");
         const email = await askQuestion('Enter admin email: ');
         const password = await askQuestion('Enter admin password: ');
 
