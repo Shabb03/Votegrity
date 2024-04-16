@@ -26,14 +26,6 @@ module.exports = (sequelize) => {
                 key: 'id',
             },
         },
-        blockId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: db.Block,
-                key: 'id',
-            },
-        },
         electionId: {
             type: DataTypes.INTEGER,
             allowNull: false,

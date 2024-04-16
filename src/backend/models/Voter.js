@@ -38,20 +38,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        document: {
-            type: DataTypes.BLOB,
-            allowNull: true,
-        },
         authToken: {
             type: DataTypes.STRING,
             allowNull: true,
         },
         authenticated: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        },
-        voted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
