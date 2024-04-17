@@ -32,12 +32,15 @@ export default {
         },
     },
     methods: {
+        //open the confirmation card dialog box
         openDialog() {
             this.isActive = true;
         },
+        //close the confirmation card dialog box
         goBack() {
             this.isActive = false;
         },
+        //emit an event to successfully continue the action required
         goContinue() {
             this.isActive = false;
             this.$emit('continueValidation');

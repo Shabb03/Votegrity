@@ -49,8 +49,6 @@ module.exports = (sequelize) => {
             type: DataTypes.BIGINT,
             allowNull: false,
         }
-    
     });
-
     return Candidate;
 }

@@ -18,9 +18,8 @@ async function sendEmail(subject, recipient, body) {
             subject: subject,
             text: body,
         };
-
         await transporter.sendMail(mailOptions);
-    } 
+    }
     catch (error) {
         console.error('Error sending email:', error);
     }

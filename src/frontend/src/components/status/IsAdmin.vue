@@ -13,6 +13,7 @@ export default {
             loading: true,
         };
     },
+    //check if the user is logged in as admin otherwise redirect
     async created() {
         try {
             const token = await getToken();
@@ -30,9 +31,6 @@ export default {
         catch (error) {
             if (process.env.NODE_ENV === 'test') {
                 console.log(error);
-            } 
-            else {
-                //alert('Error fetching status: ', error);
             }
             this.loading = false;
         }

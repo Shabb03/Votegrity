@@ -1,6 +1,9 @@
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
+//const { encryptKey } = require('./functions/encryptKeys')
 const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
+const paillier = require('paillier-bigint');
+const { Wallet } = require('ethers');
 
 //Get all possible security questions
 exports.securityQuestions = async (req, res) => {
@@ -12,6 +15,7 @@ exports.securityQuestions = async (req, res) => {
         res.json({ questions });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -21,12 +25,12 @@ exports.signup = async (req, res) => {
     try {
         const { name, email, password, dateOfBirth, specialNumber, citizenship, phoneNumber, securityQuestion1, securityAnswer1, securityQuestion2, securityAnswer2 } = req.body;
         if (!name || !email || !password || !dateOfBirth || !specialNumber || !citizenship || !phoneNumber || !securityQuestion1 || !securityAnswer1 || !securityQuestion2 || !securityAnswer2) {
-            return res.json({error: 'All required inputs not provided'});
+            return res.json({ error: 'All required inputs not provided' });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.json({error: 'Invalid Email'});
+            return res.json({ error: 'Invalid Email' });
         }
         const existingUser = await db.Voter.findOne({ where: { email } });
         if (existingUser) {
@@ -34,28 +38,23 @@ exports.signup = async (req, res) => {
         }
         const isSecure = isSecurePassword(password);
         if (!isSecure) {
-            return res.json({error: 'Password is not strong enough' });
+            return res.json({ error: 'Password is not strong enough' });
         }
         if (!countryData.includes(citizenship)) {
-            return res.json({error: 'Incorrect citizenship provided'});
+            return res.json({ error: 'Incorrect citizenship provided' });
         }
 
-        const sq1 = await db.SecurityQuestions.findOne({where: { questions: securityQuestion1 }, attributes: ['id'],});
-        const sq2 = await db.SecurityQuestions.findOne({where: { questions: securityQuestion2 }, attributes: ['id'],});
+        const sq1 = await db.SecurityQuestions.findOne({ where: { questions: securityQuestion1 }, attributes: ['id'], });
+        const sq2 = await db.SecurityQuestions.findOne({ where: { questions: securityQuestion2 }, attributes: ['id'], });
         if (!sq1 || !sq2) {
             res.json({ message: 'Security question not found' });
         }
 
-        //const decryptedPassword = await decryptPassword(password);
-        //const hashedPassword = await hashPassword(decryptedPassword);
+        const { paillierPublicKey, paillierPrivateKey } = await paillier.generateRandomKeys(2048);
         const ethereumWallet = generateUserEthereumWallet();
 
-        console.log(ethereumWallet.address);
-        console.log(ethereumWallet.privateKey);
-
-
-        const hashedPassword = await hashPassword(password);
-
+        const decryptedPassword = await decryptPassword(password);
+        const hashedPassword = await hashPassword(decryptedPassword);
         const newUser = await db.Voter.create({
             name: name,
             email: email,
@@ -66,26 +65,30 @@ exports.signup = async (req, res) => {
             phoneNumber: phoneNumber,
             walletPrivateKey: ethereumWallet.privateKey,
             walletAddress: ethereumWallet.address,
-            securityQuestion1: sq1.id, 
-            securityAnswer1: securityAnswer1, 
-            securityQuestion2: sq2.id, 
+            securityQuestion1: sq1.id,
+            securityAnswer1: securityAnswer1,
+            securityQuestion2: sq2.id,
             securityAnswer2: securityAnswer2,
         });
+
+        //const encryptedPaillierPublicKey = encryptKey(paillierPublicKey);
+        //const encryptedPaillierPrivateKey = encryptKey(paillierPrivateKey);
 
         const userResponse = {
             name: newUser.name,
             email: newUser.email,
-            publicKey: newUser.publicKey,
-            privateKey: newUser.privateKey,
+            publicKey: paillierPublicKey,
+            privateKey: paillierPrivateKey,
         };
-        res.status(201).json({ user: userResponse, message: 'User created successfully' });
+        res.json({ user: userResponse, message: 'User created successfully' });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 
-    function generateUserEthereumWallet()
-    {
+    function generateUserEthereumWallet() {
+        /*
         const privateKey = ethereumWallet.generate().getPrivateKey();
         const wallet = ethereumWallet.fromPrivateKey(privateKey);
         const address = `0x${wallet.getAddress().toString("hex")}`;
@@ -94,5 +97,12 @@ exports.signup = async (req, res) => {
             privateKey: privateKey.toString('hex'),
             address: address
         };
-    }
+        */
+
+        const wallet = Wallet.createRandom();
+        return {
+            privateKey: wallet.privateKey,
+            address: wallet.address
+        };
+    };
 };

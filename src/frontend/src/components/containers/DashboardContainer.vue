@@ -7,7 +7,6 @@
             <v-row>
                 <DashboardCard :imageSrc="require('@/assets/election.png')" :informationTitle="title" :informationText="description"/>
                 <DashboardCard :imageSrc="require('@/assets/date.png')" :informationTitle="daysLeft + ' Days Left'"/>
-                <DashboardCard :imageSrc="require('@/assets/votes.png')" :informationTitle="voteCount + ' Total Votes'"/>
                 <DashboardCard :imageSrc="require('@/assets/candidate.png')" :informationTitle="'Candidates: ' + candidateNumber"/>
             </v-row>
         </v-container>
@@ -38,7 +37,6 @@ export default {
         description: '',
         daysLeft: '',
         candidateNumber: '',
-        voteCount: '',
         electionData: [],
         selectedElection: null,
         pageSubTitle: 'No Active Elections currently',
@@ -47,6 +45,7 @@ export default {
         this.fetchInformation();
     },
     methods: {
+        //update the election details based on the chosen election to view
         async updateElectionDetails() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -56,13 +55,13 @@ export default {
                     this.description = electionD.description;
                     this.daysLeft = electionD.resultDate;
                     this.candidateNumber = electionD.candidateNumber;
-                    this.voteCount = electionD.voteCount;
                 } 
                 else {
                     alert('Selected election not found in electionData');
                 }
             }
         },
+        //format the date to DD/MM/YYYY
         formatResultDate(dateInput) {
         const date = new Date(dateInput);
             return date.toLocaleDateString('en-GB', {
@@ -71,13 +70,17 @@ export default {
                 day: 'numeric',
             });
         },
+        //get the difference between current date and result date
         getDaysDifference(startDate, endDate) {
             const oneDay = 24 * 60 * 60 * 1000;
             const start = new Date(startDate);
             const end = new Date(endDate);
+            console.log(end);
+            console.log(start);
             const daysDifference = Math.round((end - start) / oneDay);
             return daysDifference;
         },
+        //get all active elections
         async fetchInformation() {
             try {
                 const authToken = await getToken();

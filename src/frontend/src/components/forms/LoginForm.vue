@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <EmailInput @update:email="emailValue"/>
             <PasswordInput @update:password="passwordValue"/>
             <div class="errorMessage">{{ errorMessage }}</div>
@@ -11,9 +11,6 @@
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
-                </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
                 </v-btn>
             </div>
         </v-form>
@@ -49,12 +46,8 @@ export default {
         isButtonDisabled: false,
         timeRemaining: 0,
     }),
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
+        //disable the login button
         disableButton() {
             this.buttonClass = 'mt-4 disabled';
             this.isButtonDisabled = true;
@@ -62,11 +55,13 @@ export default {
                 this.enableButton();
             }, this.timeRemaining * 1000 * 60);
         },
+        //enable the login button
         enableButton() {
             this.errorMessage = '',
             this.buttonClass = 'mt-4 primary';
             this.isButtonDisabled = false;
         },
+        //submit the user's credentials and store the authentication token if correct
         async validate() {
             if (this.isButtonDisabled) {
                 return;
@@ -74,12 +69,10 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 try {
-                    const encryptedPassword = await encryptPassword(this.email, this.password);
-                    console.log(encryptedPassword);
+                    const encryptedPassword = await encryptPassword(this.password);
                     const postData = {
                         email: this.email,
                         password: encryptedPassword,
-                        //password: this.password,
                     };
                     const response = await axios.post('http://localhost:3000/api/user/login', postData);
                     const loginData = response.data;
@@ -112,19 +105,9 @@ export default {
                 }
             }
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log("email:", this.email);
-            console.log("password", this.password);
         },
         emailValue(params) {
             this.email = params;

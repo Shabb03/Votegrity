@@ -10,17 +10,20 @@ module.exports = (sequelize) => {
         },
         winner: {
             type: DataTypes.INTEGER,
-            allowNull: true,
+            allowNull: false,
             references: {
                 model: db.Candidate,
                 key: 'id',
             },
         },
-        voteCount: {
+        electionId: {
             type: DataTypes.INTEGER,
-            allowNull: true,
+            allowNull: false,
+            references: {
+                model: db.Election,
+                key: 'id',
+            },
         }
     });
-
     return Result;
 }

@@ -1,5 +1,5 @@
 const sendEmail = require('./thirdParty/email');
-const generateSixDigitCode = require('./functions/generateCode');
+const { generateSixDigitCode } = require('./functions/generateCode');
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
 const db = require('../models/index.js');
 
@@ -23,9 +23,10 @@ exports.authCode = async (req, res) => {
         await user.save();
 
         sendEmail("Reset Password Code", email, "Here is your password code: " + sixDigitCode);
-        res.json({message: "Email sent", securityQuestion1: sq1.questions, securityQuestion2: sq2.questions});
+        res.json({ message: "Email sent", securityQuestion1: sq1.questions, securityQuestion2: sq2.questions });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
@@ -37,7 +38,7 @@ exports.changePassword = async (req, res) => {
         if (!email || !resetToken || !securityAnswer1 || !securityAnswer2 || !password) {
             return res.json({ error: 'All required inputs not provided' });
         }
-        const user = await Voter.findOne({ where: { email } });
+        const user = await db.Voter.findOne({ where: { email } });
         if (!user) {
             return res.json({ error: 'User not found for the provided email' });
         }
@@ -45,20 +46,21 @@ exports.changePassword = async (req, res) => {
         if (resetToken === user.resetToken && securityAnswer1 === user.securityAnswer1 && securityAnswer2 === user.securityAnswer2) {
             const isSecure = isSecurePassword(password);
             if (!isSecure) {
-                return res.json({error: 'Password is not strong enough'});
+                return res.json({ error: 'Password is not strong enough' });
             }
-            const decryptedPassword = await decryptPassword(user.privateKey, password);
+            const decryptedPassword = await decryptPassword(password);
             const hashedPassword = await hashPassword(decryptedPassword);
             user.password = hashedPassword;
             user.resetToken = null;
             await user.save();
-            res.json({message: 'User password updated successfully'});
-        } 
+            res.json({ message: 'User password updated successfully' });
+        }
         else {
             return res.json({ error: 'Invalid resetToken', invalid: true });
         }
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

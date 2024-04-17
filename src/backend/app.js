@@ -9,20 +9,21 @@ const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/adminRoute');
 const electionRoute = require('./routes/electionRoute');
 const statusRoute = require('./routes/statusRoute');
-const testRoute = require('./routes/testRoute');
 
-const minutesTimout = 1;
+//limit the number of requests per minute from an IP address to prevent ddos attacks
+const minutesTimout = 5;
 const limiter = rateLimit({
     windowMs: minutesTimout * 60 * 1000,
     max: 200,
     handler: (req, res) => {
-        res.json({ error: 'Too many requests from this IP, please try again later.'});
+        res.json({ error: 'Too many requests from this IP, please try again later.' });
+        console.log("too many requests");
     },
 });
 
+//only allow certain url's to interact with the server
 const allowedOrigins = ['http://localhost:8080', 'http://localhost:8081'];
 const corsOptions = {
-    //origin: process.env.ORIGIN || 'http://localhost:8080',
     origin: allowedOrigins
 };
 
@@ -64,7 +65,6 @@ app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/election', electionRoute);
 app.use('/api/status', statusRoute);
-app.use('/api/test', testRoute);
 
 app.use(passport.initialize());
 

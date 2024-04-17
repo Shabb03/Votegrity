@@ -43,6 +43,13 @@
                                 @update:score="updateScore(candidate.id, $event)"
                             />
                         </div>
+                        <div v-if="electionType === 'single-transferable'">
+                            <RankChoiceInput
+                                :key="candidate.id"
+                                :rankData="rankList"
+                                @update:rank="updateRank(candidate.id, $event)"
+                            />
+                        </div>
                     </div>
                 </v-row>
                 <div v-if="electionType === 'ranked'">
@@ -58,21 +65,19 @@
                         <h3 class="errorMessage">{{ errorMessage }}</h3>
                     </v-sheet>
                 </div>
-
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </v-container>
         </div>
     </div>
     <div v-else>
         <PageSubTitle :pageSubTitle="pageSubTitle" />
     </div>
+    <ResultsButton/>
 </template>
   
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import ResultsButton from '../buttons/ResultsButton.vue';
 import PageSubTitle from '../titles/PageSubTitle.vue';
 import SuccessCard from "../SuccessCard.vue";
 import ElectionChoice from '../inputs/ElectionChoice.vue';
@@ -83,6 +88,7 @@ import VoteScoreInput from '../inputs/VoteScoreInput.vue';
 
 export default {
     components: {
+        ResultsButton,
         PageSubTitle,
         SuccessCard,
         ElectionChoice,
@@ -99,7 +105,7 @@ export default {
         candidateData: [],
         selectedElection: null,
         electionType: '',
-        totalScore: 100,
+        totalScore: 10,
         rankList: null,
         ranks: {},
         scores: {},
@@ -109,16 +115,12 @@ export default {
         this.fetchCandidates();
     },
     methods: {
+        //update the election details based on the chosen election to view
         async updateElectionDetails() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
                 if (selectedElectionIndex !== -1) {
-                    //this.electionType = this.electionData[selectedElectionIndex].type;
-
-                    //this.electionType = 'majority';
-                    //this.electionType = 'ranked';
-                    this.electionType = 'point-based';
-
+                    this.electionType = this.electionData[selectedElectionIndex].type;
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
                     this.rankList = Array.from({ length: candidateArray.length }, (_, index) => index + 1);
                     const groupSize = 3;
@@ -134,6 +136,7 @@ export default {
                 }
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard(name=null) {
             this.successMessage = 'You have successfully voted' 
             if (name !== null) {
@@ -141,6 +144,7 @@ export default {
             }
             this.$refs.successCardRef.openDialog();
         },
+        //check if 2 or more candidates have the same rank preference assigned
         async checkRank() {
             const valueSet = new Set();
             for (const key in this.ranks) {
@@ -155,6 +159,7 @@ export default {
             }
             return true;
         },
+        //check if all score points provided have been used
         async checkScore(){
             if (this.totalScore < 0) {
                 this.errorMessage = "Too many points used";
@@ -166,14 +171,13 @@ export default {
             }
             return true;
         },
+        //cast the vote
         async vote() {
             try {
                 this.errorMessage = '';
                 const postData = {
                     electionId: this.selectedElection,
                     type: this.electionType,
-                    //ranks: this.ranks,
-                    //scores: this.scores,
                 };
                 if (this.electionType === 'ranked') {
                     if (await this.checkRank()) {
@@ -191,10 +195,15 @@ export default {
                         return;
                     }
                 }
+                else if (this.electionType === 'single-transferable') {
+                    if (await this.checkRank()) {
+                        postData.ranks = this.ranks;
+                    }
+                    else {   
+                        return;
+                    }
+                }
                 const authToken = await getToken();
-                console.log(authToken);
-                console.log(postData);
-                
                 const response = await axios.post('http://localhost:3000/api/election/vote', postData, {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
@@ -216,10 +225,12 @@ export default {
                 }
             }
         },
+        //parse the date string into a readable format
         parseDate(dateString) {
             const [year, month, day] = dateString.split('-');
             return new Date(year, month - 1, day);
         },
+        //fetch all candidates for the chosen election
         async fetchCandidates() {
             try {
                 const authToken = await getToken();
@@ -252,16 +263,12 @@ export default {
         },
         updateScore(candidateId, score) {
             this.scores[candidateId] = score;
-            let initialScore = 100;
+            let initialScore = 10;
             for (const key in this.scores) {
                 initialScore -= this.scores[key];
             }
             this.totalScore = initialScore;
         },
-        test() {
-            console.log("Ranks", this.ranks);
-            console.log("Scores", this.scores);
-        }
     }
 }
 </script>

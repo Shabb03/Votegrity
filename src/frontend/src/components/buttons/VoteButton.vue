@@ -18,9 +18,11 @@ export default {
         name: String,
     },
     methods: {
+        //open the success card dialog box
         async callSuccess() {
             this.$emit('callSuccessCard', this.name);
         },
+        //cast a vote for the chosen candidate
         async vote(candidateId) {
             try {
                 const authToken = await getToken();

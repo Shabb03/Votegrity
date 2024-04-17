@@ -1,7 +1,7 @@
 <template>
     <div v-if="electionData && electionData.length > 0" class="form-container">
         <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
             <h3>Number of Candidates: {{ addedCandidates }}/{{ candidateCount }}</h3>
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue" />
@@ -17,9 +17,6 @@
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
-                </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
                 </v-btn>
             </div>
         </v-form>
@@ -70,18 +67,15 @@ export default {
     created() {
         this.getElections();
     },
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //display the number of added candidates and the number of candidates required for the election
         async updateCandidateCounts() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -95,6 +89,7 @@ export default {
                 }
             }
         },
+        //submit the new candidates details and add them to the election
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -136,6 +131,7 @@ export default {
                 }
             }
         },
+        //get all new elections where the added candidates are less than the required candidates
         async getElections() {
             try {
                 const authToken = await getToken();
@@ -156,26 +152,13 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            /*
-            console.log(this.name);
-            console.log(this.image);
-            console.log(this.voice);
-            */
-            console.log(this.selectedElection);
         },
         nameValue(params) {
           this.name = params;

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('./index.js');
-const blindSignatures = require('blind-signatures');
 const paillier = require('paillier-bigint');
+const BlindSignature = require('blind-signatures');
 
 module.exports = (sequelize) => {
     const Vote = sequelize.define('Vote', {
@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
                 model: db.Election,
                 key: 'id',
             },
-        },    
+        },
         blindedSignature: {
             type: DataTypes.BIGINT,
             allowNull: true,

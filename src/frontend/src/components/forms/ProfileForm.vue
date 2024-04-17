@@ -1,7 +1,7 @@
 <template>
     <div class="form-container">
         <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <v-text-field class="disabled"
                 disabled
                 v-model="name"
@@ -45,9 +45,6 @@
                 <v-btn class="mt-4 primary" @click="triggerConfirmationCard">
                   Submit
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                  Test
-                </v-btn>
             </div>
         </v-form>
     </div>
@@ -83,18 +80,15 @@ export default {
     created() {
         this.fetchUserData();
     },
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //change the user's email/phone number if a new one is provided
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -128,6 +122,7 @@ export default {
                 }
             }
         },
+        //get the user's personal details
         async fetchUserData() {
             try {
                 const token = await getToken();
@@ -153,22 +148,13 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log(this.email);
-            console.log(this.phoneNumber);
         },
         emailValue(params) {
             this.email = params;

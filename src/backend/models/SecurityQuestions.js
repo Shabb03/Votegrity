@@ -12,6 +12,5 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
     });
-
     return SecurityQuestions;
 }

@@ -1,7 +1,13 @@
 const jwt = require('jsonwebtoken');
 const sendEmail = require('./thirdParty/email');
-const generateSixDigitCode = require('./functions/generateCode');
+const { generateSixDigitCode } = require('./functions/generateCode');
 const db = require('../models/index.js');
+
+const { Web3 } = require('web3');
+const web3 = new Web3(process.env.API_URL);
+
+const contractABI = require(process.env.CONTRACT_ABI);
+const contractAddress = process.env.CONTRACT_ADDRESS;
 
 //Get the information of the user
 exports.userInfo = async (req, res) => {
@@ -22,60 +28,67 @@ exports.userInfo = async (req, res) => {
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
+};
+
+async function changeEmail(user, newEmail) {
+    const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
+    if (existingEmail) {
+        return null;
+    }
+    user.email = newEmail;
+    await user.save();
+    newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+    return newToken;
+};
+
+async function changeNumber(user, newNumber) {
+    const existingNumber = await db.Voter.findOne({ where: { phoneNumber: newNumber } });
+    if (existingNumber) {
+        return null;
+    }
+    user.phoneNumber = newNumber;
+    await user.save();
+    return 0
 };
 
 //Change the user's email or phone number
 exports.changeUserDetails = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const { newEmail, newNumber } = req.body;
         var message = "";
         var newToken = null;
 
-        if (newEmail && newEmail !== null && newNumber && newNumber !== null) {
-            const existingEmail = await Voter.findOne({ where: { email: newEmail } });
-            if (existingEmail && existingNumber) {
-                return res.json({ error: 'Number and email already in use' });   
-            }
-            user.email = newEmail;
-            user.phoneNumber = newNumber;
-            await user.save();
-            message = "Email and Number updated successfully";
-            newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+        if (newEmail === null && newNumber === null) {
+            return res.json({ error: 'Either email or phone number must be provided.' });
         }
-        else if (newEmail && newEmail !== null) {
-            const existingEmail = await db.Voter.findOne({ where: { email: newEmail } });
-            if (existingEmail) {
+        if (newEmail && newEmail !== null) {
+            let newToken = await changeEmail(user, newEmail);
+            if (newToken === null) {
                 return res.json({ error: 'Email already in use' });
             }
-            user.email = newEmail;
-            await user.save();
-            message = "Email updated successfully";
-            newToken = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY);
+            message = message = "Email updated successfully. ";
         }
-        else if (newNumber && newNumber !== null) {
-            const existingNumber = await db.Voter.findOne({ where: { phoneNumber: newNumber } });
-            if (existingNumber) {
+        if (newNumber && newNumber !== null) {
+            let updatedNumber = await changeNumber(user, newNumber);
+            if (updatedNumber === null) {
                 return res.json({ error: 'Number already in use' });
             }
-            user.phoneNumber = newNumber;
-            await user.save();
-            message = "Number updated successfully";
+            message = message + "Number updated successfully. ";
         }
-        else {
-            return res.json({ error: 'Either email or phone number must be provided.' });
-        }        
-        return res.json({ 
-            email: user.email, 
-            number: user.phoneNumber, 
-            message: message, 
-            token: newToken 
+        return res.json({
+            email: user.email,
+            number: user.phoneNumber,
+            message: message,
+            token: newToken
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -87,15 +100,16 @@ exports.getAuthToken = async (req, res) => {
         const user = await db.Voter.findByPk(userId);
         const authenticatedUser = user.authenticated;
         if (authenticatedUser) {
-            return res.json({error: 'User is already authenticated', authenticated: true});
+            return res.json({ error: 'User is already authenticated', authenticated: true });
         }
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
         await user.save();
         sendEmail("Authentication Code", user.email, "Here is your authentication code: " + sixDigitCode);
-        res.json({message: "Email sent"});
+        res.json({ message: "Email sent" });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
@@ -104,19 +118,29 @@ exports.getAuthToken = async (req, res) => {
 exports.authAccount = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await Voter.findByPk(userId);
+        const user = await db.Voter.findByPk(userId);
         const { token } = req.body;
         if (token === user.authToken) {
             user.authenticated = true;
             user.authToken = null;
             await user.save();
+            const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
+            await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
+                .on('receipt', receipt => {
+                    console.log(receipt);
+                })
+                .on('error', error => {
+                    console.error(error);
+                });
+
             return res.json({ message: 'New user successfully authenticated' });
-        } 
+        }
         else {
             return res.json({ error: 'Invalid token', invalid: true });
         }
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

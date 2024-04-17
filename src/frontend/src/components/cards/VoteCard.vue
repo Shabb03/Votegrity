@@ -4,7 +4,7 @@
             <v-img
                 class="align-end text-white"
                 height="350"
-                :src="imageSrc || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
+                :src="imageSrc || '@/assets/candidate.png'"
                 cover
             >
             <v-card-title>{{ name }}, {{ calculateAge(dateOfBirth) }}</v-card-title>
@@ -24,7 +24,7 @@ import getToken from '../../functions/GetToken.vue';
 
 export default {
     data: () => ({
-        imageSrc: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
+        imageSrc: '@/assets/candidate.png',
     }),
     props: {
         candidateId: Number,
@@ -38,6 +38,7 @@ export default {
         this.fetchImageData();
     },
     methods: {
+        //used to convert images into a displayable format
         arrayBufferToBase64(buffer) {
             let binary = '';
             const bytes = new Uint8Array(buffer);
@@ -46,6 +47,7 @@ export default {
             }
             return btoa(binary);
         },
+        //get the image of the candidate
         async fetchImageData() {
             try {
                 const authToken = await getToken();
@@ -68,6 +70,7 @@ export default {
                 }
             }
         },
+        //calculate the age of the candidate given the date of birth
         calculateAge(dateOfBirth) {
             const today = new Date();
             const birthDate = new Date(dateOfBirth);

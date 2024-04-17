@@ -32,12 +32,15 @@ export default {
         message: String,
     },
     methods: {
+        //open the success card dialog box
         openDialog() {
             this.isActive = true;
         },
+        //close the success card dialog box
         closeDialog() {
             this.isActive = false;
         },
+        //go to the provided route
         goToRoute() {
             this.isActive = false;
             this.$router.push(this.routeName);

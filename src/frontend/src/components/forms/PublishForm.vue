@@ -2,7 +2,7 @@
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div v-if="electionData && electionData.length > 0" class="form-container">
         <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <ElectionChoice :electionData="electionData" @update:election="electionValue"/>
             <v-text-field class="disabled"
                 disabled
@@ -18,9 +18,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
     </div>
@@ -32,6 +29,7 @@
 <script>
 import axios from 'axios';
 import getToken from '../../functions/GetToken.vue';
+import encryptPassword from '../../functions/EncryptPassword.vue';
 import ConfirmationCard from '../ConfirmationCard.vue';
 import SuccessCard from "../SuccessCard.vue";
 import ElectionChoice from '../inputs/ElectionChoice.vue';
@@ -59,18 +57,15 @@ export default {
     created() {
         this.getElections();
     },
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //convert the Date provided into a readable format
         async readableDate(resultDate) {
             const date = new Date(resultDate);
             const day = date.getDate().toString().padStart(2, '0');
@@ -79,6 +74,7 @@ export default {
             const formattedDate = `${day}/${month}/${year}`;
             return formattedDate;
         },
+        //update the result date depending on the election chosen
         async updateResultDate() {
             if (this.selectedElection) {
                 const selectedElectionIndex = this.electionData.findIndex(election => election.id === this.selectedElection);
@@ -91,23 +87,28 @@ export default {
                 }
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //publish the chosen election with the key provided
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                const encryptedKey = await encryptPassword(this.key);
                 const postData = {
                     electionId: this.selectedElection,
-                    privateKey: this.key,
+                    publishKey: encryptedKey,
                 };
                 try {
                     const token = await getToken();
+                    console.log(token);
                     const response = await axios.post('http://localhost:3000/api/admin/publishresults', postData, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
+                    console.log("response", response.data);
                     const electionData = response.data;
                     if (electionData.error) {
                         alert(electionData.error);
@@ -126,6 +127,7 @@ export default {
                 }
             }
         },
+        //get all active elections that require publishing
         async getElections() {
             try {
                 const authToken = await getToken();
@@ -145,22 +147,13 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log(this.email);
-            console.log(this.password);
         },
         keyValue(params) {
             this.key = params;

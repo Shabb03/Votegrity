@@ -1,7 +1,7 @@
 <template>
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <TextInput :label="nameLabel" :required="true" @update:text="nameValue"/>
             <EmailInput @update:email="emailValue"/>
             <PasswordInput :displayPasswordRules="true" @update:password="passwordValue"/>
@@ -25,9 +25,6 @@
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
                 </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
-                </v-btn>
             </div>
         </v-form>
         <router-link class="form-link" to="/login">Login</router-link>
@@ -37,7 +34,7 @@
 <script>
 import axios from 'axios';
 import SuccessCard from "../SuccessCard.vue";
-//import encryptPassword from '../../functions/EncryptPassword.vue';
+import encryptPassword from '../../functions/EncryptPassword.vue';
 import TextInput from '../inputs/TextInput.vue';
 import EmailInput from '../inputs/EmailInput.vue';
 import PasswordInput from '../inputs/PasswordInput.vue';
@@ -75,24 +72,20 @@ export default {
         sq2: '',
         sa2: '',
     }),
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //register the new user with the provided details
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
-                //const encryptedPassword = await encryptPassword(this.email, this.password);
+                const encryptedPassword = await encryptPassword(this.password);
                 const postData = {
                     name: this.name,
                     email: this.email,
-                    //password: encryptedPassword,
-                    password: this.password,
+                    password: encryptedPassword,
                     dateOfBirth: this.date,
                     specialNumber: this.specialNumber,
                     citizenship: this.citizenship,
@@ -108,6 +101,16 @@ export default {
                         alert(response.data.error);
                     }
                     else {
+                        /*
+                        const encryptedPublicKey = response.data.publicKey;
+                        const encryptedPrivateKey = response.data.privateKey;
+                        const publicKey =
+                        const privateKey =
+                        */
+                        //const publicKey = response.data.publicKey;
+                        //const privateKey = response.data.privateKey;
+                        //localStorage.setItem("votegrityPublicKey", publicKey);
+                        //localStorage.setItem("votegrityPrivateKey", privateKey);
                         await this.triggerSuccessCard();
                     }
 
@@ -122,28 +125,9 @@ export default {
                 }
             }
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        async test() {
-            console.log("name", this.name);
-            console.log("email", this.email);
-            console.log("password", this.password);
-            console.log("citizenship", this.citizenship);
-            console.log("special number", this.specialNumber);
-            console.log("phone number", this.phoneNumber);
-            console.log("date", this.date);
-            console.log("sq1", this.sq1);
-            console.log("sa1", this.sa1);
-            console.log("sq2", this.sq2);
-            console.log("sa2", this.sa2);
         },
         nameValue(params) {
             this.name = params;

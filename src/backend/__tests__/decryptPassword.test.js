@@ -1,16 +1,14 @@
-const { privateDecrypt } = require('crypto');
-const { decryptPassword } = require('../controllers/functions/password');
-
-jest.mock('crypto');
+const CryptoJS = require('crypto-js');
+const secretKey = 'testSecretKey';
 
 //check if the password is being decrypted correctly
 describe('decryptPassword function', () => {
     test('should decrypt the password', async () => {
-        jest.mock('crypto');
-        privateDecrypt.mockReturnValueOnce(Buffer.from('DecryptedPassword'));
-        const privateKey = 'mockPrivateKey';
-        const encryptedPassword = 'mockEncryptedPassword';
-        const result = await decryptPassword(privateKey, encryptedPassword);
-        expect(result).toBe('DecryptedPassword');
+        const encryptedPassword = 'U2FsdGVkX1/tdvfaPjYYHbf1d11k3T/XWN9hkBoaa68=';
+        const plainPassword = 'loveCookies30!';
+        const bytes = await CryptoJS.AES.decrypt(encryptedPassword, secretKey);
+        const decryptedPassword = await bytes.toString(CryptoJS.enc.Utf8);
+        const match = (plainPassword === decryptedPassword);
+        expect(match).toBe(true);
     }, 8000);
 });

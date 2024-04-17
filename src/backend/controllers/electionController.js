@@ -1,4 +1,5 @@
-const { generateKeys } = require('./functions/generateKeys');
+const sendEmail = require('./thirdParty/email');
+const { generatePublishKey } = require('./functions/generateCode');
 const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
 const votingProcess = require('../assets/process.json');
@@ -8,18 +9,22 @@ const primes = require('fast-primes');
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
+        const userId = req.user.id;
+        const user = await db.Admin.findByPk(userId);
+
         const { title, description, startDate, endDate, resultDate, candidateNumber, ageRestriction, authEmail, authCitizenship, type } = req.body;
-        if(!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !ageRestriction || !authEmail || !authCitizenship || !type) {
+        if (!title || !description || !startDate || !endDate || !resultDate || !candidateNumber || !type) {
             return res.json({ error: 'All required inputs not provided' });
-        }        
-        if (countryData !== null && !countryData.includes(citizenship)) {
-            return res.json({error: 'Incorrect citizenship provided'});
+        }
+        if (authCitizenship !== null && !countryData.includes(authCitizenship)) {
+            return res.json({ error: 'Incorrect citizenship provided' });
         }
         if (type !== null && !votingProcess.includes(type)) {
-            return res.json({error: 'Incorrect election voting process provided'});
+            return res.json({ error: 'Incorrect election voting process provided' });
         }
-        const { privateKey, publicKey } = await generateKeys();
-        const newElection = await Election.create({
+        const publishKey = await generatePublishKey();
+        sendEmail("Election Publish Key", user.email, "Here is your code to publish your new election " + title + ": " + publishKey);
+        const newElection = await db.Election.create({
             title: title,
             description: description,
             startDate: startDate,
@@ -27,20 +32,21 @@ exports.addElection = async (req, res) => {
             resultDate: resultDate,
             candidateNumber: candidateNumber,
             ageRestriction: ageRestriction,
-            privateKey: privateKey,
-            publicKey: publicKey,
-            results: null,
             authEmail: authEmail,
             authCitizenship: authCitizenship,
             type: type,
+            publishKey: publishKey,
+            adminId: userId,
         });
-        res.json({election: newElection.title, message: 'Election created successfully'});
+        res.json({ election: newElection.title, message: 'Election created successfully' });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
+//get a list of all new elections where the number of added candidates is less than the required number of candidates
 exports.getNewElections = async (req, res) => {
     try {
         const activeElections = await db.Election.findAll({
@@ -63,13 +69,14 @@ exports.getNewElections = async (req, res) => {
                     candidateNumber: election.candidateNumber,
                     addedCandidates: addedCandidates,
                 };
-            } 
-            else {return null;}
+            }
+            else { return null; }
         }));
         const filteredResult = result.filter(election => election !== null);
         res.json({ activeElections: filteredResult });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
@@ -81,11 +88,11 @@ exports.addCandidate = async (req, res) => {
         if (!name || !voice || !party || !dateOfBirth || !biography || !electionId) {
             return res.json({ error: 'All required inputs not provided' });
         }
-        const activeElection = await Election.findByPk(electionId);
+        const activeElection = await db.Election.findByPk(electionId);
         const candidateCount = activeElection.candidateCount;
-        const totalCandidates = await Candidate.count({where: {electionId: electionId}});
+        const totalCandidates = await db.Candidate.count({ where: { electionId: electionId } });
         if (totalCandidates >= candidateCount) {
-            return res.json({error: "Total number of candidates exceeded"});
+            return res.json({ error: "Total number of candidates exceeded" });
         }
         const image = req.file;
         const imagePath = image.filename;
@@ -123,9 +130,10 @@ exports.addCandidate = async (req, res) => {
             electionId: electionId,
             primeNumber: primeNo,
         });
-        res.json({candidate: newCandidate, message: 'Candidate created successfully'});
+        res.json({ candidate: newCandidate, message: 'Candidate created successfully' });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };

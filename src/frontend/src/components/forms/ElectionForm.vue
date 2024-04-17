@@ -2,7 +2,7 @@
     <SuccessCard ref="successCardRef" :message="successMessage" :routeName="successRoute"/>
     <div class="form-container">
         <ConfirmationCard ref="confirmationCardRef" @continueValidation="handleContinue" />
-        <v-form ref="form">
+        <v-form ref="form" @keyup.enter="validate">
             <TextInput :label="titleLabel" :required="true" @update:text="titleValue"/>
             <DescriptionInput @update:description="descriptionValue"/>
             <v-row>
@@ -28,9 +28,6 @@
                 </v-btn>
                 <v-btn class="mt-4 ml-10 secondary" @click="reset">
                     Reset
-                </v-btn>
-                <v-btn class="mt-4 ml-10" @click="test">
-                    Test
                 </v-btn>
             </div>
         </v-form>
@@ -82,21 +79,19 @@ export default {
         emailDomain: null,
         citizenship: null,
     }),
-    /*
-    mounted() {
-        window.addEventListener('keyup', this.handleKeyUp.bind(this));
-    },
-    */
     methods: {
+        //open the confirmation card dialog box and continue if user clicks continue
         async triggerConfirmationCard() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.$refs.confirmationCardRef.openDialog();
             }
         },
+        //open the success card dialog box
         async triggerSuccessCard() {
             this.$refs.successCardRef.openDialog();
         },
+        //submit the details and create a new election
         async validate() {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -137,24 +132,13 @@ export default {
                 }
             }
         },
+        //continue to next step
         async handleContinue() {
             this.validate();
         },
-        /*
-        handleKeyUp(event) {
-            if (event.keyCode === 13) { 
-                this.validate();
-            }
-        },
-        */
+        //reset all inputs to empty
         reset() {
             this.$refs.form.reset()
-        },
-        test() {
-            console.log(this.title);
-            console.log(this.startDate);
-            console.log(this.endDate);
-            console.log(this.resultDate);
         },
         titleValue(params) {
             this.title = params;

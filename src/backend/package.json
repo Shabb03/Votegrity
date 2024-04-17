@@ -26,6 +26,8 @@
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.3.1",
+    "ethereumjs-wallet": "^1.0.2",
+    "ethers": "^6.11.1",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
     "fast-primes": "^0.0.1",
