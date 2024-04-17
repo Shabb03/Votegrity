@@ -31,7 +31,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        privateKeyPath: {
+        paillierPrivateKeyPath: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        blindPrivateKeyPath: {
             type: DataTypes.STRING,
             allowNull: true,
         },

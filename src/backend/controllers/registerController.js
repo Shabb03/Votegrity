@@ -88,7 +88,7 @@ exports.signup = async (req, res) => {
     {
         const privateKey = ethereumWallet.generate().getPrivateKey();
         const wallet = ethereumWallet.fromPrivateKey(privateKey);
-        const address = '0x${wallet.getAddress().toString("hex")}';
+        const address = `0x${wallet.getAddress().toString("hex")}`;
 
         return {
             privateKey: privateKey.toString('hex'),

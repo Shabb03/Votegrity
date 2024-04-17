@@ -41,25 +41,30 @@ async function createAdmin() {
             }
           });
 
-        const paillierKeys = paillier.generateRandomKeys(2048);
+        const {publicKey, privateKey} = await paillier.generateRandomKeys(2048);
 
         const admin = await db.Admin.create({
             email: email,
             password: hashedPassword,
             blindPublicKey: blindPublicKey,
             blindPrivateKey: blindPrivateKey,
-            paillierPublicKey: paillierKeys.publicKey,
-            paillierPrivateKey: paillierKeys.PrivateKey,
+            paillierPublicKey: publicKey,
+            paillierPrivateKey: privateKey,
         });
 
-        const encryptedAdminKey = keyFunctions.encryptAdminKey(admin.Id, paillierKeys.PrivateKey);
-        const privateKeyPath = keyFunctions.storeEncryptedAdminKeysOnS3(votegritybucket, encryptedAdminKey, admin.email);
+        const paillierKeyType = 'paillier';
+        const blindKeyType = 'blind';
+
+        const encryptedPaillierKey = await keyFunctions.encryptAdminKey(admin.Id, privateKey);
+        const paillierPrivateKeyPath = await keyFunctions.storeEncryptedAdminKeysOnS3(votegritybucket, encryptedAdminKey, admin.email, paillierKeyType);
+        const encryptedBlindKey = await keyFunctions.encryptAdminKey(admin.Id, privateKey);
+        const blindPrivateKeyPath = await keyFunctions.storeEncryptedAdminKeysOnS3(votegritybucket, encryptedAdminKey, admin.email, blindKeyType);
 
         await admin.Update({ privateKeyPath: privateKeyPath });
 
-        console.log('\n\nAdmin created successfully\n');
-        console.log('\n\nThis is your blind signature private key: ${blindPrivateKey}\n')
-        console.log('\n\nThis is your encryption private key: ${paillierPrivateKey}\n')
+        console.log(`\n\nAdmin created successfully\n`);
+        console.log(`\n\nThis is your blind signature private key: ${blindPrivateKey}\n`)
+        console.log(`\n\nThis is your encryption private key: ${paillierPrivateKey}\n`)
     }
     catch (error) {
         console.error('Error creating admin: ', error.message);

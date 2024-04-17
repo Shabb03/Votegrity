@@ -177,7 +177,7 @@ exports.submitVote = async (req, res) => {
         const contract = new web3.eth.Contract(contractABI, contractAddress);
 
         contract.methods.submitBallot(encryptedVote, blindedSignature)
-        .send({ from: '${user.walletAddress}' })
+        .send({ from: `${user.walletAddress}` })
         .on('receipt', receipt => {
             console.log(receipt);
         })
