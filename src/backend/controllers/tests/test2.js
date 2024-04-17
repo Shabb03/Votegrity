@@ -1,55 +1,91 @@
-//co-pilot
-function calculateWinners(preferences) {
-    const voteCounts = new Map();
-    preferences.forEach((preferenceObj) => {
-        Object.entries(preferenceObj).forEach(([candidateId, preference]) => {
-            voteCounts.set(candidateId, (voteCounts.get(candidateId) || 0) + preference);
-        });
-    });
-    console.log("voteCounts", voteCounts);
-
+function calculateWinners(obj) {
+    let preferences = obj;
     const numSeats = 2;
     const totalValidVotes = preferences.length;
     const quota = Math.round(totalValidVotes / (numSeats + 1) + 1);
+    const winners = [];
 
-    console.log("totalValidVotes, quota", totalValidVotes, quota);
+    const voteCounts = new Map();
+    preferences.forEach((preferenceObj) => {
+        Object.entries(preferenceObj).forEach(([candidateId, preference]) => {
+            if (preference === 1) {
+                voteCounts.set(candidateId, (voteCounts.get(candidateId) || 0) + 1);
+            }
+            else {
+                voteCounts.set(candidateId, (voteCounts.get(candidateId) || 0));
+            }
+        });
+    });
 
-    // Eliminate candidates with fewer votes than the quota
-    const eliminatedCandidates = [];
-    for (const [candidateId, votes] of voteCounts) {
-        console.log("for", candidateId, votes);
-        if (votes < quota) {
-            eliminatedCandidates.push(candidateId);
-            voteCounts.delete(candidateId);
+    while (winners.length < numSeats) {
+        const sortedCandidates = [...voteCounts.entries()].sort((a, b) => b[1] - a[1]);
+        const [winnerId, winnerVotes] = sortedCandidates[0] ? sortedCandidates[0] : null;
+        if (winnerId.length === numSeats) {
+            break;
         }
-    }
 
-    console.log("eliminatedCandidates", eliminatedCandidates);
-
-    for (const [candidateId, votes] of voteCounts) {
-        if (votes > quota) {
-            const surplus = votes - quota;
-            voteCounts.set(candidateId, quota);
+        if (winnerVotes >= quota) {
+            winners.push(winnerId);
             preferences.forEach((preferenceObj) => {
-                eliminatedCandidates.forEach((eliminatedId) => {
-                    const nextPreference = preferenceObj[eliminatedId];
-                    if (nextPreference) {
-                        voteCounts.set(nextPreference, (voteCounts.get(nextPreference) || 0) + surplus);
+                Object.entries(preferenceObj).forEach(([candidateId, preference]) => {
+                    if (preference === 1 && candidateId === winnerId) {
+                        const [secondPreferenceCandidateId, secondPreference] = Object.entries(preferenceObj).find(([_, secondPref]) => secondPref === 2);
+                        if (secondPreferenceCandidateId) {
+                            voteCounts.set(secondPreferenceCandidateId, (voteCounts.get(secondPreferenceCandidateId) || 0) + 1);
+                        }
                     }
                 });
             });
+            voteCounts.delete(winnerId);
+        }
+        else {
+            const [eliminatedId, eliminatedVotes] = sortedCandidates[sortedCandidates.length - 1];
+            preferences.forEach((preferenceObj) => {
+                Object.entries(preferenceObj).forEach(([candidateId, preference]) => {
+                    if (preference === 1 && candidateId === eliminatedId) {
+                        const [secondPreferenceCandidateId, secondPreference] = Object.entries(preferenceObj).find(([_, secondPref]) => secondPref === 2);
+                        if (secondPreferenceCandidateId) {
+                            voteCounts.set(secondPreferenceCandidateId, (voteCounts.get(secondPreferenceCandidateId) || 0) + 1);
+                        }
+                    }
+                });
+            });
+            voteCounts.delete(eliminatedId);
         }
     }
-
-    const sortedCandidates = [...voteCounts.entries()].sort((a, b) => b[1] - a[1]);
-    const topWinners = sortedCandidates.slice(0, 2).map(([candidateId]) => candidateId);
-    return topWinners;
+    return winners;
 }
 
+/*
 const preferences = [
     { 2: 1, 3: 2, 5: 3 },
     { 2: 1, 3: 3, 5: 2 },
     { 2: 1, 3: 2, 5: 3 },
+    { 2: 1, 3: 2, 5: 3 },
+    { 2: 1, 3: 3, 5: 2 },
+    { 2: 1, 3: 2, 5: 3 },
+    { 2: 1, 3: 2, 5: 3 },
+    { 2: 1, 3: 3, 5: 2 },
+    { 2: 1, 3: 2, 5: 3 },
+    { 2: 2, 3: 1, 5: 3 },
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 2, 3: 1, 5: 3 },
+];
+*/
+
+const preferences = [
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 3, 3: 2, 5: 1 },
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 3, 3: 2, 5: 1 },
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 3, 3: 2, 5: 1 },
+    { 2: 2, 3: 3, 5: 1 },
+    { 2: 1, 3: 3, 5: 2 },
+    { 2: 3, 3: 1, 5: 2 },
+    { 2: 1, 3: 3, 5: 2 },
 ];
 
 const top2Winners = calculateWinners(preferences);
