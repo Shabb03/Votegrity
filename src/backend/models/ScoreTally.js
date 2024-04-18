@@ -27,7 +27,7 @@ module.exports = (sequelize) => {
         sum: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            defaultValue: 0
+            defaultValue: 0n
         }
     });
     return ScoreTally;

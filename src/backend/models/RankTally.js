@@ -18,7 +18,8 @@ module.exports = (sequelize) => {
         },
         sum: {
             type: DataTypes.BIGINT,
-            allowNull: false, 
+            allowNull: false,
+            defaultValue: 1n
         },
         rank: {
             type: DataTypes.INTEGER,
