@@ -15,15 +15,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        blindPrivateKey: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
         blindPublicKey: {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        paillierPrivateKey: {
+        blindPrivateKeyPath: {
             type: DataTypes.STRING,
             allowNull: true,
         },
@@ -32,10 +28,6 @@ module.exports = (sequelize) => {
             allowNull: true,
         },
         paillierPrivateKeyPath: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        blindPrivateKeyPath: {
             type: DataTypes.STRING,
             allowNull: true,
         },

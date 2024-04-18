@@ -16,7 +16,6 @@ dotenv.config();
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
 
-//const contractABI = require('../../blockchain/contract/artifacts/contracts/Vote.sol/Vote.json');
 const contractABI = require(process.env.CONTRACT_ABI);
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
@@ -177,14 +176,7 @@ async function vote4(ranks, adminPrivateKey, adminPublicKey) {
 };
 
 async function solContract(userId, electionId, encryptedVote, blindedSignature) {
-    /*
-    console.log("\n\n", encryptedVote);
-    console.log("\n\n", encryptedVote.toString()); //length = 1233
-    console.log("\n\n", blindedSignature);
-    console.log("\n\n", blindedSignature.toString()); //length = 617
-    console.log("\n\n", typeof blindedSignature);
-    console.log("\n\n", BigInt(blindedSignature.toString()));
-    */
+
     const bS = blindedSignature.toString();
 
     const user = await db.Voter.findByPk(userId);
@@ -283,7 +275,6 @@ exports.getImage = async (req, res) => {
 
 //Submit a vote cast by the user
 exports.submitVote = async (req, res) => {
-    //Work on this later to synchronize with the blockchain network
     try {
         const userId = req.user.id;
         const electionType = req.body.type;

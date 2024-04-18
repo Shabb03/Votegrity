@@ -31,42 +31,26 @@ async function createAdmin() {
         }
         const hashedPassword = await hashPassword(password);
 
-        // key creation for admins used for the paillier encryption and blind signature implementation
-        /*
-        const { privateKey, publicKey } = await crypto.generateKeyPairSync('rsa', {
-            modulusLength: 2048,
-            publicKeyEncoding: {
-                type: 'spki',
-                format: 'pem'
-            },
-            privateKeyEncoding: {
-                type: 'pkcs8',
-                format: 'pem',
-            }
-        });
-        const blindPublicKey = publicKey;
-        const blindPrivateKey = privateKey;
-        */
-
         const { keyPair } = BlindSignature.keyGeneration({ b: 2048 });
         const blindPublicKey = null;
         const blindPrivateKey = keyPair.n.toString() + '#' + keyPair.e.toString();
 
         const {publicKey, privateKey} = await paillier.generateRandomKeys(2048);
+        const publicKeyJson = JSON.stringify(publicKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
 
         const admin = await db.Admin.create({
             email: email,
             password: hashedPassword,
             blindPublicKey: blindPublicKey,
-            blindPrivateKey: blindPrivateKey,
-            paillierPublicKey: paillierKeys.publicKey.n + '#' + paillierKeys.publicKey.g,
-            paillierPrivateKey: paillierKeys.privateKey.lambda + '#' + paillierKeys.privateKey.mu,
+            paillierPublicKey: publicKeyJson,
         });
 
-        const encryptedAdminKey = keyFunctions.encryptAdminKey(admin.id, blindPrivateKey);
-        const privateKeyPath = keyFunctions.storeEncryptedAdminKeysOnS3('votegritybucket2', encryptedAdminKey, admin.email);
+        const paillierPrivateKeyPath = keyFunctions.storeEncryptedAdminPaillierKeysOnS3(privateKey, admin.email);
+        const blindPrivateKeyPath = keyFunctions.storeEncryptedAdminBlindKeysOnS3()
 
-        admin.privateKeyPath = privateKeyPath;
+
+        admin.paillierPrivateKeyPath = paillierPrivateKeyPath;
+        admin.blindPrivateKey = blindPrivateKeyPath;
         await admin.save();
 
         console.log(`\n\nAdmin created successfully\n`);

@@ -1,11 +1,5 @@
 const AWS = require('aws-sdk');
-
-const AES = require('crypto-js');
-
-const {
-    KMS,
-    KeySpec
-} = require('@aws-sdk/client-kms');
+const bucketName = "votegritybucket";
 
 const {
     Upload
@@ -17,7 +11,6 @@ const {
 
 require('dotenv').config();
 const paillier = require('paillier-bigint');
-const kmsKeyId = process.env.AWS_KMS_KEY_ID;
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -33,22 +26,14 @@ const s3 = new S3({
 
     region: process.env.AWS_REGION
 });
-const kms = new KMS({
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    },
-
-    region: process.env.AWS_REGION
-});
 
 // Function to store encrypted admin keys on S3
-async function storeEncryptedAdminBlindKeysOnS3(bucketName, encryptedAdminKey, adminName) {
+async function storeEncryptedAdminBlindKeysOnS3(blindPrivateKey, adminName) {
     try {
         const params = {
             Bucket: bucketName,
             Key: `encrypted-${adminName}-blind.txt`,
-            Body: encryptedAdminKey,
+            Body: blindPrivateKey,
             ContentEncoding: 'utf-8',
             ContentType: 'text/plain' // Set content type accordingly
         };
@@ -64,15 +49,18 @@ async function storeEncryptedAdminBlindKeysOnS3(bucketName, encryptedAdminKey, a
 }
 
 // Function to store encrypted admin keys on S3
-async function storeEncryptedAdminPaillierKeysOnS3(bucketName, encryptedAdminKey, adminName) {
+async function storeEncryptedAdminPaillierKeysOnS3(bucketName, paillierPrivateKey, adminName) {
     try {
+        const privateKeyJsonString = JSON.stringify(paillierPrivateKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
+
         const params = {
             Bucket: bucketName,
             Key: `encrypted-${adminName}-paillier.txt`,
-            Body: encryptedAdminKey,
+            Body: privateKeyJsonString,
             ContentEncoding: 'utf-8',
             ContentType: 'text/plain' // Set content type accordingly
         };
+
         const data = await new Upload({
             client: s3,
             params
@@ -85,7 +73,7 @@ async function storeEncryptedAdminPaillierKeysOnS3(bucketName, encryptedAdminKey
 }
 
 // Function to download the encrypted admin keys from S3
-async function downloadEncryptedAdminKeysFromS3(bucketName, objectKey) {
+async function downloadAdminKeysFromS3(bucketName, objectKey) {
     try {
         const params = {
             Bucket: bucketName,
@@ -100,52 +88,14 @@ async function downloadEncryptedAdminKeysFromS3(bucketName, objectKey) {
     }
 }
 
-// Function to encrypt admin key using AWS KMS
-async function encryptAdminKey(adminKey) {
-    try {
-        // Parameters for KMS data key generation
-        const params = {
-            KeyId: kmsKeyId,
-        };
-
-        // generate data keys for the admin key using AWS KMS
-        const data = await kms.generateDataKey(params);
-        console.log('Generated data key:', data.Plaintext.toString('utf-8')); // The plaintext data key
-        console.log('Encrypted data key:', data.CiphertextBlob.toString('utf-8')); // The encrypted data key
-
-        //console.log(AES.AES.encrypt(adminKey, data.CiphertextBlob.toString('base64')))
-
-    } catch (error) {
-        console.error('Error encrypting admin key:', error);
-        return null;
-    }
-}
-
-// Function to decrypt admin key using AWS KMS
-async function decryptAdminKey(encryptedAdminKey) {
-    try {
-        // Parameters for KMS decryption operation
-        const params = {
-            CiphertextBlob: Buffer.from(encryptedAdminKey, 'utf-8')
-        };
-
-        // Decrypt the admin key using AWS KMS
-        const data = await kms.decrypt(params);
-        const decryptedAdminKey = data.Plaintext.toString('utf-8');
-
-        return decryptedAdminKey;
-    } catch (error) {
-        console.error('Error decrypting admin key:', error);
-        return null;
-    }
-}
-
 async function main()
 {
     const {publicKey, privateKey } = await paillier.generateRandomKeys(2048);
     const privateKeyJsonString = JSON.stringify(privateKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
-    console.log(privateKeyJsonString.length);
-    await storeEncryptedAdminPaillierKeysOnS3("votegritybucket", privateKeyJsonString, "thomas");
+    console.log(privateKeyJsonString);
+    await storeEncryptedAdminPaillierKeysOnS3("votegritybucket", privateKey, "thomas");
+
+
     //const publicKeyObject = privateKeyJsonObject.publicKey;
     //console.log(publicKeyObject);
     //const privateKeyReturned = new paillier.PrivateKey(BigInt(privateKeyJsonObject.lambda), BigInt(privateKeyJsonObject.mu), publicKey, BigInt(privateKeyJsonObject._p), BigInt(privateKeyJsonObject._q));
@@ -156,4 +106,4 @@ async function main()
 
 main();
 
-module.exports = {storeEncryptedAdminBlindKeysOnS3, storeEncryptedAdminPaillierKeysOnS3, downloadEncryptedAdminKeysFromS3, encryptAdminKey, decryptAdminKey}
+module.exports = {storeEncryptedAdminBlindKeysOnS3, storeEncryptedAdminPaillierKeysOnS3, downloadAdminKeysFromS3}
