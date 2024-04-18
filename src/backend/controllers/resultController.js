@@ -115,10 +115,6 @@ async function publish2(votes, newPrivateKey) {
 };
 
 async function publish3(votes, newPrivateKey) {
-
-};
-
-async function publish4(votes, newPrivateKey) {
     const totalSeats = 2;
     const tally = {};
     const winners = [];
@@ -133,6 +129,10 @@ async function publish4(votes, newPrivateKey) {
         }
     }
     return winners;
+};
+
+async function publish4(votes, newPrivateKey) {
+
 };
 
 async function createResult(electionId, candidateId) {

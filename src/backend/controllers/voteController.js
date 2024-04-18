@@ -88,29 +88,7 @@ async function checkPoints(scores) {
 };
 
 //for ranking system, combine the ranks into one bigint using primes to the power of ranks
-function processObject(obj) {
-    const size = Object.keys(obj).length - 1;
-    const keys = Object.keys(obj).map(Number).sort((a, b) => b - a);
-    const result = keys.map((key, i) => {
-        const value = obj[key];
-        const powered = BigInt(primes[size - i] ** value);
-        const padded = powered.toString().padStart(6, '0');
-        return padded;
-    });
-    return result.join(''); // Join the padded strings
-}
-
-//for ranking system, combine the ranks into one bigint using primes to the power of ranks
 function calculateProduct(obj) {
-    let product = 1;
-    for (const [key, value] of Object.entries(obj)) {
-        product *= Math.pow(parseInt(key), parseInt(value));
-    }
-    return product;
-}
-
-//for stv system, using a complex mathemtaical formula and prime numbers, combine the ranks to be able to be decoded to it's original form
-function encodeObject(obj) {
     let combinedNumber = 1;
     Object.keys(obj).forEach((key, index) => {
         combinedNumber *= Math.pow(primes[index], obj[key]);
@@ -159,47 +137,31 @@ async function vote2(ranks, adminPrivateKey, adminPublicKey) {
     return { blindedSignature, encryptedVote };
 };
 
-//still needs a process
-//voting process for score based voting
-async function vote3(scores, adminPrivateKey, adminPublicKey) {
-    //const blindedSignature = vote.blindSignature(adminPrivateKey, bigIntValue);
-    //const encryptedVote = vote.encryptVote(adminPublicKey, bigIntValue);
-    //return { blindedSignature, encryptedVote };
-};
-
 //voting process for single-transferrable voting
-async function vote4(ranks, adminPrivateKey, adminPublicKey) {
-    const encodedNumber = encodeObject(ranks);
+async function vote3(scores, adminPrivateKey, adminPublicKey) {
+    const encodedNumber = calculateProduct(ranks);
     const bigIntValue = BigInt(encodedNumber);
     const blindedSignature = vote.blindSignature(adminPrivateKey, bigIntValue);
     const encryptedVote = vote.encryptVote(adminPublicKey, bigIntValue);
     return { blindedSignature, encryptedVote };
 };
 
+//still needs a process
+//voting process for score based voting
+async function vote4(ranks, adminPrivateKey, adminPublicKey) {
+    //const blindedSignature = vote.blindSignature(adminPrivateKey, bigIntValue);
+    //const encryptedVote = vote.encryptVote(adminPublicKey, bigIntValue);
+    //return { blindedSignature, encryptedVote };
+};
+
 async function solContract(userId, electionId, encryptedVote, blindedSignature) {
-    /*
-    console.log("\n\n", encryptedVote);
-    console.log("\n\n", encryptedVote.toString()); //length = 1233
-    console.log("\n\n", blindedSignature);
-    console.log("\n\n", blindedSignature.toString()); //length = 617
-    console.log("\n\n", typeof blindedSignature);
-    console.log("\n\n", BigInt(blindedSignature.toString()));
-    */
     const bS = blindedSignature.toString();
 
     const user = await db.Voter.findByPk(userId);
     const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 
     try {
-        /*
-        await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
-            .on('receipt', receipt => {
-                console.log(receipt);
-            })
-            .on('error', error => {
-                console.error(error);
-            });
-        */
+        d
         await contract.methods.submitBallot(encryptedVote, bS, electionId).send({ from: `${user.walletAddress}`, gas: 3000000 })
             .on('receipt', receipt => {
                 console.log(receipt);
@@ -336,28 +298,28 @@ exports.submitVote = async (req, res) => {
             }
             return res.json({ message: 'Vote submitted successfully' });
         }
-        //score based voting process
+        //single-transferrable voting process
         else if (electionType === processes[2]) {
-            const { scores } = req.body;
-            const checkScore = await checkPoints(scores);
-            if (checkScore !== null) {
-                return res.json({ error: checkScore });
+            const { ranks } = req.body;
+            const checkRank = await checkRanks(ranks);
+            if (checkRank !== null) {
+                return res.json({ error: checkRank });
             }
-            const { blindedSignature, encryptedVote } = await vote3(scores, adminPrivateKey, adminPublicKey);
+            const { blindedSignature, encryptedVote } = await vote3(ranks, adminPrivateKey, adminPublicKey);
             const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
             if (!submitted) {
                 return res.json({ error: 'Ballot already cast' });
             }
             return res.json({ message: 'Vote submitted successfully' });
         }
-        //single-transferrable voting process
+        //score based voting process
         else if (electionType === processes[3]) {
-            const { ranks } = req.body;
-            const checkRank = await checkRanks(ranks);
-            if (checkRank !== null) {
-                return res.json({ error: checkRank });
+            const { scores } = req.body;
+            const checkScore = await checkPoints(scores);
+            if (checkScore !== null) {
+                return res.json({ error: checkScore });
             }
-            const { blindedSignature, encryptedVote } = await vote4(ranks, adminPrivateKey, adminPublicKey);
+            const { blindedSignature, encryptedVote } = await vote4(scores, adminPrivateKey, adminPublicKey);
             const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
             if (!submitted) {
                 return res.json({ error: 'Ballot already cast' });
