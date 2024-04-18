@@ -8,11 +8,11 @@
         "description": "A voter assigns ranked preferences for each candidate with 1 having the highest value"
     },
     {
-        "label": "point-based",
-        "description": "A voter receives 100 points and can distribute those points amongst all candidates"
-    },
-    {
         "label": "single-transferable",
         "description": "A voter assigns ranked preferences for each candidate and a select top candidates are chosen using equalised distribution"
+    },
+    {
+        "label": "point-based",
+        "description": "A voter receives 100 points and can distribute those points amongst all candidates"
     }
 ]
