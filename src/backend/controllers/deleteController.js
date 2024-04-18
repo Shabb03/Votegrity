@@ -1,4 +1,4 @@
-const sendEmail = require('./thirdParty/email');
+const { sendEmail } = require('./thirdParty/email');
 const { generateSixDigitCode } = require('./functions/generateCode');
 const db = require('../models/index.js');
 
@@ -28,7 +28,7 @@ exports.deleteAccount = async (req, res) => {
         const { token } = req.body;
         if (token === user.resetToken) {
             sendEmail("Account Deleted", user.email, "Your account has successfully been deleted");
-            await Voter.destroy({ where: { id: userId } });
+            await db.Voter.destroy({ where: { id: userId } });
             return res.json({ message: 'Account deleted successfully' });
         }
         else {
