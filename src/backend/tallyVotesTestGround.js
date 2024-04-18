@@ -72,6 +72,7 @@ if (votes.length > 1)
     for (let i = 1; i < votes.length; i++) {
         const vote = votes[i];
         voteSum = publicKey.multiply(voteSum, vote);
+        publicKey.addition()
         initialDecryptedVoteCount = privateKey.decrypt(voteSum);
         console.log(initialDecryptedVoteCount);
     }

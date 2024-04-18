@@ -50,33 +50,30 @@ async function addToMajorityTally(electionId, adminPublicKey, candidatePrime)
         },
     })
 
-    if (rankTallies.length != 0 || scoreTallies.length != 0)
-    {
-        return console.error(new Error("Wrong voting process used for tally."));
+    try {
+        majorityTallyChecker(rankTallies, scoreTallies, tally);
     }
-    else if (tally == null)
+    catch (e)
     {
-        return console.error(new Error("No tally associated with this election."));
+        throw e;
+    }
+
+    var newSum;
+
+    // If the tally has only been initialised and not yet encrypted by the publicKey
+    if (tally.sum === BigInt(1))
+    {
+        const encryptedSum = await adminPublicKey.encrypt(tally.sum);
+        newSum = await adminPublicKey.multiply(encryptedSum, candidatePrime);
+        await tally.update({ sum: newSum });
     }
     else
     {
-        var newSum;
-
-        // If the tally has only been initialised and not yet encrypted by the publicKey
-        if (tally.sum === BigInt(1))
-        {
-            const encryptedSum = await adminPublicKey.encrypt(tally.sum);
-            newSum = await adminPublicKey.multiply(encryptedSum, candidatePrime);
-            await tally.update({ sum: newSum });
-        }
-        else
-        {
-            newSum = await adminPublicKey.multiply(tally.sum, candidatePrime);
-            await tally.update({ sum: newSum });
-        }
-
-        return newSum;
+        newSum = await adminPublicKey.multiply(tally.sum, candidatePrime);
+        await tally.update({ sum: newSum });
     }
+
+    return newSum;
 }
 
 async function addToScoreTally(electionId, adminPublicKey, candidateScores)
@@ -97,47 +94,45 @@ async function addToScoreTally(electionId, adminPublicKey, candidateScores)
         },
     })
 
-    if (rankTallies.length != 0 || tally != null)
+    try
     {
-        throw console.error(new Error("Wrong voting process used for tally."));
+        scoreTallyChecker(rankTallies, scoreTallies, tally)
     }
-    else if (scoreTallies.length == 0)
+    catch (e)
     {
-        throw console.error(new Error("No tallies associated with this election."));
+        throw e;
     }
-    else
+
+    const newSums = new Array();
+    foreach(scoreTally in scoreTallies)
     {
-        const newSums = new Array();
-        foreach(tally in scoreTallies)
+        const scoreForCandidate = candidateScores[scoreTally.candidateId];
+        if (typeof scoreForCandidate == 'undefined')
         {
-            const scoreForCandidate = candidateScores[tally.candidateId];
-            if (typeof scoreForCandidate == 'undefined')
-            {
-                throw console.error(new Error ("No score included for one of the candidates in the election."))
-            }
-
-            // If the tally has only been initialised and not yet encrypted by the publicKey
-            if (tally.sum === BigInt(0))
-            {
-                const encryptedSum = await adminPublicKey.encrypt(tally.sum);
-                const encryptedScore = await adminPublicKey.encrypt(scoreForCandidate);
-                newSum = await adminPublicKey.addition(encryptedSum, encryptedScore);
-                
-                newSums.push(newSum);
-                await tally.update({ sum: newSum });
-            }
-            else
-            {
-                const encryptedScore = await adminPublicKey.encrypt(scoreForCandidate);
-                newSum = await adminPublicKey.addition(encryptedSum, encryptedScore);
-
-                newSums.push(newSum);
-                await tally.update({ sum: newSum });
-            }
+            throw console.error(new Error ("No score included for one of the candidates in the election."))
         }
 
-        return newSums;
+        // If the tally has only been initialised and not yet encrypted by the publicKey
+        if (scoreTally.sum === BigInt(0))
+        {
+            const encryptedSum = await adminPublicKey.encrypt(scoreTally.sum);
+            const encryptedScore = await adminPublicKey.encrypt(scoreForCandidate);
+            newSum = await adminPublicKey.addition(encryptedSum, encryptedScore);
+            
+            newSums.push(newSum);
+            await tally.update({ sum: newSum });
+        }
+        else
+        {
+            const encryptedScore = await adminPublicKey.encrypt(scoreForCandidate);
+            newSum = await adminPublicKey.addition(encryptedSum, encryptedScore);
+
+            newSums.push(newSum);
+            await tally.update({ sum: newSum });
+        }
     }
+
+    return newSums;
 }
 
 async function addToRankTally(electionId, adminPublicKey, candidateRanks)
@@ -158,43 +153,192 @@ async function addToRankTally(electionId, adminPublicKey, candidateRanks)
         },
     })
 
+    try 
+    {
+        rankTallyChecker(rankTallies, scoreTallies, tally)
+    }
+    catch (e)
+    {
+        throw e
+    }
+
+    const newSums = new Array();
+    foreach(tally in rankTallies)
+    {
+        const candidateForRank = candidateRanks[tally.rank];
+        if (typeof candidateForRank == 'undefined')
+        {
+            throw console.error(new Error ("No score included for one of the candidates in the election."))
+        }
+
+        // If the tally has only been initialised and not yet encrypted by the publicKey
+        if (tally.sum === BigInt(1))
+        {
+            const encryptedSum = await adminPublicKey.encrypt(tally.sum);
+            const newSum = await adminPublicKey.multiply(encryptedSum, candidateForRank);
+            
+            newSums.push(newSum);
+            await tally.update({ sum: newSum });
+        }
+        else
+        {
+            const newSum = await adminPublicKey.multiply(tally.sum, candidateForRank);
+
+            newSums.push(newSum);
+            await tally.update({ sum: newSum });
+        }
+
+    return newSums;
+    }
+}
+
+async function getMajorityTally(electionId, adminPrivateKey, candidatePrimes)
+{
+    const rankTallies = await db.RankTally.findAll({
+        where: {
+          electionId: electionId,
+        }
+    });
+    const scoreTallies = await db.ScoreTally.findAll({
+        where: {
+          electionId: electionId,
+        },
+    });
+    const tally = await db.tally.findOne({
+        where: {
+            electionId: electionId,
+        },
+    })
+
+    try
+    {
+        majorityTallyChecker(rankTallies, scoreTallies, tally);
+    }
+    catch (e)
+    {
+        throw e;
+    }
+
+    const decryptedSum = await adminPrivateKey.decrypt(tally.sum);
+    const decryptedSumAsInt = ParseInt(decryptedSum);
+    const talliesForCandidates = primeFactorization(decryptedSumAsInt, candidatePrimes);
+
+    return talliesForCandidates;
+}
+
+async function getScoreTally(electionId, adminPrivateKey, candidatePrimes)
+{
+    const rankTallies = await db.RankTally.findAll({
+        where: {
+          electionId: electionId,
+        }
+    });
+    const scoreTallies = await db.ScoreTally.findAll({
+        where: {
+          electionId: electionId,
+        },
+    });
+    const tally = await db.tally.findOne({
+        where: {
+            electionId: electionId,
+        },
+    })
+
+    try {
+        scoreTallyChecker(rankTallies, scoreTallies, tally);
+    }
+    catch (e)
+    {
+        throw e;
+    }
+
+    var scoresForCandidates = {};
+
+    foreach(scoreTally in scoreTallies)
+    {
+        const decryptedSum = await adminPrivateKey.decrypt(scoreTally.sum);
+        const decryptedSumAsInt = ParseInt(decryptedSum);
+        scoresForCandidates[scoreTally.candidateId] = decryptedSumAsInt;
+    }
+
+    return scoresForCandidates;
+}
+
+async function getRankTally(electionId, adminPrivateKey, candidatePrimes)
+{
+    const rankTallies = await db.RankTally.findAll({
+        where: {
+          electionId: electionId,
+        }
+    });
+    const scoreTallies = await db.ScoreTally.findAll({
+        where: {
+          electionId: electionId,
+        },
+    });
+    const tally = await db.tally.findOne({
+        where: {
+            electionId: electionId,
+        },
+    })
+
+    try {
+        rankTallyChecker(rankTallies, scoreTallies, tally);
+    }
+    catch (e)
+    {
+        throw e;
+    }
+
+    var talliesForRank = {};
+
+    foreach(rankTally in rankTallies)
+    {
+        const decryptedSum = await adminPrivateKey.decrypt(rankTally.sum);
+        const decryptedSumAsInt = ParseInt(decryptedSum);
+        const tallyForRank = primeFactorization(decryptedSumAsInt, candidatePrimes);
+        talliesForRank[rankTally.preference] = tallyForRank;
+    }
+
+    return talliesForRank;
+}
+
+// helper function that can be reused in all Majority tally functions
+function majorityTallyChecker(rankTallies, scoreTallies, tally)
+{
+    if (rankTallies.length != 0 || scoreTallies.length != 0)
+    {
+        throw new Error("Wrong voting process used for tally.");
+    }
+    else if (tally == null)
+    {
+        throw new Error("No tally associated with this election.");
+    }
+}
+
+// helper function that can be resued in all Rank tally functions
+function scoreTallyChecker(rankTallies, scoreTallies, tally)
+{
+    if (rankTallies.length != 0 || tally != null)
+    {
+        throw new Error("Wrong voting process used for tally.");
+    }
+    else if (scoreTallies.length == 0)
+    {
+        throw new Error("No tallies associated with this election.");
+    }
+}
+
+function rankTallyChecker(rankTallies, scoreTallies, tally)
+{
     if (scoreTallies.length != 0 || tally != null)
     {
-        throw console.error(new Error("Wrong voting process used for tally."));
+        throw new Error("Wrong voting process used for tally.");
     }
     else if (rankTallies.length == 0)
     {
-        throw console.error(new Error("No tallies associated with this election."));
-    }
-    else
-    {
-        const newSums = new Array();
-        foreach(tally in scoreTallies)
-        {
-            const candidateForRank = candidateRanks[tally.rank];
-            if (typeof candidateForRank == 'undefined')
-            {
-                throw console.error(new Error ("No score included for one of the candidates in the election."))
-            }
-
-            // If the tally has only been initialised and not yet encrypted by the publicKey
-            if (tally.sum === BigInt(1))
-            {
-                const encryptedSum = await adminPublicKey.encrypt(tally.sum);
-                const newSum = await adminPublicKey.multiply(encryptedSum, candidateForRank);
-                
-                newSums.push(newSum);
-                await tally.update({ sum: newSum });
-            }
-            else
-            {
-                const newSum = await adminPublicKey.multiply(tally.sum, candidateForRank);
-
-                newSums.push(newSum);
-                await tally.update({ sum: newSum });
-            }
-        }
-
-        return newSums;
+        throw new Error("No tallies associated with this election.");
     }
 }
+
+module.exports = { addToMajorityTally, addToRankTally, addToScoreTally, getMajorityTally, getRankTally }
