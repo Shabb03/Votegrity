@@ -43,6 +43,6 @@ exports.login = async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.status(500).send({ error: 'An error has occured trying to log in' })
+        res.status(500).send({ error: 'An error has occurred trying to log in' });
     }
 }
