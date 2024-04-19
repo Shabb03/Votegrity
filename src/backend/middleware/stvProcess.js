@@ -88,5 +88,5 @@ const preferences = [
     { 2: 1, 3: 3, 5: 2 },
 ];
 
-const top2Winners = calculateWinners(preferences);
-console.log("Top 2 winners:", top2Winners);
+const topWinners = calculateWinners(preferences);
+console.log("Top winners:", topWinners);

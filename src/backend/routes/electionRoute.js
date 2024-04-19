@@ -12,4 +12,6 @@ router.post('/vote', authenticateToken, voteController.submitVote);
 
 router.get('/results', authenticateToken, winnerController.getResults);
 
+router.get('/test', voteController.test);
+
 module.exports = router;
