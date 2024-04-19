@@ -2,6 +2,7 @@ const { decryptPassword } = require('./functions/password');
 const db = require('../models/index.js');
 const processes = require('../assets/process.json');
 const paillier = require('paillier-bigint');
+const { addToMajorityTally, addToRankTally, addToScoreTally, getMajorityTally, getScoreTally, getRankTally } = require('../middleware/tallyVotes');
 
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);

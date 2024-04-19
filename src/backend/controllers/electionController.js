@@ -6,6 +6,8 @@ const votingProcess = require('../assets/process.json');
 const { where } = require('sequelize');
 const primes = require('fast-primes');
 
+const primesList = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+
 //Create a new election
 exports.addElection = async (req, res) => {
     try {
@@ -97,24 +99,22 @@ exports.addCandidate = async (req, res) => {
         const image = req.file;
         const imagePath = image.filename;
 
-        const primeNo = primes.range.fast(2, 50);
-        const otherCandidates = db.Candidate.findAll({
-            where: {
-              electionId: electionId
-            }
-          });
+        //const randomIndex = Math.floor(Math.random() * primes.length);
+        //let primeNo = primesList[randomIndex];
 
-        const candidatesWithSamePrime = db.Candidate.findAll({
-        where: {
-            primeNumber: primeNo
-        }
+        let primeNo = primes.range.fast(2, 50);
+        const candidatesWithSamePrime = await db.Candidate.findAll({
+            where: {
+                electionId: electionId,
+                primeNumber: primeNo
+            }
         });
 
-        while (candidatesWithSamePrime.length != 0)
-        {
-            primeNo = primeGenerator({min:2, max: 50});
-            candidatesWithSamePrime = db.Candidate.findAll({
+        while (candidatesWithSamePrime.length != 0) {
+            primeNo = primeGenerator({ min: 2, max: 50 });
+            candidatesWithSamePrime = await db.Candidate.findAll({
                 where: {
+                    electionId: electionId,
                     primeNumber: primeNo
                 }
             });
