@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
         sum: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            defaultValue: 1n
+            defaultValue: '1'
         }
     });
     return Tally;

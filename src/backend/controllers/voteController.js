@@ -5,6 +5,7 @@ const processes = require('../assets/process.json');
 const keyFunctions = require('../middleware/keyFunctions.js');
 const paillier = require('paillier-bigint');
 const BlindSignature = require('blind-signatures');
+const { addToMajorityTally, addToRankTally, addToScoreTally, getMajorityTally, getScoreTally, getRankTally } = require('../middleware/tallyVotes');
 
 const fs = require('fs');
 const path = require('path');
@@ -324,6 +325,60 @@ exports.submitVote = async (req, res) => {
             }
             return res.json({ message: 'Vote submitted successfully' });
         }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+exports.test = async (req, res) => {
+    try {
+        const { publicKey, privateKey } = await paillier.generateRandomKeys(2048);
+        /*const votes = [
+            { electionId: 2, candidatePrime: 2 },
+            { electionId: 2, candidatePrime: 2 },
+            { electionId: 2, candidatePrime: 3 },
+            { electionId: 2, candidatePrime: 3 },
+            { electionId: 2, candidatePrime: 5 },
+            { electionId: 2, candidatePrime: 5 },
+            { electionId: 2, candidatePrime: 2 },
+            { electionId: 2, candidatePrime: 2 },
+            { electionId: 2, candidatePrime: 3 },
+        ];*/
+        /*const votes = [
+            { 2: 1, 3: 2, 5: 3 },
+            { 2: 1, 3: 2, 5: 3 },
+            { 2: 1, 3: 2, 5: 3 },
+            { 2: 2, 3: 1, 5: 3 },
+            { 2: 3, 3: 2, 5: 1 },
+            { 2: 2, 3: 3, 5: 1 },
+            { 2: 1, 3: 2, 5: 3 },
+            { 2: 1, 3: 3, 5: 2 },
+            { 2: 1, 3: 3, 5: 2 },
+        ];*/
+        const votes = [
+            { 2: 7, 3: 2, 5: 1 },
+            { 2: 7, 3: 1, 5: 2 },
+            { 2: 7, 3: 2, 5: 1 },
+            { 2: 7, 3: 2, 5: 1 },
+            { 2: 7, 3: 2, 5: 1 },
+            { 2: 7, 3: 2, 5: 1 },
+            { 2: 7, 3: 2, 5: 1 },
+            { 2: 3, 3: 1, 5: 6 },
+            { 2: 2, 3: 5, 5: 3 },
+        ];
+
+        const electionId = 4
+        for (let index in votes) {
+            const obj = votes[index];
+            //await addToScoreTally(electionId, publicKey, obj);
+        }
+
+        //const result = await getScoreTally(electionId, privateKey, [2, 3, 5, 7, 11, 13, 17]);
+        console.log(result);
+
+        return res.json({ message: 'success' });
     }
     catch (error) {
         console.log(error);

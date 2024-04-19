@@ -11,37 +11,6 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
-
-//y**x, find how many x's are in y, used to calculate the sum of ranks
-async function extractArray(x, y) {
-    const originalArray = [];
-    let remainingY = y;
-    for (let exponent = x; exponent >= 1; exponent--) {
-        const currentPower = Math.pow(x, exponent);
-        const count = Math.floor(remainingY / currentPower);
-        originalArray.push(...Array(count).fill(exponent));
-        remainingY -= count * currentPower;
-    }
-    const total = originalArray.reduce((total, num) => total + num, 0)
-    return total;
-};
-
-//calculate the total rankings for each candidate
-async function totalVotes(candidateIds, final) {
-    const bigIntStr = final.toString();
-    const result = {};
-    const n = candidateIds.length;
-    for (let i = 0; i < n; i++) {
-        const start = -6 * (i + 1);
-        const end = i === 0 ? 0 : -6 * i;
-        const stringNum = end === 0 ? bigIntStr.slice(start) : bigIntStr.slice(start, end);
-        const prime = primes[i]
-        const num = await extractArray(prime, parseInt(stringNum));
-        result[candidateIds[i]] = num;
-    }
-    return result;
-};
-
 //stv, decode the combined number to get the original rankings
 async function decodeNumber(number) {
     let obj = {};
@@ -67,7 +36,7 @@ function countPrimeDivisions(number, candidateIds) {
     for (let i = 0; i < n; i++) {
         const prime = BigInt(primes[n - i - 1]);
         let count = 0;
-        while (num % prime === 0) {
+        while (num % prime === 0n) {
             num /= prime;
             count++;
         }
@@ -115,20 +84,6 @@ async function publish2(votes, newPrivateKey) {
 };
 
 async function publish3(votes, newPrivateKey) {
-    const totalSeats = 2;
-    const tally = {};
-    const winners = [];
-    const totalVotes = preferences.length;
-    const quota = Math.round(totalVotes / (totalSeats + 1)) + 1;
-    for (let index in votes) {
-        let vote = votes[index];
-        const decryptedVote = await newPrivateKey.decrypt(vote);
-        const orgVote = await decodeNumber(decryptedVote);
-        for (const candidateId in orgVote) {
-            tally[candidateId] = tally[candidateId] || 0;
-        }
-    }
-    return winners;
 };
 
 async function publish4(votes, newPrivateKey) {
