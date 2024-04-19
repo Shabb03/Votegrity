@@ -98,11 +98,6 @@ exports.addCandidate = async (req, res) => {
         const imagePath = image.filename;
 
         const primeNo = primes.range.fast(2, 50);
-        const otherCandidates = db.Candidate.findAll({
-            where: {
-              electionId: electionId
-            }
-          });
 
         const candidatesWithSamePrime = db.Candidate.findAll({
         where: {
