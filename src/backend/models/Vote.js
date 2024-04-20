@@ -1,7 +1,5 @@
 const { DataTypes } = require('sequelize');
 const db = require('./index.js');
-const paillier = require('paillier-bigint');
-const BlindSignature = require('blind-signatures');
 
 module.exports = (sequelize) => {
     const Vote = sequelize.define('Vote', {
@@ -9,6 +7,14 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: db.Voter,
+                key: 'id',
+            },
         },
         electionId: {
             type: DataTypes.INTEGER,
@@ -22,34 +28,15 @@ module.exports = (sequelize) => {
             type: DataTypes.BIGINT,
             allowNull: true,
         },
+        r: {
+            type: DataTypes.BIGINT,
+            allowNull: false,
+        },
         encryptedVote: {
             type: DataTypes.BIGINT,
             allowNull: true,
         },
     });
-
-    Vote.prototype.blindSignature = async function (adminPrivateKey, encryptedVote) {
-
-        const blindedVote = blindSignatures.blind({
-            message: encryptedVote,
-            N: adminPrivateKey.N,
-            E: adminPrivateKey.E
-        });
-
-        this.blindedSignature = blindedVote.blinded;
-        await this.save();
-        return blindedVote.blinded;
-    };
-
-    Vote.prototype.encryptVoteForMajority = async function (adminPublicKey, primeNumber) {
-        const pk = new paillier.PublicKey(adminPublicKey);
-        const vote = Math.pow(10, primeNumber);
-        const encryptedVote = pk.encrypt(vote);
-        
-        this.encryptedVote = encryptedVote;
-        await this.save();
-        return encryptedVote;
-    };
 
     return Vote;
 }
