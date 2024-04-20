@@ -132,9 +132,9 @@ async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrime
     let arr = Object.values(candiateTotalScores);
     let highestTally = Math.max(...arr);
 
-    for (const candidatePrime in tallySum)
+    for (const candidatePrime in candiateTotalScores)
     {
-        if (tallySum[candidatePrime] == highestTally)
+        if (candiateTotalScores[candidatePrime] == highestTally)
         {
             winningCandidates.push(candidatePrime);
         }
