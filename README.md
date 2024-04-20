@@ -1,5 +1,5 @@
 # **Votegrity**
-![Logo](res/README/logo.png)
+![Logo](res/logo.png)
 
 ### Authors:
 

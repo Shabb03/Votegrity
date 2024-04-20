@@ -6,7 +6,7 @@ const votingProcess = require('../assets/process.json');
 const { where } = require('sequelize');
 const primes = require('fast-primes');
 
-const primesList = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+const primesList = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
 
 //Create a new election
 exports.addElection = async (req, res) => {
@@ -99,7 +99,7 @@ exports.addCandidate = async (req, res) => {
         const image = req.file;
         const imagePath = image.filename;
 
-        //const randomIndex = Math.floor(Math.random() * primes.length);
+        //const randomIndex = Math.floor(Math.random() * primesList.length);
         //let primeNo = primesList[randomIndex];
 
         let primeNo = primes.range.fast(2, 50);
