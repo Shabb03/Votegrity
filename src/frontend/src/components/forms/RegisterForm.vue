@@ -101,16 +101,6 @@ export default {
                         alert(response.data.error);
                     }
                     else {
-                        /*
-                        const encryptedPublicKey = response.data.publicKey;
-                        const encryptedPrivateKey = response.data.privateKey;
-                        const publicKey =
-                        const privateKey =
-                        */
-                        //const publicKey = response.data.publicKey;
-                        //const privateKey = response.data.privateKey;
-                        //localStorage.setItem("votegrityPublicKey", publicKey);
-                        //localStorage.setItem("votegrityPrivateKey", privateKey);
                         await this.triggerSuccessCard();
                     }
 
