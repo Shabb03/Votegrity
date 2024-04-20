@@ -6,7 +6,7 @@ const keyFunctions = require('../middleware/keyFunctions.js');
 const paillier = require('paillier-bigint');
 const BlindSignature = require('blind-signatures');
 const { addToMajorityTally, addToRankTally, addToScoreTally } = require('../middleware/tallyVotes');
-const { blindVote, signVote, encryptVote } = require('../middleware/voteFunctions')
+const { blindVote, signVote, encryptVote, decryptVote } = require('../middleware/voteFunctions')
 
 const fs = require('fs');
 const path = require('path');
@@ -23,6 +23,24 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
+
+function countPrimeDivisions(number, candidateIds) {
+    const divisions = {};
+    let num = BigInt(number);
+    const n = candidateIds.length;
+    for (let i = 0; i < n; i++) {
+        const prime = BigInt(primes[n - i - 1]);
+        let count = 0;
+        while (num % prime === 0n) {
+            num /= prime;
+            count++;
+        }
+        if (count > 0) {
+            divisions[candidateIds[i]] = count;
+        }
+    }
+    return divisions;
+};
 
 //check if the user is eleigible to vote for the election they are voting for
 async function notEligible(userId, electionId) {
@@ -254,16 +272,92 @@ exports.getAllCandidates = async (req, res) => {
         });
 
         const candidatesByElection = await Promise.all(activeElections.map(async (election) => {
-            const candidates = await db.Candidate.findAll({
-                where: { electionId: election.id },
-                attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
-            });
-            return {
-                id: election.id,
-                title: election.title,
-                type: election.type,
-                candidates,
-            };
+            const vote = await db.Vote.findOne({
+                where: {
+                    electionId: election.id,
+                    userId: userId
+                }
+            })
+            if (vote) {
+                const voteElection = await db.Election.findByPk(election.id);
+                const admin = await db.Admin.findByPk(voteElection.adminId);
+                const adminPrivateKey = await keyFunctions.downloadPaillierKeysFromS3(admin.paillierPrivateKeyPath);
+                const decryptedVote = await decryptVote(adminPrivateKey, encryptedVote);
+                if (voteElection.type === processes[0]) {
+                    const cand = await db.Candidate.findOne({
+                        where: {
+                            electionId: election.id,
+                            primeNumber: decryptedVote
+                        }
+                    })
+                    return {
+                        id: election.id,
+                        title: election.title,
+                        type: 'voted',
+                        candidates: cand
+                    };
+                }
+                else if (voteElection.type === processes[1]) {
+                    const candPrimes = await db.Candidate.findAll({
+                        where: { electionId: election.id },
+                        attributes: ['id', 'primeNumbers'],
+                    });
+                    const primeNumbersArray = candPrimes.map(candidate => candidate.primeNumbers);
+                    const allPrimeNumbers = primeNumbersArray.flat();
+                    allPrimeNumbers.sort((a, b) => a - b);
+                    const voteObj = countPrimeDivisions(decryptedVote, allPrimeNumbers)
+                    const keyValueArray = Object.entries(voteObj);
+                    keyValueArray.sort((a, b) => a[1] - b[1]);
+                    const cands = await db.Candidate.findAll({
+                        where: {
+                            electionId: election.id,
+                            primeNumber: { [Op.in]: keyValueArray }
+                        }
+                    });
+                    return {
+                        id: election.id,
+                        title: election.title,
+                        type: 'voted',
+                        candidates: cands
+                    };
+                }
+                else if (voteElection.type === processes[2]) {
+                    const candPrimes = await db.Candidate.findAll({
+                        where: { electionId: election.id },
+                        attributes: ['id', 'primeNumbers'],
+                    });
+                    const primeNumbersArray = candPrimes.map(candidate => candidate.primeNumbers);
+                    const allPrimeNumbers = primeNumbersArray.flat();
+                    allPrimeNumbers.sort((a, b) => a - b);
+                    const voteObj = countPrimeDivisions(decryptedVote, allPrimeNumbers)
+                    const keyValueArray = Object.entries(voteObj);
+                    keyValueArray.sort((a, b) => a[1] - b[1]);
+                    const cands = await db.Candidate.findAll({
+                        where: {
+                            electionId: election.id,
+                            primeNumber: { [Op.in]: keyValueArray }
+                        }
+                    });
+                    return {
+                        id: election.id,
+                        title: election.title,
+                        type: 'voted',
+                        candidates: cands
+                    };
+                }
+            }
+            else {
+                const candidates = await db.Candidate.findAll({
+                    where: { electionId: election.id },
+                    attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
+                });
+                return {
+                    id: election.id,
+                    title: election.title,
+                    type: election.type,
+                    candidates,
+                };
+            }
         }));
         return res.json({ candidates: candidatesByElection });
     }
