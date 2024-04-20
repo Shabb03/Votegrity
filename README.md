@@ -16,17 +16,17 @@ Votegrity is an innovative blockchain-based voting system designed to enhance th
 
 ### Images
 
-![Poster](res/README/poster.png)
+![Poster](res/poster.png)
 
-![Login](res/README/login.png)
+![Login](res/login.png)
 
-![Authentication](res/README/authentication.png)
+![Authentication](res/authentication.png)
 
-![Voting](res/README/vote_ranked.png)
+![Voting](res/vote_ranked.png)
 
-![Voting](res/README/vote_majority.png)
+![Voting](res/vote_majority.png)
 
-![Dashboard](res/README/dashboard.png)
+![Dashboard](res/dashboard.png)
 
 ### Makefile
 
