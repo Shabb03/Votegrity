@@ -249,9 +249,8 @@ async function getScoreTally(electionId, adminPrivateKey, candidatePrimes) {
 
 async function getRankTally(electionId, adminPrivateKey, candidatePrimes) {
     const rankTallies = await db.RankTally.findAll({
-        where: {
-            electionId: electionId,
-        }
+        where: { electionId: electionId },
+        order: [['rank', 'ASC']]
     });
     const scoreTallies = await db.ScoreTally.findAll({
         where: {

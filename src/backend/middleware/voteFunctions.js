@@ -15,24 +15,23 @@ async function signVote(adminPrivateKey, blindedVote) {
     const signedVote = await blindSignatures.sign({
         blinded: blindedVote,
         key: adminPrivateKey,
-      });
+    });
 
-      return signedVote;
+    return signedVote;
 }
 
 async function unblindVote(adminPublicKey, signed, r) {
     const parts = adminPublicKey.split('#');
     const unblindedVote = await blindSignatures.unblind({
-    signed: signed,
-    N: parts[0].toString(),
-    r: r,
+        signed: signed,
+        N: parts[0].toString(),
+        r: r,
     });
 
     return unblindedVote;
 }
 
-async function verifySignForVoter(adminPublicKey, unblindedVote, vote)
-{
+async function verifySignForVoter(adminPublicKey, unblindedVote, vote) {
     var verified = false;
     const parts = adminPublicKey.split('#');
 
@@ -41,31 +40,28 @@ async function verifySignForVoter(adminPublicKey, unblindedVote, vote)
         N: parts[0].toString(),
         E: parts[1].toString(),
         message: vote.toString(),
-      });
+    });
 
-    if (result)
-    {
-    verified = true;
+    if (result) {
+        verified = true;
     }
-      
+
     return verified;
 }
 
-async function verifySignForAdmin(adminPrivateKey, unblindedVote, vote)
-{
+async function verifySignForAdmin(adminPrivateKey, unblindedVote, vote) {
     var verified = false;
 
     const result = await blindSignatures.verify2({
         unblinded: unblindedVote,
         key: adminPrivateKey,
         message: vote.toString(),
-      });
+    });
 
-    if (result)
-    {
-    verified = true;
+    if (result) {
+        verified = true;
     }
-      
+
     return verified;
 }
 

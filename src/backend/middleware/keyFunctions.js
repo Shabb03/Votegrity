@@ -1,12 +1,8 @@
 const AWS = require('aws-sdk');
 
-const {
-    Upload
-} = require('@aws-sdk/lib-storage');
+const { Upload } = require('@aws-sdk/lib-storage');
 
-const {
-    S3
-} = require('@aws-sdk/client-s3');
+const { S3 } = require('@aws-sdk/client-s3');
 
 require('dotenv').config({ path: '../.env' });
 
@@ -21,7 +17,6 @@ const s3 = new S3({
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     },
-
     region: process.env.AWS_REGION
 });
 
@@ -85,7 +80,7 @@ async function downloadPaillierKeysFromS3(objectKey) {
         };
         const data = await s3.getObject(params);
         const streamToString = await data.Body?.transformToString("utf-8");
-        
+
         const streamAsJson = JSON.parse(streamToString);
         const publicKey = new paillier.PublicKey(BigInt(streamAsJson.publicKey.n), BigInt(streamAsJson.publicKey.g));
         const privateKey = new paillier.PrivateKey(BigInt(streamAsJson.lambda), BigInt(streamAsJson.mu), publicKey, BigInt(streamAsJson._p), BigInt(streamAsJson._q));
@@ -96,8 +91,7 @@ async function downloadPaillierKeysFromS3(objectKey) {
     }
 }
 
-async function downloadBlindKeysFromS3(objectKey)
-{
+async function downloadBlindKeysFromS3(objectKey) {
     try {
         const params = {
             Bucket: bucketName,
@@ -112,7 +106,7 @@ async function downloadBlindKeysFromS3(objectKey)
     } catch (error) {
         console.error('Error downloading blind key from S3:', error);
         return null;
-    }    
+    }
 }
 
-module.exports = {storeEncryptedAdminBlindKeysOnS3, storeEncryptedAdminPaillierKeysOnS3, downloadPaillierKeysFromS3, downloadBlindKeysFromS3}
+module.exports = { storeEncryptedAdminBlindKeysOnS3, storeEncryptedAdminPaillierKeysOnS3, downloadPaillierKeysFromS3, downloadBlindKeysFromS3 }

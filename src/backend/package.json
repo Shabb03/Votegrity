@@ -29,6 +29,7 @@
     "ethers": "^6.11.1",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
+    "fast-prime": "^0.1.0",
     "fast-primes": "^0.0.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
