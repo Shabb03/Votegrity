@@ -9,6 +9,7 @@ const web3 = new Web3(process.env.API_URL);
 
 const contractABI = require(process.env.CONTRACT_ABI);
 const contractAddress = process.env.CONTRACT_ADDRESS;
+const { getMajorityTally, getRankTally, getScoreTally } = require('../middleware/tallyVotes.js')
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
@@ -50,52 +51,26 @@ function countPrimeDivisions(number, candidateIds) {
     return divisions;
 };
 
-async function publish1(votes, newPrivateKey) {
+async function getWinnerForMajorityTally(votes, newPrivateKey) {
 
 };
 
-async function publish2(votes, newPrivateKey) {
-    let sum = 0;
-    for (let index in votes) {
-        let vote = votes[index];
-        const bigIntvote = BigInt(vote);
-        let origSum = sum;
-        if (sum === 0) {
-            sum = bigIntvote;
-        }
-        else {
-            sum = newPublicKey.multiply(origSum, bigIntvote); //does not work if one value is 0n
-        }
-    }
-    const final = newPrivateKey.decrypt(sum);
-    //const result = await totalVotes(candidateIds, final);
-    const result = await countPrimeDivisions(final, candidateIds);
+async function getWinnerForRankTally(votes, newPrivateKey) {
 
-    let lowestCandidateId = Object.keys(result)[0];
-    let lowestRanking = result[lowestCandidateId];
-    for (const candidateId in result) {
-        const totalRanking = result[candidateId];
-        if (totalRanking < lowestRanking) {
-            lowestRanking = totalRanking;
-            lowestCandidateId = candidateId;
-        }
-    }
-    const winner = [lowestCandidateId];
-    return winner;
 };
 
-async function publish3(votes, newPrivateKey) {
-};
-
-async function publish4(votes, newPrivateKey) {
+async function getWinnerForScoreTally(votes, newPrivateKey) {
 
 };
 
 async function createResult(electionId, candidateId) {
-    await db.Result.create({
+    const result = await db.Result.create({
         electionId: electionId,
         winner: candidateId,
     });
+
+    result.save();
+    return result;
 }
 
 //get all active elections

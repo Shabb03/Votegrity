@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const bucketName = "votegritybucket";
 
 const {
     Upload
@@ -9,8 +8,7 @@ const {
     S3
 } = require('@aws-sdk/client-s3');
 
-require('dotenv').config();
-const paillier = require('paillier-bigint');
+require('dotenv').config({ path: '../.env' });
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -27,13 +25,20 @@ const s3 = new S3({
     region: process.env.AWS_REGION
 });
 
+const paillier = require('paillier-bigint');
+const bucketName = "votegritybucket";
+const blind = require('blind-signatures');
+const NodeRSA = require('node-rsa');
+
 // Function to store encrypted admin keys on S3
-async function storeEncryptedAdminBlindKeysOnS3(blindPrivateKey, adminName) {
+async function storeEncryptedAdminBlindKeysOnS3(blindKeys, adminName) {
     try {
+        const exportedKey = blindKeys.exportKey();
+
         const params = {
             Bucket: bucketName,
             Key: `encrypted-${adminName}-blind.txt`,
-            Body: blindPrivateKey,
+            Body: exportedKey,
             ContentEncoding: 'utf-8',
             ContentType: 'text/plain' // Set content type accordingly
         };
@@ -49,7 +54,7 @@ async function storeEncryptedAdminBlindKeysOnS3(blindPrivateKey, adminName) {
 }
 
 // Function to store encrypted admin keys on S3
-async function storeEncryptedAdminPaillierKeysOnS3(bucketName, paillierPrivateKey, adminName) {
+async function storeEncryptedAdminPaillierKeysOnS3(paillierPrivateKey, adminName) {
     try {
         const privateKeyJsonString = JSON.stringify(paillierPrivateKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
 
@@ -72,8 +77,7 @@ async function storeEncryptedAdminPaillierKeysOnS3(bucketName, paillierPrivateKe
     }
 }
 
-// Function to download the encrypted admin keys from S3
-async function downloadAdminKeysFromS3(bucketName, objectKey) {
+async function downloadPaillierKeysFromS3(objectKey) {
     try {
         const params = {
             Bucket: bucketName,
@@ -81,29 +85,34 @@ async function downloadAdminKeysFromS3(bucketName, objectKey) {
         };
         const data = await s3.getObject(params);
         const streamToString = await data.Body?.transformToString("utf-8");
-        return streamToString;
+        
+        const streamAsJson = JSON.parse(streamToString);
+        const publicKey = new paillier.PublicKey(BigInt(streamAsJson.publicKey.n), BigInt(streamAsJson.publicKey.g));
+        const privateKey = new paillier.PrivateKey(BigInt(streamAsJson.lambda), BigInt(streamAsJson.mu), publicKey, BigInt(streamAsJson._p), BigInt(streamAsJson._q));
+        return privateKey;
     } catch (error) {
-        console.error('Error downloading encrypted admin keys from S3:', error);
+        console.error('Error downloading paillier key from S3:', error);
         return null;
     }
 }
 
-async function main()
+async function downloadBlindKeysFromS3(objectKey)
 {
-    const {publicKey, privateKey } = await paillier.generateRandomKeys(2048);
-    const privateKeyJsonString = JSON.stringify(privateKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
-    console.log(privateKeyJsonString);
-    await storeEncryptedAdminPaillierKeysOnS3("votegritybucket", privateKey, "thomas");
+    try {
+        const params = {
+            Bucket: bucketName,
+            Key: objectKey
+        };
+        const data = await s3.getObject(params);
+        const streamToString = await data.Body?.transformToString("utf-8");
+        console.log(streamToString);
 
-
-    //const publicKeyObject = privateKeyJsonObject.publicKey;
-    //console.log(publicKeyObject);
-    //const privateKeyReturned = new paillier.PrivateKey(BigInt(privateKeyJsonObject.lambda), BigInt(privateKeyJsonObject.mu), publicKey, BigInt(privateKeyJsonObject._p), BigInt(privateKeyJsonObject._q));
-    //const publicKeyTest = new paillier.PublicKey(BigInt(privateKeyJsonObject.publicKey.n), BigInt(privateKeyJsonObject.publicKey.g));
-    //console.log(publicKey);
-    //console.log(publicKeyTest);
+        const blindKeys = new NodeRSA(streamToString);
+        return blindKeys;
+    } catch (error) {
+        console.error('Error downloading blind key from S3:', error);
+        return null;
+    }    
 }
 
-main();
-
-module.exports = {storeEncryptedAdminBlindKeysOnS3, storeEncryptedAdminPaillierKeysOnS3, downloadAdminKeysFromS3}
+module.exports = {storeEncryptedAdminBlindKeysOnS3, storeEncryptedAdminPaillierKeysOnS3, downloadPaillierKeysFromS3, downloadBlindKeysFromS3}

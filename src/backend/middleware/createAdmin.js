@@ -31,9 +31,9 @@ async function createAdmin() {
         }
         const hashedPassword = await hashPassword(password);
 
-        const { keyPair } = BlindSignature.keyGeneration({ b: 2048 });
-        const blindPublicKey = null;
-        const blindPrivateKey = keyPair.n.toString() + '#' + keyPair.e.toString();
+        const blindKey = BlindSignature.keyGeneration({ b: 2048 });
+        const keyPair = blindKey.keyPair;
+        const blindPublicKey = keyPair.n.toString() + '#' + keyPair.e.toString();
 
         const {publicKey, privateKey} = await paillier.generateRandomKeys(2048);
         const publicKeyJson = JSON.stringify(publicKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
@@ -46,16 +46,16 @@ async function createAdmin() {
         });
 
         const paillierPrivateKeyPath = keyFunctions.storeEncryptedAdminPaillierKeysOnS3(privateKey, admin.email);
-        const blindPrivateKeyPath = keyFunctions.storeEncryptedAdminBlindKeysOnS3()
+        const blindPrivateKeyPath = keyFunctions.storeEncryptedAdminBlindKeysOnS3(blindKey, admin.email);
 
 
         admin.paillierPrivateKeyPath = paillierPrivateKeyPath;
-        admin.blindPrivateKey = blindPrivateKeyPath;
+        admin.blindPrivateKeyPath = blindPrivateKeyPath;
         await admin.save();
 
         console.log(`\n\nAdmin created successfully\n`);
         console.log(`\n\nThis is your blind signature private key: ${blindPrivateKey}\n`);
-        console.log(`\n\nThis is your encryption private key: ${paillierKeys.privateKey}\n`);
+        console.log(`\n\nThis is your encryption private key: ${privateKey}\n`);
         console.log(`\n\nDo NOT share these credentials with anyone\n`);
     }
     catch (error) {

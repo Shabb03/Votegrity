@@ -158,7 +158,7 @@ async function addToRankTally(electionId, adminPublicKey, candidateRanks) {
         const tally = rankTallies[index];
         const candidateForRank = Object.keys(candidateRanks).find(key => candidateRanks[key] === tally.rank);
         if (typeof candidateForRank == 'undefined') {
-            throw console.error(new Error("No rank included for one of the candidates in the election."))
+            throw new Error("No rank included for one of the candidates in the election.");
         }
 
         // If the tally has only been initialised and not yet encrypted by the publicKey

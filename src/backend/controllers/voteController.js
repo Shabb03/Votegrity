@@ -6,6 +6,7 @@ const keyFunctions = require('../middleware/keyFunctions.js');
 const paillier = require('paillier-bigint');
 const BlindSignature = require('blind-signatures');
 const { addToMajorityTally, addToRankTally, addToScoreTally, getMajorityTally, getScoreTally, getRankTally } = require('../middleware/tallyVotes');
+const { blindVote, signVote, encryptVote } = require('../middleware/voteFunctions')
 
 const fs = require('fs');
 const path = require('path');
@@ -42,13 +43,13 @@ async function notEligible(userId, electionId) {
 };
 
 //check if the candidate exists
-async function checkCandidate(candidateId) {
+async function checkCandidate(candidateId, electionId) {
     if (!candidateId) {
         return "No candidate or election selected";
     }
     const candidate = await db.Candidate.findByPk(candidateId);
-    if (!candidate) {
-        return "Selected candidate not found";
+    if (!candidate || candidate.electionId != electionId) {
+        return "Selected candidate not found or not available for this election";
     }
     return null;
 };
@@ -87,6 +88,34 @@ async function checkPoints(scores) {
     return null;
 };
 
+//check if all candidates exists
+async function checkCandidates(candidateIds, electionId) {
+    if (candidateIds.length == 0 || !electionId) {
+        return "No candidate or election selected";
+    }
+
+    foreach(candidateId in candidateIds)
+    {
+        const candidate = await db.Candidate.findByPk(ParseInt(candidateId));
+        if (!candidate || candidate.electionId != electionId) {
+            return "Selected candidate not found or not available for this election";
+        }
+    }
+    return null;
+};
+
+async function convertIdsToPrimes(candidateIds)
+{
+    const ranksAsPrimes = {};
+    foreach(candidateId in candidateIds)
+    {
+        const candidate = await db.Candidate.findByPk(ParseInt(candidateId));
+        ranksAsPrimes[candidate.primeNumber] = ranks[candidate.id];
+    }
+
+    return ranksAsPrimes;
+}
+
 //for ranking system, combine the ranks into one bigint using primes to the power of ranks
 function calculateProduct(obj) {
     let combinedNumber = 1;
@@ -96,62 +125,88 @@ function calculateProduct(obj) {
     return combinedNumber;
 }
 
-async function voteBlindSignature(adminPrivateKey, vote) {
-    const parts = adminPrivateKey.split('#');
-    const { blinded, r } = await BlindSignature.blind({
-        message: vote.toString(),
-        N: parts[0].toString(),
-        E: parts[1].toString(),
-    });
-    return blinded;
-};
-
-async function voteEncryptVote(adminPublicKey, vote) {
-    const parts = adminPublicKey.split('#');
-    const n = BigInt(parts[0]);
-    const g = BigInt(parts[1]);
-    const newPublicKey = new paillier.PublicKey(n, g);
-    const encryptedVote = await newPublicKey.encrypt(vote);
-    return encryptedVote.toString();
-};
-
 //voting process for majority voting
-async function vote1(userId, candidateId, electionId, adminPrivateKey, adminPublicKey) {
+async function majorityVote(userId, candidatePrime, electionId, paillierPublicKey, blindPublicKey, blindPrivateKey) {
+    const { blinded, r } = await blindVote(blindPublicKey, candidatePrime);
+    const signedVote = await signVote(blindPrivateKey, blinded);
+    const encryptedVote = await encryptVote(paillierPublicKey, candidatePrime);
+
+    try{
+        const tallySum = await addToMajorityTally(electionId, paillierPublicKey, candidatePrime);
+    }
+    catch (e)
+    {
+        console.error(e);
+    }
+
     const vote = await db.Vote.create({
-        voterId: userId,
-        candidateId: candidateId,
+        userId: userId,
         electionId: electionId,
-    });
-    const blindedSignature = vote.blindSignature(adminPrivateKey);
-    const encryptedVote = vote.encryptVote(adminPublicKey);
-    return { blindedSignature, encryptedVote };
+        blindedSignature: signedVote,
+        r: r,
+        encryptedVote: encryptedVote
+    })
+    vote.save();
+
+    return { signedVote, encryptedVote };
 };
 
 //voting process for ranked voting
-async function vote2(ranks, adminPrivateKey, adminPublicKey) {
+async function rankVote(ranks, paillierPublicKey, blindPublicKey, blindPrivateKey) {
     //const processedStr = await processObject(ranks);
     const processedStr = await calculateProduct(ranks);
     const bigIntValue = BigInt(processedStr);
-    const blindedSignature = await voteBlindSignature(adminPrivateKey, bigIntValue);
-    const encryptedVote = await voteEncryptVote(adminPublicKey, bigIntValue);
-    return { blindedSignature, encryptedVote };
+
+    const { blinded, r } = blindVote(blindPublicKey, bigIntValue);
+    const signedVote = signVote(blindPrivateKey, blinded)
+    const encryptedVote = await encryptVote(paillierPublicKey, bigIntValue);
+
+    try{
+        const tallySum = await addToRankTally(electionId, paillierPublicKey, ranks);
+    }
+    catch (e)
+    {
+        console.error(e);
+    }
+
+    const vote = await db.Vote.create({
+        userId: userId,
+        electionId: electionId,
+        blindedSignature: signedVote,
+        r: r,
+        encryptedVote: encryptedVote
+    })
+    vote.save();
+
+    return { signedVote, encryptedVote };
 };
 
-//voting process for single-transferrable voting
-async function vote3(scores, adminPrivateKey, adminPublicKey) {
-    const encodedNumber = calculateProduct(ranks);
-    const bigIntValue = BigInt(encodedNumber);
-    const blindedSignature = vote.blindSignature(adminPrivateKey, bigIntValue);
-    const encryptedVote = vote.encryptVote(adminPublicKey, bigIntValue);
-    return { blindedSignature, encryptedVote };
-};
+//voting process for score-based voting
+async function scoreVote(scores, paillierPublicKey, blindPublicKey, blindPrivateKey) 
+{
+    // not sure what value to use to encrypt and blind for scores
+    const { blinded, r } = blindVote(blindPublicKey, bigIntValue);
+    const signedVote = signVote(blindPrivateKey, blinded)
+    const encryptedVote = await encryptVote(paillierPublicKey, bigIntValue);
 
-//still needs a process
-//voting process for score based voting
-async function vote4(ranks, adminPrivateKey, adminPublicKey) {
-    //const blindedSignature = vote.blindSignature(adminPrivateKey, bigIntValue);
-    //const encryptedVote = vote.encryptVote(adminPublicKey, bigIntValue);
-    //return { blindedSignature, encryptedVote };
+    try{
+        const tallySum = await addToScoreTally(electionId, paillierPublicKey, scores);
+    }
+    catch (e)
+    {
+        console.error(e);
+    }
+
+    const vote = await db.Vote.create({
+        userId: userId,
+        electionId: electionId,
+        blindedSignature: signedVote,
+        r: r,
+        encryptedVote: encryptedVote
+    })
+    vote.save();
+
+    return { signedVote, encryptedVote };
 };
 
 async function solContract(userId, electionId, encryptedVote, blindedSignature) {
@@ -261,22 +316,21 @@ exports.submitVote = async (req, res) => {
 
         const election = await db.Election.findByPk(electionId);
         const admin = await db.Admin.findByPk(election.adminId);
-        //const bucketName = "votegritybucket2";
-        //const encryptedAdminPrivateKey = keyFunctions.downloadEncryptedAdminKeysFromS3(bucketName, admin.privateKeyPath);
-        //const adminPrivateKey = keyFunctions.decryptAdminKey(encryptedAdminPrivateKey)
 
-        const adminPublicKey = admin.paillierPublicKey;
-        const adminPrivateKey = admin.blindPrivateKey;
+        const paillierPublicKey = admin.paillierPublicKey;
+        const blindPublicKey = admin.blindPublicKey;
+        const blindPrivateKey = await keyFunctions.downloadBlindKeysFromS3(admin.blindPrivateKeyPath);
 
         //majority voting process
         if (electionType === processes[0]) {
             const { candidateId } = req.body;
-            const cand = await checkCandidate(candidateId);
+            const cand = await checkCandidate(candidateId, electionId);
             if (cand !== null) {
                 return res.json({ error: cand });
             }
-            const { blindedSignature, encryptedVote } = await vote1(userId, candidateId, electionId, adminPrivateKey, adminPublicKey);
-            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
+            const candidate = db.Candidate.findByPk(candidateId);
+            const { signedVote, encryptedVote } = await majorityVote(userId, candidate.primeNumber, electionId, paillierPublicKey, blindPublicKey, blindPrivateKey);
+            const submitted = await solContract(userId, electionId, encryptedVote, signedVote);
             if (!submitted) {
                 return res.json({ error: 'Ballot already cast' });
             }
@@ -289,35 +343,39 @@ exports.submitVote = async (req, res) => {
             if (checkRank !== null) {
                 return res.json({ error: checkRank });
             }
-            const { blindedSignature, encryptedVote } = await vote2(ranks, adminPrivateKey, adminPublicKey);
-            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
-            if (!submitted) {
-                return res.json({ error: 'Ballot already cast' });
+
+            const candidateIds = ranks.keys()
+            const checkCandidates = await checkCandidates(candidateIds, electionId)
+            {
+                if (checkCandidates !== null) {
+                    return res.json({ error: checkCandidates });
+                }
             }
-            return res.json({ message: 'Vote submitted successfully' });
-        }
-        //single-transferrable voting process
-        else if (electionType === processes[2]) {
-            const { ranks } = req.body;
-            const checkRank = await checkRanks(ranks);
-            if (checkRank !== null) {
-                return res.json({ error: checkRank });
-            }
-            const { blindedSignature, encryptedVote } = await vote3(ranks, adminPrivateKey, adminPublicKey);
-            const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
+            const ranksWithPrimes = await convertIdsToPrimes(candidateIds);
+
+            const { signedVote, encryptedVote } = await rankVote(ranksWithPrimes, paillierPublicKey, blindPublicKey, blindPrivateKey);
+            const submitted = await solContract(userId, electionId, encryptedVote, signedVote);
             if (!submitted) {
                 return res.json({ error: 'Ballot already cast' });
             }
             return res.json({ message: 'Vote submitted successfully' });
         }
         //score based voting process
-        else if (electionType === processes[3]) {
+        else if (electionType === processes[2]) {
             const { scores } = req.body;
             const checkScore = await checkPoints(scores);
             if (checkScore !== null) {
                 return res.json({ error: checkScore });
             }
-            const { blindedSignature, encryptedVote } = await vote4(scores, adminPrivateKey, adminPublicKey);
+            const candidateIds = scores.keys();
+            const checkCandidates = await checkCandidates(candidateIds, electionId)
+            {
+                if (checkCandidates !== null) {
+                    return res.json({ error: checkCandidates });
+                }
+            }
+
+            const { blindedSignature, encryptedVote } = await scoreVote(scores, paillierPublicKey, blindPublicKey, blindPrivateKey);
             const submitted = await solContract(userId, electionId, encryptedVote, blindedSignature);
             if (!submitted) {
                 return res.json({ error: 'Ballot already cast' });
