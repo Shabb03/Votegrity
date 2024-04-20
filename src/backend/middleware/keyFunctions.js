@@ -33,7 +33,7 @@ const NodeRSA = require('node-rsa');
 // Function to store encrypted admin keys on S3
 async function storeEncryptedAdminBlindKeysOnS3(blindKeys, adminName) {
     try {
-        const exportedKey = blindKeys.exportKey()
+        const exportedKey = blindKeys.exportKey();
 
         const params = {
             Bucket: bucketName,

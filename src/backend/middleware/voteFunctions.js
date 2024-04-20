@@ -31,16 +31,16 @@ async function unblindVote(adminPublicKey, signed, r) {
     return unblindedVote;
 }
 
-async function verifySignForVoter(adminPublicKey, unblindedVote, decryptedVote)
+async function verifySignForVoter(adminPublicKey, unblindedVote, vote)
 {
-    const verified = false;
+    var verified = false;
     const parts = adminPublicKey.split('#');
 
-    const result = await BlindSignature.verify({
+    const result = await blindSignatures.verify({
         unblinded: unblindedVote,
         N: parts[0].toString(),
         E: parts[1].toString(),
-        message: decryptedVote,
+        message: vote.toString(),
       });
 
     if (result)
@@ -53,12 +53,12 @@ async function verifySignForVoter(adminPublicKey, unblindedVote, decryptedVote)
 
 async function verifySignForAdmin(adminPrivateKey, unblindedVote, vote)
 {
-    const verified = false;
+    var verified = false;
 
-    const result = await BlindSignature.verify2({
+    const result = await blindSignatures.verify2({
         unblinded: unblindedVote,
         key: adminPrivateKey,
-        message: vote,
+        message: vote.toString(),
       });
 
     if (result)
@@ -70,13 +70,14 @@ async function verifySignForAdmin(adminPrivateKey, unblindedVote, vote)
 }
 
 async function encryptVote(adminPublicKey, vote) {
-    const newPublicKey = new paillier.PublicKey(BigInt(adminPublicKey.n), BigInt(adminPublicKey.g));
+    const publicKeyAsJSON = JSON.parse(adminPublicKey);
+    const newPublicKey = new paillier.PublicKey(BigInt(publicKeyAsJSON.n), BigInt(publicKeyAsJSON.g));
     const encryptedVote = await newPublicKey.encrypt(vote);
     return encryptedVote.toString();
 };
 
-async function decryptVote(adminPrivateKey, vote) {
-    const voteAsBigInt = BigInt(vote);
+async function decryptVote(adminPrivateKey, encryptedVote) {
+    const voteAsBigInt = BigInt(encryptedVote);
     const decryptedVote = await adminPrivateKey.decrypt(voteAsBigInt);
     return decryptedVote.toString();
 };

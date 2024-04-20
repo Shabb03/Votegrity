@@ -31,7 +31,8 @@ async function createAdmin() {
         }
         const hashedPassword = await hashPassword(password);
 
-        const { keyPair } = BlindSignature.keyGeneration({ b: 2048 });
+        const blindKey = BlindSignature.keyGeneration({ b: 2048 });
+        const keyPair = blindKey.keyPair;
         const blindPublicKey = keyPair.n.toString() + '#' + keyPair.e.toString();
 
         const {publicKey, privateKey} = await paillier.generateRandomKeys(2048);
@@ -45,7 +46,7 @@ async function createAdmin() {
         });
 
         const paillierPrivateKeyPath = keyFunctions.storeEncryptedAdminPaillierKeysOnS3(privateKey, admin.email);
-        const blindPrivateKeyPath = keyFunctions.storeEncryptedAdminBlindKeysOnS3(blindPrivateKey, admin.email);
+        const blindPrivateKeyPath = keyFunctions.storeEncryptedAdminBlindKeysOnS3(blindKey, admin.email);
 
 
         admin.paillierPrivateKeyPath = paillierPrivateKeyPath;

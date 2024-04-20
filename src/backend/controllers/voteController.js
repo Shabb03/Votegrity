@@ -127,8 +127,8 @@ function calculateProduct(obj) {
 
 //voting process for majority voting
 async function majorityVote(userId, candidatePrime, electionId, paillierPublicKey, blindPublicKey, blindPrivateKey) {
-    const { blindedSignature, r } = await blindVote(blindPublicKey, candidatePrime);
-    const signedVote = await signVote(blindPrivateKey, blindedSignature);
+    const { blinded, r } = await blindVote(blindPublicKey, candidatePrime);
+    const signedVote = await signVote(blindPrivateKey, blinded);
     const encryptedVote = await encryptVote(paillierPublicKey, candidatePrime);
 
     try{
@@ -157,8 +157,8 @@ async function rankVote(ranks, paillierPublicKey, blindPublicKey, blindPrivateKe
     const processedStr = await calculateProduct(ranks);
     const bigIntValue = BigInt(processedStr);
 
-    const { blindedSignature, r } = blindVote(blindPublicKey, bigIntValue);
-    const signedVote = signVote(blindPrivateKey, blindedSignature)
+    const { blinded, r } = blindVote(blindPublicKey, bigIntValue);
+    const signedVote = signVote(blindPrivateKey, blinded)
     const encryptedVote = await encryptVote(paillierPublicKey, bigIntValue);
 
     try{
@@ -185,8 +185,8 @@ async function rankVote(ranks, paillierPublicKey, blindPublicKey, blindPrivateKe
 async function scoreVote(scores, paillierPublicKey, blindPublicKey, blindPrivateKey) 
 {
     // not sure what value to use to encrypt and blind for scores
-    const { blindedSignature, r } = blindVote(blindPublicKey, bigIntValue);
-    const signedVote = signVote(blindPrivateKey, blindedSignature)
+    const { blinded, r } = blindVote(blindPublicKey, bigIntValue);
+    const signedVote = signVote(blindPrivateKey, blinded)
     const encryptedVote = await encryptVote(paillierPublicKey, bigIntValue);
 
     try{
