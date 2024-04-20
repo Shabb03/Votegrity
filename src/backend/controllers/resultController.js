@@ -14,23 +14,6 @@ const { getMajorityTally, getRankTally, getScoreTally } = require('../middleware
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
-//stv, decode the combined number to get the original rankings
-async function decodeNumber(number) {
-    let obj = {};
-    let num = Number(number);
-    primes.forEach((prime, index) => {
-        let exponent = 0;
-        while (num % prime === 0) {
-            exponent++;
-            num /= prime;
-        }
-        if (exponent > 0) {
-            obj[prime] = exponent;
-        }
-    })
-    return obj;
-};
-
 //used to count the number of primes in a number
 function countPrimeDivisions(number, candidateIds) {
     const divisions = {};
@@ -43,10 +26,8 @@ function countPrimeDivisions(number, candidateIds) {
             num /= prime;
             count++;
         }
-        console.log("\ncount", count);
         if (count > 0) {
             divisions[candidateIds[i]] = count;
-            console.log("\nif count > 0", candidateIds[i], count);
         }
     }
     return divisions;

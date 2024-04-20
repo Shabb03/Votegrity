@@ -5,6 +5,7 @@ const { isSecurePassword, hashPassword } = require('../controllers/functions/pas
 const keyFunctions = require('../middleware/keyFunctions');
 const crypto = require('crypto');
 const paillier = require('paillier-bigint');
+const BlindSignature = require('blind-signatures');
 const db = require('../models/index.js');
 
 const rl = readline.createInterface({
@@ -35,7 +36,7 @@ async function createAdmin() {
         const keyPair = blindKey.keyPair;
         const blindPublicKey = keyPair.n.toString() + '#' + keyPair.e.toString();
 
-        const {publicKey, privateKey} = await paillier.generateRandomKeys(2048);
+        const { publicKey, privateKey } = await paillier.generateRandomKeys(2048);
         const publicKeyJson = JSON.stringify(publicKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
 
         const admin = await db.Admin.create({
@@ -45,9 +46,11 @@ async function createAdmin() {
             paillierPublicKey: publicKeyJson,
         });
 
-        const paillierPrivateKeyPath = keyFunctions.storeEncryptedAdminPaillierKeysOnS3(privateKey, admin.email);
-        const blindPrivateKeyPath = keyFunctions.storeEncryptedAdminBlindKeysOnS3(blindKey, admin.email);
+        const paillierPrivateKeyPath = await keyFunctions.storeEncryptedAdminPaillierKeysOnS3(privateKey, admin.email);
+        const blindPrivateKeyPath = await keyFunctions.storeEncryptedAdminBlindKeysOnS3(blindKey, admin.email);
 
+        console.log("\n\npaillierPrivateKeyPath", paillierPrivateKeyPath);
+        console.log("\n\nblindPrivateKeyPath", blindPrivateKeyPath);
 
         admin.paillierPrivateKeyPath = paillierPrivateKeyPath;
         admin.blindPrivateKeyPath = blindPrivateKeyPath;
@@ -63,7 +66,6 @@ async function createAdmin() {
     }
     finally {
         rl.close();
-        sequelize.close();
     }
 }
 
