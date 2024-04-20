@@ -8,4 +8,4 @@ node_modules/
 .env
 
 ##Ignore the atlas.hcl file
-atlas.hcl
+./backend/atlas.hcl
