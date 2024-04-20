@@ -39,25 +39,15 @@ async function createAdmin() {
         const { publicKey, privateKey } = await paillier.generateRandomKeys(2048);
         const publicKeyJson = JSON.stringify(publicKey, (_, v) => typeof v === 'bigint' ? v.toString() : v);
 
-        const admin = await db.Admin.create({
-            email: email,
-            password: hashedPassword,
-            blindPublicKey: blindPublicKey,
-            paillierPublicKey: publicKeyJson,
-        });
-
         const paillierPrivateKeyPath = await keyFunctions.storeEncryptedAdminPaillierKeysOnS3(privateKey, admin.email);
         const blindPrivateKeyPath = await keyFunctions.storeEncryptedAdminBlindKeysOnS3(blindKey, admin.email);
-
-        console.log("\n\npaillierPrivateKeyPath", paillierPrivateKeyPath);
-        console.log("\n\nblindPrivateKeyPath", blindPrivateKeyPath);
 
         admin.paillierPrivateKeyPath = paillierPrivateKeyPath;
         admin.blindPrivateKeyPath = blindPrivateKeyPath;
         await admin.save();
 
         console.log(`\n\nAdmin created successfully\n`);
-        console.log(`\n\nThis is your blind signature private key: ${blindPrivateKey}\n`);
+        console.log(`\n\nThis is your blind signature private key: ${blindKey}\n`);
         console.log(`\n\nThis is your encryption private key: ${privateKey}\n`);
         console.log(`\n\nDo NOT share these credentials with anyone\n`);
     }

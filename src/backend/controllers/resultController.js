@@ -10,7 +10,6 @@ const web3 = new Web3(process.env.API_URL);
 
 const contractABI = require(process.env.CONTRACT_ABI);
 const contractAddress = process.env.CONTRACT_ADDRESS;
-const { getMajorityTally, getRankTally, getScoreTally } = require('../middleware/tallyVotes.js')
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
@@ -42,21 +41,17 @@ async function getWinnerForMajorityTally(electionId, adminPrivateKey, candidateP
     let arr = Object.values(tallySum);
     let highestTally = Math.max(...arr);
 
-    for (const candidatePrime in tallySum)
-    {
-        if (tallySum[candidatePrime] == highestTally)
-        {
+    for (const candidatePrime in tallySum) {
+        if (tallySum[candidatePrime] == highestTally) {
             winningCandidates.push(candidatePrime);
         }
     }
 
-    if (winningCandidates.length > 1)
-    {
+    if (winningCandidates.length > 1) {
         // Randomly choose a winner because they have the same amount of votes
         winnerPrime = winningCandidates[(Math.floor(Math.random() * winningCandidates.length))]
     }
-    else
-    {
+    else {
         winnerPrime = winningCandidates[0];
     }
 
@@ -73,26 +68,22 @@ async function getWinnerForScoreTally(electionId, adminPrivateKey) {
     let arr = Object.values(tallySum);
     let highestTally = Math.max(...arr);
 
-    for (const candidateId in tallySum)
-    {
-        if (tallySum[candidateId] == highestTally)
-        {
+    for (const candidateId in tallySum) {
+        if (tallySum[candidateId] == highestTally) {
             winningCandidates.push(candidateId);
         }
     }
 
-    if (winningCandidates.length > 1)
-    {
+    if (winningCandidates.length > 1) {
         // Randomly choose a winner because they have the same amount of votes
         winnerId = winningCandidates[(Math.floor(Math.random() * winningCandidates.length))]
     }
-    else
-    {
+    else {
         winnerId = winningCandidates[0];
     }
-   
+
     return winnerId;
-   
+
 };
 
 async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrimes) {
@@ -102,9 +93,9 @@ async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrime
     const rank = "rank";
 
     const candiateTotalScores = {};
-    foreach (candidatePrime in candidatePrimes)
+    foreach(candidatePrime in candidatePrimes)
     {
-        const candidateTotalTally = tallySums.reduce(function(accumulator, tally) {
+        const candidateTotalTally = tallySums.reduce(function (accumulator, tally) {
             return accumulator + (tally[candidatePrime] * tally[rank]);
         }, 0);
         candiateTotalScores[candidatePrime] = candidateTotalTally;
@@ -113,21 +104,17 @@ async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrime
     let arr = Object.values(candiateTotalScores);
     let highestTally = Math.max(...arr);
 
-    for (const candidatePrime in candiateTotalScores)
-    {
-        if (candiateTotalScores[candidatePrime] == highestTally)
-        {
+    for (const candidatePrime in candiateTotalScores) {
+        if (candiateTotalScores[candidatePrime] == highestTally) {
             winningCandidates.push(candidatePrime);
         }
     }
 
-    if (winningCandidates.length > 1)
-    {
+    if (winningCandidates.length > 1) {
         // Randomly choose a winner because they have the same amount of votes
         winnerPrime = winningCandidates[(Math.floor(Math.random() * winningCandidates.length))]
     }
-    else
-    {
+    else {
         winnerPrime = winningCandidates[0];
     }
 
