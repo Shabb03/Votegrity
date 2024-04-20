@@ -161,7 +161,6 @@ async function solContract(userId, electionId, encryptedVote, blindedSignature) 
     const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 
     try {
-        d
         await contract.methods.submitBallot(encryptedVote, bS, electionId).send({ from: `${user.walletAddress}`, gas: 3000000 })
             .on('receipt', receipt => {
                 console.log(receipt);
