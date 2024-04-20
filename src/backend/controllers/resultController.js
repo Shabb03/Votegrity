@@ -4,13 +4,6 @@ const processes = require('../assets/process.json');
 const paillier = require('paillier-bigint');
 const { getMajorityTally, getScoreTally, getRankTally } = require('../middleware/tallyVotes');
 
-const { Web3 } = require('web3');
-const web3 = new Web3(process.env.API_URL);
-
-const contractABI = require(process.env.CONTRACT_ABI);
-const contractAddress = process.env.CONTRACT_ADDRESS;
-const { getMajorityTally, getRankTally, getScoreTally } = require('../middleware/tallyVotes.js')
-
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
 //used to count the number of primes in a number
