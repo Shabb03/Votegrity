@@ -6,3 +6,6 @@ node_modules/
 
 ## Ignore .env file
 .env
+
+##Ignore the atlas.hcl file
+atlas.hcl
