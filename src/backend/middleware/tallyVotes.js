@@ -4,7 +4,7 @@ const paillier = require("paillier-bigint");
 function primeFactorization(number, primes) {
     let primeCounts = {};
 
-    // initial counter value, so it will go over every prime in the 
+    // initial counter value, so it will go over every prime in the list 
     var counter = 0
     let prime = BigInt(primes[counter]);
 
@@ -118,7 +118,6 @@ async function addToScoreTally(electionId, adminPublicKey, candidateScores) {
             await scoreTally.update({ sum: newSum }, { where: { id: scoreTally.id } });
         }
         else {
-            //const encryptedSum = await adminPublicKey.encrypt(BigInt(scoreTally.sum));
             const encryptedScore = await adminPublicKey.encrypt(BigInt(scoreForCandidate));
             let newSum = await adminPublicKey.addition(BigInt(scoreTally.sum), encryptedScore);
 
@@ -211,7 +210,7 @@ async function getMajorityTally(electionId, adminPrivateKey, candidatePrimes) {
     return talliesForCandidates;
 }
 
-async function getScoreTally(electionId, adminPrivateKey, candidatePrimes) {
+async function getScoreTally(electionId, adminPrivateKey) {
     const rankTallies = await db.RankTally.findAll({
         where: {
             electionId: electionId,
@@ -277,6 +276,8 @@ async function getRankTally(electionId, adminPrivateKey, candidatePrimes) {
         const tallySum = BigInt(rankTally.sum);
         const decryptedSum = await adminPrivateKey.decrypt(tallySum);
         const tallyForRank = primeFactorization(decryptedSum, candidatePrimes);
+        const rank = "rank";
+        tallyForRank[rank] = rankTally.rank;
         talliesForRank.push(tallyForRank);
     }
 

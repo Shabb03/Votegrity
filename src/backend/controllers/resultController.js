@@ -2,7 +2,8 @@ const { decryptPassword } = require('./functions/password');
 const db = require('../models/index.js');
 const processes = require('../assets/process.json');
 const paillier = require('paillier-bigint');
-const { addToMajorityTally, addToRankTally, addToScoreTally, getMajorityTally, getScoreTally, getRankTally } = require('../middleware/tallyVotes');
+const { getMajorityTally, getScoreTally, getRankTally } = require('../middleware/tallyVotes');
+const { downloadPaillierKeysFromS3 } = require('../middleware/keyFunctions')
 
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
@@ -51,15 +52,103 @@ function countPrimeDivisions(number, candidateIds) {
     return divisions;
 };
 
-async function getWinnerForMajorityTally(votes, newPrivateKey) {
+async function getWinnerForMajorityTally(electionId, adminPrivateKey, candidatePrimes) {
+    const tallySum = await getMajorityTally(electionId, adminPrivateKey, candidatePrimes);
+    const winningCandidates = new Array();
+    var winnerPrime;
+
+    // get the highest value in the tallySum object
+    let arr = Object.values(tallySum);
+    let highestTally = Math.max(...arr);
+
+    for (const candidatePrime in tallySum)
+    {
+        if (tallySum[candidatePrime] == highestTally)
+        {
+            winningCandidates.push(candidatePrime);
+        }
+    }
+
+    if (winningCandidates.length > 1)
+    {
+        // Randomly choose a winner because they have the same amount of votes
+        winnerPrime = winningCandidates[(Math.floor(Math.random() * winningCandidates.length))]
+    }
+    else
+    {
+        winnerPrime = winningCandidates[0];
+    }
+
+    return winnerPrime
 
 };
 
-async function getWinnerForRankTally(votes, newPrivateKey) {
+async function getWinnerForScoreTally(electionId, adminPrivateKey) {
+    const tallySum = await getScoreTally(electionId, adminPrivateKey);
+    const winningCandidates = new Array();
+    var winnerId;
 
+    // get the highest value in the tallySum object
+    let arr = Object.values(tallySum);
+    let highestTally = Math.max(...arr);
+
+    for (const candidateId in tallySum)
+    {
+        if (tallySum[candidateId] == highestTally)
+        {
+            winningCandidates.push(candidateId);
+        }
+    }
+
+    if (winningCandidates.length > 1)
+    {
+        // Randomly choose a winner because they have the same amount of votes
+        winnerId = winningCandidates[(Math.floor(Math.random() * winningCandidates.length))]
+    }
+    else
+    {
+        winnerId = winningCandidates[0];
+    }
+   
+    return winnerId;
+   
 };
 
-async function getWinnerForScoreTally(votes, newPrivateKey) {
+async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrimes) {
+    const tallySums = await getRankTally(electionId, adminPrivateKey, candidatePrimes);
+    const winningCandidates = new Array();
+    var winnerPrime;
+    const rank = "rank";
+
+    const candiateTotalScores = {};
+    foreach (candidatePrime in candidatePrimes)
+    {
+        const candidateTotalTally = tallySums.reduce(function(accumulator, tally) {
+            return accumulator + (tally[candidatePrime] * tally[rank]);
+        }, 0);
+        candiateTotalScores[candidatePrime] = candidateTotalTally;
+    }
+
+    let arr = Object.values(candiateTotalScores);
+    let highestTally = Math.max(...arr);
+
+    for (const candidatePrime in tallySum)
+    {
+        if (tallySum[candidatePrime] == highestTally)
+        {
+            winningCandidates.push(candidatePrime);
+        }
+    }
+
+    if (winningCandidates.length > 1)
+    {
+        // Randomly choose a winner because they have the same amount of votes
+        winnerPrime = winningCandidates[(Math.floor(Math.random() * winningCandidates.length))]
+    }
+    else
+    {
+        winnerPrime = winningCandidates[0];
+    }
 
 };
 
@@ -107,22 +196,16 @@ exports.publishResults = async (req, res) => {
 
         const admin = await db.Admin.findByPk(election.adminId);
         const adminPublicKey = admin.paillierPublicKey;
-        const adminPrivateKey = admin.paillierPrivateKey;
-        const publicKeyParts = adminPublicKey.split('#');
-        const n = BigInt(publicKeyParts[0]);
-        const g = BigInt(publicKeyParts[1]);
-        const newPublicKey = new paillier.PublicKey(n, g);
-        const privateKeyParts = adminPrivateKey.split('#');
-        const lambda = BigInt(privateKeyParts[0]);
-        const mu = BigInt(privateKeyParts[1]);
-        const newPrivateKey = new paillier.PrivateKey(lambda, mu, newPublicKey);
+        const adminPublicKeyAsJSON = JSON.parse(adminPublicKey);
+        const paillierPrivateKey = await downloadPaillierKeysFromS3(admin.paillierPrivateKeyPath);
+        const paillierPublicKey = new paillier.PublicKey(BigInt(adminPublicKeyAsJSON.n), BigInt(adminPublicKeyAsJSON.g));
 
         const candidates = await db.Candidate.findAll({
             where: { electionId: electionId },
-            attributes: ['id'],
+            attributes: ['id', 'primeNumber'],
             order: [['id', 'ASC']]
         });
-        const candidateIds = candidates.map(candidate => candidate.id);
+        const candidatePrimes = candidates.map(candidate => candidate.primeNumber);
         const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 
         // get the votes
@@ -131,31 +214,22 @@ exports.publishResults = async (req, res) => {
 
         //majority voting process
         if (electionType === processes[0]) {
-            const winnerArray = await publish1(votes, newPrivateKey)
-            for (let candidateId in winnerArray) {
-                await createResult(electionId, candidateId);
-            }
+            const winnerPrime = await getWinnerForMajorityTally(electionId, paillierPrivateKey, candidatePrimes);
+            candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
+            const winnerId = candidate.id;
+            await createResult(electionId, winnerId);
         }
         //ranking voting process
         else if (electionType === processes[1]) {
-            const winnerArray = await publish2(votes, newPrivateKey)
-            for (let candidateId in winnerArray) {
-                await createResult(electionId, candidateId);
-            }
+            const winnerPrime = await getWinnerForRankTally(electionId, paillierPrivateKey, candidatePrimes);
+            candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
+            const winnerId = candidate.id;
+            await createResult(electionId, winnerId);
         }
         //score based voting process
         else if (electionType === processes[2]) {
-            const winnerArray = await publish3(votes, newPrivateKey)
-            for (let candidateId in winnerArray) {
-                await createResult(electionId, candidateId);
-            }
-        }
-        //single-transferrable voting process
-        else if (electionType === processes[3]) {
-            const winnerArray = await publish4(votes, newPrivateKey)
-            for (let candidateId in winnerArray) {
-                await createResult(electionId, candidateId);
-            }
+            const winnerId = await getWinnerForScoreTally(electionId, paillierPrivateKey)
+            await createResult(electionId, winnerId);
         }
 
         election.isActive = false;
