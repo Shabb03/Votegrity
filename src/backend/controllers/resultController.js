@@ -118,6 +118,7 @@ async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrime
         winnerPrime = winningCandidates[0];
     }
 
+    return winnerPrime
 };
 
 async function createResult(electionId, candidateId) {
@@ -183,20 +184,22 @@ exports.publishResults = async (req, res) => {
         //majority voting process
         if (electionType === processes[0]) {
             const winnerPrime = await getWinnerForMajorityTally(electionId, paillierPrivateKey, candidatePrimes);
-            candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
+            const candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
             const winnerId = candidate.id;
             await createResult(electionId, winnerId);
         }
         //ranking voting process
         else if (electionType === processes[1]) {
             const winnerPrime = await getWinnerForRankTally(electionId, paillierPrivateKey, candidatePrimes);
-            candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
+            const candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
             const winnerId = candidate.id;
             await createResult(electionId, winnerId);
         }
         //score based voting process
         else if (electionType === processes[2]) {
-            const winnerId = await getWinnerForScoreTally(electionId, paillierPrivateKey)
+            const winner = await getWinnerForScoreTally(electionId, paillierPrivateKey)
+            const candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
+            const winnerId = candidate.id;
             await createResult(electionId, winnerId);
         }
 
