@@ -229,13 +229,6 @@ async function solContract(userId, electionId, encryptedVote, blindedSignature) 
     const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 
     try {
-        await contract.methods.registerVoter({ gasLimit: 2000000 }).send({ from: `${user.walletAddress}` })
-            .on('receipt', receipt => {
-                console.log(receipt);
-            })
-            .on('error', error => {
-                console.error(error);
-            });
         await contract.methods.submitBallot(encryptedVote, bS, electionId).send({ from: `${user.walletAddress}`, gas: 3000000 })
             .on('receipt', receipt => {
                 console.log(receipt);
@@ -291,17 +284,18 @@ exports.getAllCandidates = async (req, res) => {
                 const adminPrivateKey = await keyFunctions.downloadPaillierKeysFromS3(admin.paillierPrivateKeyPath);
                 const decryptedVote = await decryptVote(adminPrivateKey, encryptedVote);
                 if (voteElection.type === processes[0]) {
-                    const cand = await db.Candidate.findOne({
+                    const candidates = await db.Candidate.findOne({
                         where: {
                             electionId: election.id,
                             primeNumber: decryptedVote
-                        }
+                        },
+                        attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
                     })
                     return {
                         id: election.id,
                         title: election.title,
                         type: 'voted',
-                        candidates: cand
+                        candidates,
                     };
                 }
                 else if (voteElection.type === processes[1]) {
@@ -315,17 +309,18 @@ exports.getAllCandidates = async (req, res) => {
                     const voteObj = countPrimeDivisions(decryptedVote, allPrimeNumbers)
                     const keyValueArray = Object.entries(voteObj);
                     keyValueArray.sort((a, b) => a[1] - b[1]);
-                    const cands = await db.Candidate.findAll({
+                    const candidates = await db.Candidate.findAll({
                         where: {
                             electionId: election.id,
                             primeNumber: { [Op.in]: keyValueArray }
-                        }
+                        },
+                        attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
                     });
                     return {
                         id: election.id,
                         title: election.title,
                         type: 'voted',
-                        candidates: cands
+                        candidates,
                     };
                 }
                 else if (voteElection.type === processes[2]) {
@@ -339,17 +334,18 @@ exports.getAllCandidates = async (req, res) => {
                     const voteObj = countPrimeDivisions(decryptedVote, allPrimeNumbers)
                     const keyValueArray = Object.entries(voteObj);
                     keyValueArray.sort((a, b) => a[1] - b[1]);
-                    const cands = await db.Candidate.findAll({
+                    const candidates = await db.Candidate.findAll({
                         where: {
                             electionId: election.id,
                             primeNumber: { [Op.in]: keyValueArray }
-                        }
+                        },
+                        attributes: ['id', 'name', 'voice', 'party', 'dateOfBirth', 'biography'],
                     });
                     return {
                         id: election.id,
                         title: election.title,
                         type: 'voted',
-                        candidates: cands
+                        candidates,
                     };
                 }
             }
