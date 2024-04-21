@@ -436,7 +436,7 @@ exports.submitVote = async (req, res) => {
                 return res.json({ error: checkRank });
             }
 
-            const candidateIds = ranks.keys()
+            const candidateIds = ranks.keys();
             const checkCandidates = await checkCandidates(candidateIds, electionId)
             {
                 if (checkCandidates !== null) {

@@ -99,7 +99,6 @@ async function downloadBlindKeysFromS3(objectKey) {
         };
         const data = await s3.getObject(params);
         const streamToString = await data.Body?.transformToString("utf-8");
-        console.log(streamToString);
 
         const blindKeys = new NodeRSA(streamToString);
         return blindKeys;
