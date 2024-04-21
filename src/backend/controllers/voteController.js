@@ -13,7 +13,7 @@ const path = require('path');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: '../.env'});
 
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
@@ -142,6 +142,16 @@ function calculateProduct(obj) {
     return combinedNumber;
 }
 
+//for scores, combine the scores into one bigint using score to the power of 10 times the index
+function calculateScore(obj){
+    let combinedNumber = 0;
+    let multiplication = 10;
+    Object.keys(obj).forEach((key, index) => {
+        combinedNumer += obj[Key] * (Math.pow(multiplication, index));
+    });
+    return combinedNumber;
+}
+
 //voting process for majority voting
 async function majorityVote(userId, candidatePrime, electionId, paillierPublicKey, blindPublicKey, blindPrivateKey) {
     const { blinded, r } = await blindVote(blindPublicKey, candidatePrime);
@@ -198,7 +208,9 @@ async function rankVote(ranks, paillierPublicKey, blindPublicKey, blindPrivateKe
 
 //voting process for score-based voting
 async function scoreVote(scores, paillierPublicKey, blindPublicKey, blindPrivateKey) {
-    // not sure what value to use to encrypt and blind for scores
+    const processedStr = await calculateScore(scores);
+    const bigIntValue = BigInt(processedStr);
+
     const { blinded, r } = blindVote(blindPublicKey, bigIntValue);
     const signedVote = signVote(blindPrivateKey, blinded)
     const encryptedVote = await encryptVote(paillierPublicKey, bigIntValue);
