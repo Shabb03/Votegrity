@@ -13,7 +13,7 @@ const path = require('path');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: '../.env'});
 
 const { Web3 } = require('web3');
 const web3 = new Web3(process.env.API_URL);
