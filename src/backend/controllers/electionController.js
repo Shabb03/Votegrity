@@ -99,10 +99,8 @@ exports.addCandidate = async (req, res) => {
         const image = req.file;
         const imagePath = image.filename;
 
-        //const randomIndex = Math.floor(Math.random() * primesList.length);
-        //let primeNo = primesList[randomIndex];
-
-        let primeNo = primes.range.fast(2, 50);
+        let random = Math.floor(Math.random() * (primesList.length));
+        let primeNo = primesList[random];
         const candidatesWithSamePrime = await db.Candidate.findAll({
             where: {
                 electionId: electionId,
@@ -111,7 +109,8 @@ exports.addCandidate = async (req, res) => {
         });
 
         while (candidatesWithSamePrime.length != 0) {
-            primeNo = primeGenerator({ min: 2, max: 50 });
+            random = Math.floor(Math.random() * (primesList.length));
+            primeNo = primesList[random];
             candidatesWithSamePrime = await db.Candidate.findAll({
                 where: {
                     electionId: electionId,

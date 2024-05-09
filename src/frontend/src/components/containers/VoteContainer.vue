@@ -29,6 +29,7 @@
                                 :name="candidate.name"
                             />
                         </div>
+                        <div v-else></div>
                         <div v-if="electionType === 'ranked'">
                             <RankChoiceInput
                                 :key="candidate.id"
@@ -36,6 +37,7 @@
                                 @update:rank="updateRank(candidate.id, $event)"
                             />
                         </div>
+                        <div v-else></div>
                         <div v-if="electionType === 'point-based'">
                             <VoteScoreInput 
                                 :key="candidate.id"
@@ -43,6 +45,7 @@
                                 @update:score="updateScore(candidate.id, $event)"
                             />
                         </div>
+                        <div v-else></div>
                         <div v-if="electionType === 'single-transferable'">
                             <RankChoiceInput
                                 :key="candidate.id"
@@ -50,6 +53,7 @@
                                 @update:rank="updateRank(candidate.id, $event)"
                             />
                         </div>
+                        <div v-else></div>
                     </div>
                 </v-row>
                 <div v-if="electionType === 'ranked'">
@@ -124,6 +128,7 @@ export default {
                     const candidateArray = this.electionData[selectedElectionIndex].candidates;
                     this.rankList = Array.from({ length: candidateArray.length }, (_, index) => index + 1);
                     const groupSize = 3;
+                    this.candidateData = [];
                     for (let i = 0; i < candidateArray.length; i += groupSize) {
                         if (i % 3 === 0) {
                             const group = candidateArray.slice(i, i + groupSize);
@@ -140,7 +145,7 @@ export default {
         async triggerSuccessCard(name=null) {
             this.successMessage = 'You have successfully voted' 
             if (name !== null) {
-                this.successMessage = this.successMessage + 'for ' + name;
+                this.successMessage = this.successMessage + ' for ' + name;
             }
             this.$refs.successCardRef.openDialog();
         },
@@ -239,11 +244,7 @@ export default {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
-                const dataArray = response.data.candidates;
                 this.electionData = response.data.candidates;
-                if (dataArray.length === 0) {
-                    alert('Error: Election has no candidates')
-                }
             } 
             catch (error) {
                 if (process.env.NODE_ENV === 'test') {

@@ -1,4 +1,5 @@
-const { sendEmail } = require('./thirdParty/email');
+const jwt = require('jsonwebtoken');
+const sendEmail = require('./thirdParty/email');
 const { generateSixDigitCode } = require('./functions/generateCode');
 const db = require('../models/index.js');
 
@@ -10,7 +11,7 @@ exports.deleteCode = async (req, res) => {
         const token = generateSixDigitCode();
         user.resetToken = token;
         await user.save();
-        sendEmail("Account Deletion Code", user.email, "Here is your delete code: " + token);
+        await sendEmail("Account Deletion Code", user.email, "Here is your delete code: " + token);
         res.json({ message: "Email sent" });
     }
     catch (error) {
@@ -27,8 +28,9 @@ exports.deleteAccount = async (req, res) => {
 
         const { token } = req.body;
         if (token === user.resetToken) {
-            sendEmail("Account Deleted", user.email, "Your account has successfully been deleted");
+            await db.Vote.destroy({ where: { userId: userId } });
             await db.Voter.destroy({ where: { id: userId } });
+            await sendEmail("Account Deleted", user.email, "Your account has successfully been deleted");
             return res.json({ message: 'Account deleted successfully' });
         }
         else {

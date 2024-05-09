@@ -66,9 +66,10 @@ async function verifySignForAdmin(adminPrivateKey, unblindedVote, vote) {
 }
 
 async function encryptVote(adminPublicKey, vote) {
-    const publicKeyAsJSON = JSON.parse(adminPublicKey);
-    const newPublicKey = new paillier.PublicKey(BigInt(publicKeyAsJSON.n), BigInt(publicKeyAsJSON.g));
-    const encryptedVote = await newPublicKey.encrypt(vote);
+    //const publicKeyAsJSON = JSON.parse(adminPublicKey);
+    //const newPublicKey = new paillier.PublicKey(BigInt(publicKeyAsJSON.n), BigInt(publicKeyAsJSON.g));
+    //const encryptedVote = await newPublicKey.encrypt(vote);
+    const encryptedVote = await adminPublicKey.encrypt(vote);
     return encryptedVote.toString();
 };
 

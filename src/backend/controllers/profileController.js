@@ -105,7 +105,7 @@ exports.getAuthToken = async (req, res) => {
         const sixDigitCode = generateSixDigitCode();
         user.authToken = sixDigitCode;
         await user.save();
-        sendEmail("Authentication Code", user.email, "Here is your authentication code: " + sixDigitCode);
+        await sendEmail("Authentication Code", user.email, "Here is your authentication code: " + sixDigitCode);
         res.json({ message: "Email sent" });
     }
     catch (error) {

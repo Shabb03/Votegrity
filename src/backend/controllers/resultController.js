@@ -35,15 +35,15 @@ function countPrimeDivisions(number, candidateIds) {
 async function getWinnerForMajorityTally(electionId, adminPrivateKey, candidatePrimes) {
     const tallySum = await getMajorityTally(electionId, adminPrivateKey, candidatePrimes);
     const winningCandidates = new Array();
-    var winnerPrime;
+    let winnerPrime;
 
     // get the highest value in the tallySum object
     let arr = Object.values(tallySum);
     let highestTally = Math.max(...arr);
 
-    for (const candidatePrime in tallySum) {
-        if (tallySum[candidatePrime] == highestTally) {
-            winningCandidates.push(candidatePrime);
+    for (const key in tallySum) {
+        if (tallySum[key] === highestTally) {
+            winningCandidates.push(Number(key));
         }
     }
 
@@ -54,23 +54,21 @@ async function getWinnerForMajorityTally(electionId, adminPrivateKey, candidateP
     else {
         winnerPrime = winningCandidates[0];
     }
-
     return winnerPrime
-
 };
 
 async function getWinnerForScoreTally(electionId, adminPrivateKey) {
     const tallySum = await getScoreTally(electionId, adminPrivateKey);
     const winningCandidates = new Array();
-    var winnerId;
+    let winnerId;
 
     // get the highest value in the tallySum object
     let arr = Object.values(tallySum);
     let highestTally = Math.max(...arr);
 
-    for (const candidateId in tallySum) {
-        if (tallySum[candidateId] == highestTally) {
-            winningCandidates.push(candidateId);
+    for (const key in tallySum) {
+        if (tallySum[key] === highestTally) {
+            winningCandidates.push(Number(key));
         }
     }
 
@@ -89,24 +87,27 @@ async function getWinnerForScoreTally(electionId, adminPrivateKey) {
 async function getWinnerForRankTally(electionId, adminPrivateKey, candidatePrimes) {
     const tallySums = await getRankTally(electionId, adminPrivateKey, candidatePrimes);
     const winningCandidates = new Array();
-    var winnerPrime;
+    let winnerPrime;
     const rank = "rank";
 
     const candiateTotalScores = {};
-    foreach(candidatePrime in candidatePrimes)
-    {
-        const candidateTotalTally = tallySums.reduce(function (accumulator, tally) {
-            return accumulator + (tally[candidatePrime] * tally[rank]);
-        }, 0);
+    for (const index in candidatePrimes) {
+        const candidatePrime = candidatePrimes[index];
+        let candidateTotalTally = 0
+        tallySums.forEach(obj => {
+            const value = obj[candidatePrime] || 0;
+            const rank = obj.rank;
+            candidateTotalTally += (tallySums.length - rank + 1) * 5 * value;
+        });
         candiateTotalScores[candidatePrime] = candidateTotalTally;
     }
 
     let arr = Object.values(candiateTotalScores);
     let highestTally = Math.max(...arr);
 
-    for (const candidatePrime in candiateTotalScores) {
-        if (candiateTotalScores[candidatePrime] == highestTally) {
-            winningCandidates.push(candidatePrime);
+    for (const key in candiateTotalScores) {
+        if (candiateTotalScores[key] === highestTally) {
+            winningCandidates.push(Number(key));
         }
     }
 
@@ -177,10 +178,6 @@ exports.publishResults = async (req, res) => {
         const candidatePrimes = candidates.map(candidate => candidate.primeNumber);
         const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 
-        // get the votes
-        //const votes = await contract.methods.getEncryptedVotes(electionId).call({ gas: 3000000 });
-
-
         //majority voting process
         if (electionType === processes[0]) {
             const winnerPrime = await getWinnerForMajorityTally(electionId, paillierPrivateKey, candidatePrimes);
@@ -197,16 +194,14 @@ exports.publishResults = async (req, res) => {
         }
         //score based voting process
         else if (electionType === processes[2]) {
-            const winner = await getWinnerForScoreTally(electionId, paillierPrivateKey)
-            const candidate = candidates.find((candidate) => candidate.primeNumber === winnerPrime);
-            const winnerId = candidate.id;
+            const winnerId = await getWinnerForScoreTally(electionId, paillierPrivateKey)
             await createResult(electionId, winnerId);
         }
 
         election.isActive = false;
         await election.save();
 
-        res.json({ message: 'Election results successfully published' });
+        return res.json({ message: 'Election results successfully published' });
     }
     catch (error) {
         console.log(error);

@@ -1,5 +1,4 @@
 const { isSecurePassword, hashPassword, decryptPassword } = require('./functions/password');
-//const { encryptKey } = require('./functions/encryptKeys')
 const db = require('../models/index.js');
 const countryData = require('../assets/citizenship.json');
 const { Wallet } = require('ethers');

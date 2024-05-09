@@ -6,9 +6,7 @@
 | ------------------- | ----------------- |
 | Project Title:      | Votegrity         |
 | Student 1 Name:     | Thomas Kelly      |
-| Student 1 ID:       | 20361526          |
 | Student 2 Name:     | Rishabdev Sidhu   |
-| Student 2 ID:       | 20309616          |
 | Project Supervisor: | Geoffrey Hamilton |
 
 ## SECTION B
@@ -36,8 +34,6 @@
 > Election Admins: Admins hold the decryption keys for the tally, once the voting is finalised, the tally is decrypted and published.
 >
 > Key Management: A secure system is needed to manage these keys for the highest possible security.
->
-> (Optional Feature) Verification: Voters can verify that their vote is in the tally without revealing their vote by checking the blockchain (Implemented with the use of ZK-SNARKs).
 
 ### Background
 
@@ -64,7 +60,7 @@
 
 ### Programming language(s)
 
-Solidity, Python, Javascript
+Solidity, Javascript
 
 ### Libraries / Frameworks / Tools
 
@@ -80,9 +76,9 @@ Solidity, Python, Javascript
 >
 > Gmail API
 >
-> Homomorphic Encryption libraries: PyCryptodome/ python-paillier
+> Homomorphic Encryption libraries: paillier
 >
-> Testing: PyUnit, Solidity Security Analysers, Truffle
+> Testing: Solidity Security Analysers, Hardhat, Jest
 
 ### Hardware
 
@@ -93,26 +89,3 @@ Solidity, Python, Javascript
 > Blockchain is a completely new concept for us so we will have to research many concepts as we develop the system and its requirements
 >
 > Learning new languages Solidity, as well as the use of new libraries / frameworks such as Node.js and Vue.js
-
-### Breakdown of work
-
-#### Student 1 (Rishab)
-> Frontend
->
-> Homomorphic encryption
->
-> Blind Signature
->
-> User Verification
->
-
-#### Student 2 (Thomas)
-> Backend
->
-> Database setup
->
-> Blockchain
->
-> Key Generation and Management
->
-> Account registration

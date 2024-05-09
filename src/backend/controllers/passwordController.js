@@ -22,7 +22,7 @@ exports.authCode = async (req, res) => {
         user.resetToken = sixDigitCode;
         await user.save();
 
-        sendEmail("Reset Password Code", email, "Here is your password code: " + sixDigitCode);
+        await sendEmail("Reset Password Code", email, "Here is your password code: " + sixDigitCode);
         res.json({ message: "Email sent", securityQuestion1: sq1.questions, securityQuestion2: sq2.questions });
     }
     catch (error) {
