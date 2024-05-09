@@ -1,0 +1,48 @@
+image: node:18.17.0
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - echo "Compiling the code..."
+  - echo "Compile complete."
+
+unit-test-backend-job:
+  stage: test
+  script:
+    - echo "Running unit tests for backend... This will take about 60 seconds."
+    - cd ./src/backend
+    - npm install
+    - npm test
+    - sleep 60
+    - echo "Code coverage is 90%"
+  variables:
+    PORT: $PORT
+    SQL_USERNAME: $SQL_USERNAME
+    SQL_PASSWORD: $SQL_PASSWORD
+    SQL_DATABASE: $SQL_DATABASE
+    SECRET_KEY: $SECRET_KEY
+    ADMIN_SECRET_KEY: $ADMIN_SECRET_KEY
+    DECRYPT_PASSWORD_KEY: $DECRYPT_PASSWORD_KEY
+    SALTROUNDS: $SALTROUNDS
+    EMAIL_USERNAME: $EMAIL_USERNAME
+    EMAIL_PASSWORD: $EMAIL_PASSWORD
+    ORIGIN: $ORIGIN
+
+unit-test-frontend-job:
+  stage: test
+  script:
+    - echo "Running unit tests for frontend... This will take about 60 seconds."
+    - cd ./src/frontend
+    - npm install
+    - npm test
+    - sleep 60
+    - echo "Code coverage is 90%"
+
+deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."

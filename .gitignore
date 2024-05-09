@@ -1,0 +1,11 @@
+## Ignore all Zone.Identifier files
+*Zone.Identifier
+
+## Ignore all node_modules
+node_modules/
+
+## Ignore .env file
+.env
+
+##Ignore the atlas.hcl file
+./backend/atlas.hcl
